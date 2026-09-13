@@ -1,0 +1,256 @@
+﻿@model MvcKutuphane.Models.Entities.TBL_UYELER
+@{
+    ViewBag.Title = "Yeni Üye Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .form-layout {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"], .form-group input[type="password"], .form-group input[type="email"], .form-group input[type="tel"] {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            background: var(--surface);
+            font-family: var(--font-body);
+            font-size: 0.98rem;
+            color: var(--ink);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--oxblood);
+        }
+
+    .form-hint {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        margin-top: 6px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .validation-summary-errors {
+        background: #f7e9e6;
+        border: 1px solid #e6c3ba;
+        color: var(--oxblood-dark);
+        padding: 12px 16px;
+        border-radius: var(--radius-s);
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
+
+    .field-validation-error {
+        display: block;
+        color: var(--oxblood);
+        font-size: 0.85rem;
+        margin-top: 6px;
+    }
+
+    input.input-validation-error {
+        border-color: var(--oxblood) !important;
+    }
+
+    .side-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+        .side-panel .panel h3 {
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+
+    .preview-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        padding: 20px;
+        display: flex;
+        gap: 14px;
+        align-items: center;
+    }
+
+    .preview-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--oxblood);
+        color: var(--surface-warm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .preview-card h4 {
+        font-family: var(--font-display);
+        font-size: 1.1rem;
+        margin: 0 0 4px;
+        color: var(--ink);
+    }
+
+    .preview-card p {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        margin: 0;
+    }
+
+    .tips-list {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+    }
+
+        .tips-list li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+    @@media (max-width: 900px) {
+        .form-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 520px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<h1 style="margin-bottom:4px;">Yeni Üye Ekle</h1>
+<p style="color:var(--ink-soft); margin-bottom:28px;">Kütüphaneye yeni bir üye kaydedin.</p>
+
+<div class="form-layout">
+    <div class="panel">
+        @using (Html.BeginForm("CreateMember", "Member", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.AD, "Ad")
+                    @Html.TextBoxFor(m => m.AD, new { @class = "input-text", id = "adInput", autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.AD, "", new { @class = "field-validation-error" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SOYAD, "Soyad")
+                    @Html.TextBoxFor(m => m.SOYAD, new { @class = "input-text", id = "soyadInput", autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.SOYAD, "", new { @class = "field-validation-error" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.MAİL, "E-posta")
+                @Html.TextBoxFor(m => m.MAİL, new { @class = "input-text", type = "email", autocomplete = "off" })
+                @Html.ValidationMessageFor(m => m.MAİL, "", new { @class = "field-validation-error" })
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.KULLANİCİADİ, "Kullanıcı Adı")
+                    @Html.TextBoxFor(m => m.KULLANİCİADİ, new { @class = "input-text", autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.KULLANİCİADİ, "", new { @class = "field-validation-error" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ŞİFRE, "Şifre")
+                    @Html.PasswordFor(m => m.ŞİFRE, new { @class = "input-text", autocomplete = "new-password" })
+                    @Html.ValidationMessageFor(m => m.ŞİFRE, "", new { @class = "field-validation-error" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.TELEFON, "Telefon")
+                    @Html.TextBoxFor(m => m.TELEFON, new { @class = "input-text", type = "tel", autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.TELEFON, "", new { @class = "field-validation-error" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.OKUL, "Okul")
+                    @Html.TextBoxFor(m => m.OKUL, new { @class = "input-text", autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.OKUL, "", new { @class = "field-validation-error" })
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Üyeyi kaydet</button>
+                <a class="btn btn-ghost" href="@Url.Action("MemberList", "Member")">Vazgeç</a>
+            </div>
+        }
+    </div>
+
+    <div class="side-panel">
+        <div class="panel">
+            <h3>Önizleme</h3>
+            <div class="preview-card">
+                <div class="preview-avatar" id="previewAvatar">?</div>
+                <div>
+                    <h4 id="previewName">Yeni üye</h4>
+                    <p>Üye listesinde bu isimle görünür.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <h3>Dikkat edilmesi gerekenler</h3>
+            <ul class="tips-list">
+                <li>Kullanıcı adının benzersiz olduğundan emin olun.</li>
+                <li>Şifreyi üyeye güvenli bir kanaldan iletin, ekranda saklamayın.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var adInput = document.getElementById("adInput");
+        var soyadInput = document.getElementById("soyadInput");
+        var previewName = document.getElementById("previewName");
+        var previewAvatar = document.getElementById("previewAvatar");
+        if (!adInput || !soyadInput) return;
+        function update() {
+            var ad = adInput.value.trim();
+            var soyad = soyadInput.value.trim();
+            var full = (ad + " " + soyad).trim();
+            previewName.textContent = full === "" ? "Yeni üye" : full;
+            previewAvatar.textContent = ((ad.charAt(0) || "") + (soyad.charAt(0) || "")).toUpperCase() || "?";
+        }
+        adInput.addEventListener("input", update);
+        soyadInput.addEventListener("input", update);
+    })();
+</script>

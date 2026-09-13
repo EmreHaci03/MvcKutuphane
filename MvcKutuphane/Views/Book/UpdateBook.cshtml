@@ -1,0 +1,308 @@
+﻿@model MvcKutuphane.Models.Entities.TBL_KITAP
+@using System.Web.Mvc
+@{
+    ViewBag.Title = "Kitabı Düzenle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .form-layout {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            background: var(--surface);
+            font-family: var(--font-body);
+            font-size: 0.98rem;
+            color: var(--ink);
+            appearance: none;
+        }
+
+        .form-group select {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b5d52' stroke-width='1.6'><path d='M6 9l6 6 6-6'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 36px;
+        }
+
+        .form-group input[readonly] {
+            background: var(--surface-warm);
+            color: var(--ink-soft);
+            cursor: not-allowed;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--oxblood);
+        }
+
+    .form-hint {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        margin-top: 6px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .validation-summary-errors {
+        background: #f7e9e6;
+        border: 1px solid #e6c3ba;
+        color: var(--oxblood-dark);
+        padding: 12px 16px;
+        border-radius: var(--radius-s);
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
+
+    .field-validation-error {
+        display: block;
+        color: var(--oxblood);
+        font-size: 0.85rem;
+        margin-top: 6px;
+    }
+
+    .input-validation-error {
+        border-color: var(--oxblood) !important;
+    }
+
+    .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-s);
+        background: var(--surface);
+    }
+
+        .checkbox-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--oxblood);
+            cursor: pointer;
+        }
+
+        .checkbox-row label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+    .side-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+        .side-panel .panel h3 {
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+
+    .preview-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--brass);
+        border-radius: var(--radius-m);
+        padding: 20px;
+    }
+
+        .preview-card .cat-id {
+            font-size: 0.75rem;
+            color: var(--ink-soft);
+            letter-spacing: 0.03em;
+            margin-bottom: 8px;
+        }
+
+        .preview-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            margin: 0 0 6px;
+            color: var(--ink);
+        }
+
+        .preview-card p {
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+            margin: 0;
+        }
+
+    .tips-list {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+    }
+
+        .tips-list li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+    @@media (max-width: 900px) {
+        .form-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 520px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<h1 style="margin-bottom:4px;">Kitabı Düzenle</h1>
+<p style="color:var(--ink-soft); margin-bottom:28px;">"@Model.AD" bilgilerini güncelleyin.</p>
+
+<div class="form-layout">
+
+    <div class="panel">
+        @using (Html.BeginForm("UpdateBook", "Book", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ID)
+            @Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
+
+            <div class="form-group">
+                <label>Kitap No</label>
+                <input type="text" value="@Model.ID" readonly />
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.AD, "Kitap Adı")
+                @Html.TextBoxFor(m => m.AD, new { @class = "input-text", id = "adInput", autocomplete = "off" })
+                @Html.ValidationMessageFor(m => m.AD, "", new { @class = "field-validation-error" })
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Kategori</label>
+                    @Html.DropDownListFor(m => m.KATEGORI, (List<SelectListItem>)ViewBag.Category, "Kategori seçin", new { @class = "input-text", id = "kategoriInput" })
+                    @Html.ValidationMessageFor(m => m.KATEGORI, "", new { @class = "field-validation-error" })
+                </div>
+                <div class="form-group">
+                    <label>Yazar</label>
+                    @Html.DropDownListFor(m => m.YAZAR, (List<SelectListItem>)ViewBag.Author, "Yazar seçin", new { @class = "input-text", id = "yazarInput" })
+                    @Html.ValidationMessageFor(m => m.YAZAR, "", new { @class = "field-validation-error" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.BASIMYIL, "Basım Yılı")
+                    @Html.TextBoxFor(m => m.BASIMYIL, new { @class = "input-text", type = "number", autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.BASIMYIL, "", new { @class = "field-validation-error" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SAYFA, "Sayfa Sayısı")
+                    @Html.TextBoxFor(m => m.SAYFA, new { @class = "input-text", type = "number", autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.SAYFA, "", new { @class = "field-validation-error" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.YAYINEVI, "Yayınevi")
+                @Html.TextBoxFor(m => m.YAYINEVI, new { @class = "input-text", autocomplete = "off" })
+                @Html.ValidationMessageFor(m => m.YAYINEVI, "", new { @class = "field-validation-error" })
+            </div>
+
+            <div class="form-group">
+                <label>Durum</label>
+                <div class="checkbox-row">
+                    <input type="checkbox" name="DURUM" id="durumInput" value="true" checked="@(Model.DURUM == true)" />
+                    <input type="hidden" name="DURUM" value="false" />
+                    <label for="durumInput">Rafta mevcut (işaretli değilse ödünçte kabul edilir)</label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Değişiklikleri kaydet</button>
+                <a class="btn btn-ghost" href="@Url.Action("BookList", "Book")">Vazgeç</a>
+            </div>
+        }
+    </div>
+
+    <div class="side-panel">
+        <div class="panel">
+            <h3>Önizleme</h3>
+            <div class="preview-card">
+                <div class="cat-id">Kitap No: @Model.ID</div>
+                <h4 id="previewName">@Model.AD</h4>
+                <p id="previewDetail">Kategori ve yazar seçimi değişince güncellenir.</p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Dikkat edilmesi gerekenler</h3>
+            <ul class="tips-list">
+                <li>Kategori veya yazarı değiştirmek, kitabın listelerdeki görünen etiketini de günceller.</li>
+                <li>"Rafta mevcut" işaretini kaldırırsan kitap ödünçte olarak işaretlenir.</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    (function () {
+        var adInput = document.getElementById("adInput");
+        var kategoriInput = document.getElementById("kategoriInput");
+        var yazarInput = document.getElementById("yazarInput");
+        var previewName = document.getElementById("previewName");
+        var previewDetail = document.getElementById("previewDetail");
+        if (!adInput || !previewName) return;
+
+        function update() {
+            previewName.textContent = adInput.value.trim() === "" ? "(isimsiz kitap)" : adInput.value;
+
+            var katText = kategoriInput.options[kategoriInput.selectedIndex] ? kategoriInput.options[kategoriInput.selectedIndex].text : "";
+            var yazText = yazarInput.options[yazarInput.selectedIndex] ? yazarInput.options[yazarInput.selectedIndex].text : "";
+
+            if (katText === "Kategori seçin") katText = "";
+            if (yazText === "Yazar seçin") yazText = "";
+
+            var parts = [katText, yazText].filter(function (t) { return t !== ""; });
+            previewDetail.textContent = parts.length > 0 ? parts.join(" · ") : "Kategori ve yazar seçilmedi.";
+        }
+
+        adInput.addEventListener("input", update);
+        kategoriInput.addEventListener("change", update);
+        yazarInput.addEventListener("change", update);
+        update();
+    })();
+</script>

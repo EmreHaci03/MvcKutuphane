@@ -1,0 +1,388 @@
+﻿@model List<MvcKutuphane.Models.Entities.TBL_KATEGORI>
+@{
+    ViewBag.Title = "Kategoriler";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+<style>
+    .cat-page-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+        .cat-page-head p {
+            color: var(--ink-soft);
+            margin: 6px 0 0;
+        }
+
+    .cat-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .cat-stat {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        padding: 18px 20px;
+        box-shadow: var(--shadow-card);
+    }
+
+        .cat-stat .num {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--oxblood);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .cat-stat .label {
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+        }
+
+    .cat-toolbar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+    }
+
+    .cat-search {
+        flex: 1;
+        min-width: 220px;
+        position: relative;
+    }
+
+        .cat-search input {
+            width: 100%;
+            padding: 11px 14px 11px 38px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            background: var(--surface);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+            .cat-search input:focus {
+                outline: none;
+                border-color: var(--oxblood);
+            }
+
+        .cat-search svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--ink-soft);
+        }
+
+    .cat-count {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin-bottom: 16px;
+    }
+
+    .cat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 18px;
+    }
+
+    .cat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--brass);
+        border-radius: var(--radius-m);
+        padding: 20px 20px 16px;
+        box-shadow: var(--shadow-card);
+        transition: transform 0.15s ease, border-left-color 0.15s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 118px;
+    }
+
+        .cat-card:hover {
+            transform: translateY(-2px);
+            border-left-color: var(--oxblood);
+        }
+
+        .cat-card .cat-id {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            color: var(--ink-soft);
+            letter-spacing: 0.03em;
+            margin-bottom: 8px;
+        }
+
+        .cat-card h3 {
+            margin: 0 0 14px;
+            font-size: 1.2rem;
+            line-height: 1.3;
+        }
+
+    .cat-card-actions {
+        display: flex;
+        gap: 14px;
+    }
+
+        .cat-card-actions a,
+        .cat-card-actions button {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--forest);
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font-family: var(--font-body);
+        }
+
+            .cat-card-actions button.danger {
+                color: var(--oxblood);
+            }
+
+            .cat-card-actions a:hover,
+            .cat-card-actions button:hover {
+                text-decoration: underline;
+            }
+
+    .cat-empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--ink-soft);
+    }
+
+        .cat-empty h3 {
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+    /* ---------- Delete confirmation modal ---------- */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(42, 33, 28, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: 20px;
+    }
+
+        .modal-overlay.is-open {
+            display: flex;
+        }
+
+    .modal-box {
+        background: var(--surface);
+        border-radius: var(--radius-m);
+        max-width: 420px;
+        width: 100%;
+        padding: 28px;
+        box-shadow: 0 20px 60px -12px rgba(42, 33, 28, 0.45);
+        border-top: 4px solid var(--oxblood);
+        animation: modalPop 0.15s ease;
+    }
+
+    @@keyframes modalPop {
+        from {
+            transform: translateY(6px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .modal-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: #f7e9e6;
+        color: var(--oxblood);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+        .modal-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+    .modal-box h3 {
+        margin-bottom: 8px;
+    }
+
+    .modal-box p {
+        color: var(--ink-soft);
+        font-size: 0.95rem;
+        margin-bottom: 0;
+    }
+
+        .modal-box p strong {
+            color: var(--ink);
+        }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 26px;
+    }
+
+    .btn-danger {
+        background: var(--oxblood);
+        color: var(--surface-warm);
+        border-color: var(--oxblood);
+    }
+
+        .btn-danger:hover {
+            background: var(--oxblood-dark);
+        }
+</style>
+
+<div class="cat-page-head">
+    <div>
+        <h1 style="margin-bottom:4px;">Kategoriler</h1>
+        <p>Koleksiyondaki kitapları sınıflandırmak için kullanılan kategori listesi.</p>
+    </div>
+    <a class="btn btn-primary" href="@Url.Action("CreateCategory", "Category")">Yeni kategori ekle</a>
+</div>
+
+<div class="cat-stats">
+    <div class="cat-stat">
+        <div class="num">@(Model != null ? Model.Count : 0)</div>
+        <div class="label">Toplam kategori</div>
+    </div>
+    <div class="cat-stat">
+        <div class="num">@(Model != null && Model.Any() ? Model.OrderByDescending(k => k.ID).First().CategoryName : "-")</div>
+        <div class="label">En son eklenen</div>
+    </div>
+</div>
+
+<div class="cat-toolbar">
+    <div class="cat-search">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6" />
+            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+        <input type="text" id="catSearchInput" placeholder="Kategori ara..." autocomplete="off" />
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <p class="cat-count" id="catCount">@Model.Count() kategori listeleniyor</p>
+
+    <div class="cat-grid" id="catGrid">
+        @foreach (var kategori in Model)
+        {
+            count++;
+            <div class="cat-card" data-name="@kategori.CategoryName.ToLower()">
+                <div>
+                    <div class="cat-id">Kategori No: @count</div>
+                    <h3>@kategori.CategoryName</h3>
+                </div>
+                <div class="cat-card-actions">
+                    <a href="@Url.Action("UpdateCategory", "Category", new { id = kategori.ID })">Düzenle</a>
+                    <button type="button" class="danger" onclick="openDeleteModal('@kategori.ID', '@kategori.CategoryName.Replace("'", "\\'")')">Sil</button>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="panel cat-empty">
+        <h3>Henüz kategori eklenmemiş</h3>
+        <p>İlk kategoriyi ekleyerek kitaplarınızı sınıflandırmaya başlayın.</p>
+        <a class="btn btn-primary" href="@Url.Action("CreateCategory", "Category")" style="margin-top:12px;">Yeni kategori ekle</a>
+    </div>
+}
+
+<!-- Silme onay modalı -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+        <div class="modal-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path d="M10.3 3.86 2.7 18a1.5 1.5 0 0 0 1.3 2.25h16a1.5 1.5 0 0 0 1.3-2.25L13.7 3.86a1.5 1.5 0 0 0-2.6 0Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+            </svg>
+        </div>
+        <h3>Kategoriyi sil</h3>
+        <p><strong id="deleteModalCategoryName"></strong> kategorisini silmek istediğinize emin misiniz? Bu işlem geri alınamaz.</p>
+
+        <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" onclick="closeDeleteModal()">Vazgeç</button>
+            @using (Html.BeginForm("DeleteCategory", "Category", FormMethod.Post, new { id = "deleteCategoryForm", style = "display:inline;" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" id="deleteCategoryId" value="" />
+                <button type="submit" class="btn btn-danger">Evet, sil</button>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var input = document.getElementById("catSearchInput");
+        var grid = document.getElementById("catGrid");
+        var countLabel = document.getElementById("catCount");
+        if (!input || !grid) return;
+
+        var cards = Array.prototype.slice.call(grid.querySelectorAll(".cat-card"));
+
+        input.addEventListener("input", function () {
+            var term = input.value.trim().toLowerCase();
+            var visible = 0;
+
+            cards.forEach(function (card) {
+                var match = card.getAttribute("data-name").indexOf(term) !== -1;
+                card.style.display = match ? "" : "none";
+                if (match) visible++;
+            });
+
+            if (countLabel) {
+                countLabel.textContent = visible + " kategori listeleniyor";
+            }
+        });
+    })();
+
+    var deleteModal = document.getElementById("deleteModal");
+
+    function openDeleteModal(id, name) {
+        document.getElementById("deleteCategoryId").value = id;
+        document.getElementById("deleteModalCategoryName").textContent = name;
+        deleteModal.classList.add("is-open");
+    }
+
+    function closeDeleteModal() {
+        deleteModal.classList.remove("is-open");
+    }
+
+    deleteModal.addEventListener("click", function (e) {
+        if (e.target === deleteModal) closeDeleteModal();
+    });
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeDeleteModal();
+    });
+</script>

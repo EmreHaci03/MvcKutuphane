@@ -1,0 +1,202 @@
+﻿@model MvcKutuphane.Models.Entities.TBL_PERSONEL
+@{
+    ViewBag.Title = "Personeli Düzenle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .form-layout {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            background: var(--surface);
+            font-family: var(--font-body);
+            font-size: 0.98rem;
+            color: var(--ink);
+        }
+
+            .form-group input[type="text"]:focus {
+                outline: none;
+                border-color: var(--oxblood);
+            }
+
+        .form-group input[readonly] {
+            background: var(--surface-warm);
+            color: var(--ink-soft);
+            cursor: not-allowed;
+        }
+
+    .form-hint {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        margin-top: 6px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .validation-summary-errors {
+        background: #f7e9e6;
+        border: 1px solid #e6c3ba;
+        color: var(--oxblood-dark);
+        padding: 12px 16px;
+        border-radius: var(--radius-s);
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
+
+    .field-validation-error {
+        display: block;
+        color: var(--oxblood);
+        font-size: 0.85rem;
+        margin-top: 6px;
+    }
+
+    input.input-validation-error {
+        border-color: var(--oxblood) !important;
+    }
+
+    .side-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+        .side-panel .panel h3 {
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+
+    .preview-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        padding: 20px;
+        display: flex;
+        gap: 14px;
+        align-items: center;
+    }
+
+    .preview-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--oxblood);
+        color: var(--surface-warm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .preview-card h4 {
+        font-family: var(--font-display);
+        font-size: 1.1rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .tips-list {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+    }
+
+        .tips-list li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+    @@media (max-width: 900px) {
+        .form-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<h1 style="margin-bottom:4px;">Personeli Düzenle</h1>
+<p style="color:var(--ink-soft); margin-bottom:28px;">"@Model.PERSONEL" bilgilerini güncelleyin.</p>
+
+<div class="form-layout">
+    <div class="panel">
+        @using (Html.BeginForm("UpdateEmployee", "Employee", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ID)
+            @Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
+
+            <div class="form-group">
+                <label>Personel No</label>
+                <input type="text" value="@Model.ID" readonly />
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.PERSONEL, "Ad Soyad")
+                @Html.TextBoxFor(m => m.PERSONEL, new { @class = "input-text", id = "personelInput", autocomplete = "off" })
+                @Html.ValidationMessageFor(m => m.PERSONEL, "", new { @class = "field-validation-error" })
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Değişiklikleri kaydet</button>
+                <a class="btn btn-ghost" href="@Url.Action("EmployeeList", "Employee")">Vazgeç</a>
+            </div>
+        }
+    </div>
+
+    <div class="side-panel">
+        <div class="panel">
+            <h3>Önizleme</h3>
+            <div class="preview-card">
+                <div class="preview-avatar" id="previewAvatar">@(!string.IsNullOrWhiteSpace(Model.PERSONEL) ? Model.PERSONEL.Trim().Substring(0,1).ToUpper() : "?")</div>
+                <h4 id="previewName">@Model.PERSONEL</h4>
+            </div>
+        </div>
+        <div class="panel">
+            <h3>Dikkat edilmesi gerekenler</h3>
+            <ul class="tips-list">
+                <li>Ad soyad değişikliği, bu personele ait geçmiş işlem kayıtlarındaki görünen ismi de günceller.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var input = document.getElementById("personelInput");
+        var previewName = document.getElementById("previewName");
+        var previewAvatar = document.getElementById("previewAvatar");
+        if (!input || !previewName || !previewAvatar) return;
+        input.addEventListener("input", function () {
+            var val = input.value.trim();
+            previewName.textContent = val === "" ? "(isimsiz personel)" : val;
+            previewAvatar.textContent = val === "" ? "?" : val.charAt(0).toUpperCase();
+        });
+    })();
+</script>

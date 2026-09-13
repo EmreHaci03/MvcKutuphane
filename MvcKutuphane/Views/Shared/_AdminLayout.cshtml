@@ -1,0 +1,448 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Yönetim Paneli</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg: #f7f3ea;
+            --surface: #ffffff;
+            --surface-warm: #fbf7ef;
+            --ink: #2a211c;
+            --ink-soft: #6b5d52;
+            --border: #e3d9c2;
+            --border-strong: #d8c9a8;
+            --oxblood: #7a2a2e;
+            --oxblood-dark: #5b1f22;
+            --forest: #2f4a3e;
+            --brass: #a9793b;
+            --brass-light: #cfa768;
+            --radius-s: 3px;
+            --radius-m: 6px;
+            --font-display: "Lora", Georgia, "Times New Roman", serif;
+            --font-body: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+            --shadow-card: 0 1px 2px rgba(42, 33, 28, 0.06), 0 8px 24px -12px rgba(42, 33, 28, 0.18);
+            --sidebar-w: 248px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: var(--oxblood);
+            text-decoration: none;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--ink);
+            margin: 0 0 0.5em;
+        }
+
+        h1 {
+            font-size: 2rem;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+        }
+
+        p {
+            margin: 0 0 1em;
+        }
+
+        /* ---------- Shell ---------- */
+        .admin-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ---------- Sidebar ---------- */
+        .admin-sidebar {
+            width: var(--sidebar-w);
+            flex-shrink: 0;
+            background: var(--oxblood-dark);
+            color: #ecdfd2;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 22px 22px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+            .sidebar-brand svg {
+                width: 26px;
+                height: 26px;
+                color: var(--brass-light);
+                flex-shrink: 0;
+            }
+
+            .sidebar-brand span {
+                font-family: var(--font-display);
+                font-weight: 600;
+                font-size: 1.15rem;
+                color: #f4ead9;
+            }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 18px 12px;
+            overflow-y: auto;
+        }
+
+        .sidebar-section-label {
+            font-size: 0.72rem;
+            text-transform: none;
+            color: #b89b83;
+            padding: 8px 12px 6px;
+            letter-spacing: 0.02em;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: var(--radius-s);
+            color: #ead9c8;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2px;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+            .sidebar-nav a svg {
+                width: 18px;
+                height: 18px;
+                flex-shrink: 0;
+                opacity: 0.85;
+            }
+
+            .sidebar-nav a:hover {
+                background: rgba(255,255,255,0.06);
+                color: #ffffff;
+            }
+
+            .sidebar-nav a.active {
+                background: var(--brass);
+                color: #2a1a0e;
+                font-weight: 600;
+            }
+
+                .sidebar-nav a.active svg {
+                    opacity: 1;
+                }
+
+        .sidebar-foot {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem;
+            color: #c8b7a4;
+        }
+
+        /* ---------- Main area ---------- */
+        .admin-main {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+            .admin-topbar .crumb {
+                font-size: 0.85rem;
+                color: var(--ink-soft);
+            }
+
+                .admin-topbar .crumb strong {
+                    color: var(--ink);
+                    font-weight: 600;
+                }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--ink-soft);
+        }
+
+            .topbar-user .avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: var(--oxblood);
+                color: #f4ead9;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: var(--font-display);
+                font-weight: 600;
+                font-size: 0.9rem;
+            }
+
+        .admin-content {
+            padding: 32px;
+            flex: 1;
+        }
+
+        /* ---------- Shared content patterns ---------- */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-m);
+            padding: 28px;
+            box-shadow: var(--shadow-card);
+        }
+
+            .panel + .panel {
+                margin-top: 20px;
+            }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 9px 18px;
+            border-radius: var(--radius-s);
+            font-size: 0.92rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--oxblood);
+            color: var(--surface-warm);
+            border-color: var(--oxblood);
+        }
+
+            .btn-primary:hover {
+                background: var(--oxblood-dark);
+            }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--ink);
+            border-color: var(--border-strong);
+        }
+
+            .btn-ghost:hover {
+                border-color: var(--oxblood);
+                color: var(--oxblood);
+            }
+
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+        }
+
+            table.data-table th, table.data-table td {
+                text-align: left;
+                padding: 12px 14px;
+                border-bottom: 1px solid var(--border);
+                font-size: 0.95rem;
+            }
+
+            table.data-table th {
+                font-family: var(--font-display);
+                font-weight: 600;
+                color: var(--ink-soft);
+                background: var(--surface-warm);
+            }
+
+        a:focus-visible, button:focus-visible {
+            outline: 2px solid var(--brass);
+            outline-offset: 2px;
+        }
+
+        @@media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+
+        /* ---------- Responsive ---------- */
+        @@media (max-width: 900px) {
+            .admin-sidebar {
+                position: fixed;
+                left: -260px;
+                z-index: 100;
+                transition: left 0.2s ease;
+                box-shadow: 0 0 0 9999px rgba(0,0,0,0);
+            }
+
+                .admin-sidebar.is-open {
+                    left: 0;
+                    box-shadow: 0 0 40px rgba(0,0,0,0.35);
+                }
+
+            .admin-content {
+                padding: 22px 18px;
+            }
+
+            .admin-topbar {
+                padding: 14px 18px;
+            }
+        }
+
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            padding: 7px 10px;
+            cursor: pointer;
+        }
+
+        @@media (max-width: 900px) {
+            .sidebar-toggle {
+                display: inline-flex;
+            }
+        }
+    </style>
+
+    @RenderSection("styles", required: false)
+</head>
+<body>
+
+    <div class="admin-shell">
+
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-brand">
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M4 8c5-3 11-3 16 0v24c-5-3-11-3-16 0V8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                    <path d="M36 8c-5-3-11-3-16 0v24c5-3 11-3 16 0V8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                    <path d="M20 8v24" stroke="currentColor" stroke-width="1.2" />
+                </svg>
+                <span>Kütüphanem</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Katalog</div>
+                <a href="@Url.Action("BookList", "Book")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Book" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5C4.7 20 4 19.3 4 18.5v-13Z" stroke="currentColor" stroke-width="1.5" /><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.5" /></svg>
+                    Kitaplar
+                </a>
+                <a href="@Url.Action("Index", "Category")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Category" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="13" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="4" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="13" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /></svg>
+                    Kategoriler @*Tamamlandı*@
+                </a>
+                <a href="@Url.Action("EmployeeList", "Employee")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Personel" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5" /><circle cx="9" cy="11" r="2" stroke="currentColor" stroke-width="1.5" /><path d="M6 16c.6-1.5 1.8-2.3 3-2.3s2.4.8 3 2.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><path d="M14 10h4M14 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                    Personel @*Tamamlandı*@
+                </a>
+                <a href="@Url.Action("AuthorList", "Author")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Author" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 20c1.5-4.5 4-9 8.5-13.5C14 5 16 4 18 4c0 2-1 4-2.5 5.5C11 14 6.5 16.5 4 20Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                        <path d="M12.5 9.5 15 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        <path d="M4 20H2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                    Yazarlar @*Tamamlandı*@
+                </a>
+
+                <div class="sidebar-section-label">İşlemler</div>
+                <a href="@Url.Action("Index", "Loan")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Loan" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                    Ödünç işlemleri
+                </a>
+                <a href="@Url.Action("MemberList", "Member")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Member" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" /><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                    Üyeler @*Tamamlandı*@
+                </a>
+
+                <div class="sidebar-section-label">Sistem</div>
+                <a href="@Url.Action("Index", "Report")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Report" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 19V9M12 19V5M19 19v-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                    Raporlar
+                </a>
+                <a href="@Url.Action("Index", "Settings")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Settings" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" /><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                    Ayarlar
+                </a>
+            </nav>
+
+            <div class="sidebar-foot">
+                Kütüphanem Yönetim Paneli
+            </div>
+        </aside>
+
+        <div class="admin-main">
+            <header class="admin-topbar">
+                <div style="display:flex; align-items:center; gap:14px;">
+                    <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Menüyü aç">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+                    </button>
+                    <div class="crumb">Yönetim Paneli / <strong>@ViewBag.Title</strong></div>
+                </div>
+                <div class="topbar-user">
+                    <div class="avatar">A</div>
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="admin-content">
+                @RenderBody()
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        (function () {
+            var toggle = document.getElementById("sidebarToggle");
+            var sidebar = document.getElementById("adminSidebar");
+            if (!toggle || !sidebar) return;
+            toggle.addEventListener("click", function () {
+                sidebar.classList.toggle("is-open");
+            });
+        })();
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
