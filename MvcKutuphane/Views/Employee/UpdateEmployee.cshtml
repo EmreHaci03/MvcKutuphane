@@ -141,6 +141,13 @@
     }
 </style>
 
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
+
 <h1 style="margin-bottom:4px;">Personeli Düzenle</h1>
 <p style="color:var(--ink-soft); margin-bottom:28px;">"@Model.PERSONEL" bilgilerini güncelleyin.</p>
 

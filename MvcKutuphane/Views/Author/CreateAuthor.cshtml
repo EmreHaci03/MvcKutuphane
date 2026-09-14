@@ -179,6 +179,13 @@
     }
 </style>
 
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
+
 <h1 style="margin-bottom:4px;">Yeni Yazar Ekle</h1>
 <p style="color:var(--ink-soft); margin-bottom:28px;">Koleksiyona yeni bir yazar tanımlayın.</p>
 
@@ -212,7 +219,7 @@
 
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Yazarı kaydet</button>
-                <a class="btn btn-ghost" href="@Url.Action("Index", "Author")">Vazgeç</a>
+                <a class="btn btn-ghost" href="@Url.Action("AuthorList", "Author")">Vazgeç</a>
             </div>
         }
     </div>
@@ -243,7 +250,8 @@
 
 </div>
 
-<script>(function () {
+<script>
+    (function () {
         var adInput = document.getElementById("adInput");
         var soyadInput = document.getElementById("soyadInput");
         var previewName = document.getElementById("previewName");

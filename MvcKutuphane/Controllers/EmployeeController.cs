@@ -26,9 +26,33 @@ namespace MvcKutuphane.Controllers
         [HttpPost]
         public ActionResult CreateEmployee(TBL_PERSONEL p)
         {
-            db.TBL_PERSONEL.Add(p);
-            db.SaveChanges();
-            return RedirectToAction("EmployeeList");
+            if (string.IsNullOrWhiteSpace(p.PERSONEL))
+            {
+                TempData["Error"] = "Personel Adı Boş Bırakılamaz";
+                return RedirectToAction("CreateEmployee");
+            }
+
+
+            bool anyEmployee = db.TBL_PERSONEL.Any(x => x.PERSONEL.Trim().ToLower() == p.PERSONEL.Trim().ToLower());
+            if (anyEmployee)
+            {
+                TempData["Error"] = "Bu Personel Adı Zaten kullanılıyor.";
+                return RedirectToAction("CreateEmployee");
+            }
+            try
+            {
+                p.PERSONEL=p.PERSONEL.Trim();   
+                db.TBL_PERSONEL.Add(p);
+                db.SaveChanges();
+                return RedirectToAction("EmployeeList");
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Personel Eklenirken Bir Hata Oluştu.";
+                return RedirectToAction("CreateEmployee");
+            }
+
+
         }
 
         [HttpPost]
@@ -61,16 +85,40 @@ namespace MvcKutuphane.Controllers
         public ActionResult UpdateEmployee(int id)
         {
             var Employee = db.TBL_PERSONEL.Find(id);
+            if (Employee == null)
+            {
+                TempData["Error"] = "Güncellenmek İstenen Personel Bilgileri Alınamadı.";
+                return RedirectToAction("EmployeeList");
+            }
             return View(Employee);
         }
 
         [HttpPost]
         public ActionResult UpdateEmployee(TBL_PERSONEL p)
         {
+            if (string.IsNullOrWhiteSpace(p.PERSONEL))
+            {
+                TempData["Error"] = "Personel Adı Boş Bırakılamaz.";
+                return RedirectToAction("UpdateEmployee", new { id = p.ID });
+            }
+
             var Employee = db.TBL_PERSONEL.Find(p.ID);
-            Employee.PERSONEL = p.PERSONEL;
-            db.SaveChanges();
-            return RedirectToAction("EmployeeList");
+            if (Employee == null)
+            {
+                TempData["Error"] = "Güncellenecek Personel bulunamadı.";
+                return RedirectToAction("EmployeeList");
+            }
+            try
+            {
+                Employee.PERSONEL = p.PERSONEL.Trim();
+                db.SaveChanges();
+                return RedirectToAction("EmployeeList");
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Personel Güncellenirken Bir Hata Oluştu.";
+                return RedirectToAction("UpdateEmployee", new { id = p.ID });
+            }          
         }
 
     }

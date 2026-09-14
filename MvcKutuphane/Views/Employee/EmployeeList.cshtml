@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Personel";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
 }
 
 <style>
@@ -287,11 +288,12 @@
     <div class="emp-grid" id="empGrid">
         @foreach (var p in Model)
         {
+            count++;
             var initials = !string.IsNullOrWhiteSpace(p.PERSONEL) ? p.PERSONEL.Trim().Substring(0, 1).ToUpper() : "?";
             <div class="emp-card" data-name="@(p.PERSONEL ?? "").ToLower()">
                 <div class="emp-avatar">@initials</div>
                 <div>
-                    <div class="emp-id">Personel No: @p.ID</div>
+                    <div class="emp-id">Personel No: @count</div>
                     <h3>@p.PERSONEL</h3>
                 </div>
                 <div class="emp-card-actions">

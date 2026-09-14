@@ -1,0 +1,245 @@
+﻿@model List<MvcKutuphane.Models.Entities.TBL_CEZALAR>
+@{
+    ViewBag.Title = "Cezalar";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .pen-page-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+        .pen-page-head p {
+            color: var(--ink-soft);
+            margin: 6px 0 0;
+        }
+
+    .pen-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .pen-stat {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        padding: 18px 20px;
+        box-shadow: var(--shadow-card);
+    }
+
+        .pen-stat .num {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--oxblood);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .pen-stat .label {
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+        }
+
+    .pen-toolbar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+    }
+
+    .pen-search {
+        flex: 1;
+        min-width: 220px;
+        position: relative;
+    }
+
+        .pen-search input {
+            width: 100%;
+            padding: 11px 14px 11px 38px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            background: var(--surface);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+            .pen-search input:focus {
+                outline: none;
+                border-color: var(--oxblood);
+            }
+
+        .pen-search svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--ink-soft);
+        }
+
+    .pen-count {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin-bottom: 16px;
+    }
+
+    table.data-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        overflow: hidden;
+    }
+
+        table.data-table th, table.data-table td {
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.92rem;
+        }
+
+        table.data-table th {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--ink-soft);
+            background: var(--surface-warm);
+        }
+
+        table.data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.data-table tbody tr:hover {
+            background: var(--surface-warm);
+        }
+
+    .amount {
+        font-weight: 700;
+        color: var(--oxblood);
+    }
+
+    .pen-empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--ink-soft);
+    }
+
+        .pen-empty h3 {
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+</style>
+
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Message"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--forest); margin-bottom:20px; color:var(--forest);">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="pen-page-head">
+    <div>
+        <h1 style="margin-bottom:4px;">Cezalar</h1>
+        <p>Geç teslim edilen kitaplara ait gecikme cezaları.</p>
+    </div>
+</div>
+
+<div class="pen-stats">
+    <div class="pen-stat">
+        <div class="num">@(Model != null ? Model.Count : 0)</div>
+        <div class="label">Toplam ceza kaydı</div>
+    </div>
+    <div class="pen-stat">
+        <div class="num">@(Model != null ? Model.Sum(x => (decimal?)x.CEZA ?? 0).ToString("0.00") : "0.00") TL</div>
+        <div class="label">Toplam ceza tutarı</div>
+    </div>
+</div>
+
+<div class="pen-toolbar">
+    <div class="pen-search">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6" />
+            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+        <input type="text" id="penSearchInput" placeholder="Üye ara..." autocomplete="off" />
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <p class="pen-count" id="penCount">@Model.Count() kayıt listeleniyor</p>
+
+    <div class="panel" style="padding:0; overflow-x:auto;">
+        <table class="data-table" id="penTable">
+            <thead>
+                <tr>
+                    <th>Üye</th>
+                    <th>Ceza Başlangıç</th>
+                    <th>Ceza Bitiş</th>
+                    <th>Tutar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    var uyeAd = c.TBL_UYELER != null ? c.TBL_UYELER.AD + " " + c.TBL_UYELER.SOYAD : "-";
+
+                    <tr data-name="@uyeAd.ToLower()">
+                        <td>@uyeAd</td>
+                        <td>@(c.CEZABASLANGIC.HasValue ? c.CEZABASLANGIC.Value.ToString("dd MMM yyyy") : "-")</td>
+                        <td>@(c.CEZABITIS.HasValue ? c.CEZABITIS.Value.ToString("dd MMM yyyy") : "-")</td>
+                        <td><span class="amount">@(c.CEZA.HasValue ? c.CEZA.Value.ToString("0.00") : "0.00") TL</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="panel pen-empty">
+        <h3>Henüz ceza kaydı yok</h3>
+        <p>Kitaplar zamanında iade edildiği sürece burası boş kalır.</p>
+    </div>
+}
+
+<script>
+    (function () {
+        var input = document.getElementById("penSearchInput");
+        var table = document.getElementById("penTable");
+        var countLabel = document.getElementById("penCount");
+        if (!input || !table) return;
+
+        var rows = Array.prototype.slice.call(table.querySelectorAll("tbody tr"));
+
+        input.addEventListener("input", function () {
+            var term = input.value.trim().toLowerCase();
+            var visible = 0;
+
+            rows.forEach(function (row) {
+                var match = row.getAttribute("data-name").indexOf(term) !== -1;
+                row.style.display = match ? "" : "none";
+                if (match) visible++;
+            });
+
+            if (countLabel) countLabel.textContent = visible + " kayıt listeleniyor";
+        });
+    })();
+</script>

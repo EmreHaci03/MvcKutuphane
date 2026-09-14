@@ -142,6 +142,13 @@
     }
 </style>
 
+
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
 <h1 style="margin-bottom:4px;">Kategoriyi Düzenle</h1>
 <p style="color:var(--ink-soft); margin-bottom:28px;">"@Model.CategoryName" kategorisinin bilgilerini güncelleyin.</p>
 
@@ -195,7 +202,8 @@
 
 </div>
 
-<script>(function () {
+<script>
+    (function () {
         var input = document.getElementById("categoryNameInput");
         var preview = document.getElementById("previewName");
         if (!input || !preview) return;

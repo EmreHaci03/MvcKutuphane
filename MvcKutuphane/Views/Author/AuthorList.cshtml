@@ -297,6 +297,22 @@
         }
 </style>
 
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Message"]
+    </div>
+}
+
+
+
 <div class="auth-page-head">
     <div>
         <h1 style="margin-bottom:4px;">Yazarlar</h1>
@@ -390,7 +406,8 @@ else
     </div>
 </div>
 
-<script>(function () {
+<script>
+    (function () {
         var input = document.getElementById("authSearchInput");
         var list = document.getElementById("authList");
         var countLabel = document.getElementById("authCount");

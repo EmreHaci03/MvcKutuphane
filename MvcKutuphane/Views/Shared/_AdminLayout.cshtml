@@ -387,13 +387,18 @@
                 </a>
 
                 <div class="sidebar-section-label">İşlemler</div>
-                <a href="@Url.Action("Index", "Loan")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Loan" ? "active" : "")">
+                <a href="@Url.Action("MoveBookList", "BorrowedBooks")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Loan" ? "active" : "")">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
                     Ödünç işlemleri
                 </a>
                 <a href="@Url.Action("MemberList", "Member")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Member" ? "active" : "")">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" /><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
                     Üyeler @*Tamamlandı*@
+                </a>
+
+                <a href="@Url.Action("PenaltyList", "Penalty")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Penalty" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="1.5" /></svg>
+                    Cezalar
                 </a>
 
                 <div class="sidebar-section-label">Sistem</div>

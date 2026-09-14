@@ -47,28 +47,86 @@ namespace MvcKutuphane.Controllers
         [HttpPost]
         public ActionResult CreateBook(TBL_KITAP p)
         {
-            var Author = db.TBL_YAZAR.Where(x => x.ID == p.YAZAR).Select(x=>x.ID).FirstOrDefault();
-            var Category = db.TBL_KATEGORI.Where(x => x.ID == p.KATEGORI).Select(x => x.ID).FirstOrDefault();
-            p.KATEGORI = Category;
-            p.YAZAR = Author;
-            p.DURUM = true;
-            db.TBL_KITAP.Add(p);
-            db.SaveChanges();
-            return RedirectToAction("BookList");
+            if (string.IsNullOrWhiteSpace(p.AD) || string.IsNullOrWhiteSpace(p.YAYINEVI))
+            {
+                TempData["Error"] = "Kitap Adı Ve Yayın Evi Boş Bırakılamaz.";
+                return RedirectToAction("CreateBook");
+            }
+
+            if (string.IsNullOrWhiteSpace(p.SAYFA))
+            {
+                TempData["Error"] = "Sayfa sayısı boş bırakılamaz.";
+                return RedirectToAction("CreateBook");
+            }
+
+            int numberofPages = 0;
+            if (!int.TryParse(p.SAYFA, out numberofPages) || numberofPages <= 0)
+            {
+                TempData["Error"] = "Sayfa sayısı geçerli bir sayı olmalı.";
+                return RedirectToAction("CreateBook");
+            }
+
+            int YearOfPublication = 0;
+            if (!int.TryParse(p.BASIMYIL, out YearOfPublication) || YearOfPublication < 1400 || YearOfPublication > DateTime.Now.Year)
+            {
+                TempData["Error"] = "Lütfen geçerli bir basım yılı giriniz.";
+                return RedirectToAction("CreateBook");
+            }
+
+            bool yazarVarMi = db.TBL_YAZAR.Any(x => x.ID == p.YAZAR);
+            bool kategoriVarMi = db.TBL_KATEGORI.Any(x => x.ID == p.KATEGORI);
+            if (!yazarVarMi || !kategoriVarMi)
+            {
+                TempData["Error"] = "Lütfen geçerli bir yazar ve kategori seçiniz.";
+                return RedirectToAction("CreateBook");
+            }
+
+            bool ayniKitapVarMi = db.TBL_KITAP.Any(x => x.AD.Trim().ToLower() == p.AD.Trim().ToLower());
+            if (ayniKitapVarMi)
+            {
+                TempData["Error"] = "Bu isimde bir kitap zaten kayıtlı.";
+                return RedirectToAction("CreateBook");
+            }
+            try
+            {
+
+                p.AD = p.AD.Trim();
+                p.DURUM = true;
+
+                db.TBL_KITAP.Add(p);
+                db.SaveChanges();
+                TempData["Message"] = "Kitap eklendi.";
+                return RedirectToAction("BookList");
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Kitap eklenirken bir hata oluştu.";
+                return RedirectToAction("CreateBook");
+            }
         }
+
         [HttpPost]
         public ActionResult DeleteBook(int id)
         {
             var Book = db.TBL_KITAP.Find(id);
             if (Book == null)
             {
-                TempData["Error"] = "Silmek İstediğiniz Kitap Bulunamadı";
+                TempData["Error"] = "Silmek istediğiniz kitap bulunamadı.";
                 return RedirectToAction("BookList");
             }
-            db.TBL_KITAP.Remove(Book);
-            db.SaveChanges();
-            return RedirectToAction("BookList");
 
+            try
+            {
+                db.TBL_KITAP.Remove(Book);
+                db.SaveChanges();
+                TempData["Message"] = "Kitap silindi.";
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Bu kitaba ait ödünç kayıtları olduğu için silinemiyor.";
+            }
+
+            return RedirectToAction("BookList");
         }
 
         [HttpGet]
@@ -77,7 +135,7 @@ namespace MvcKutuphane.Controllers
             var Book = db.TBL_KITAP.Find(id);
             if (Book == null)
             {
-                TempData["Error"] = "Silmek İstediğiniz Kitap Bulunamadı";
+                TempData["Error"] = "Güncellemek İstediğiniz Kitap Bulunamadı";
                 return RedirectToAction("BookList");
             }
 
@@ -104,15 +162,50 @@ namespace MvcKutuphane.Controllers
         [HttpPost]
         public ActionResult UpdateBook(TBL_KITAP p)
         {
+            if (string.IsNullOrWhiteSpace(p.AD) || string.IsNullOrWhiteSpace(p.YAYINEVI))
+            {
+                TempData["Error"] = "Kitap adı ve yayınevi boş bırakılamaz.";
+                return RedirectToAction("UpdateBook", new { id = p.ID });
+            }
+
+            int PageCount = 0;
+            if (!int.TryParse(p.SAYFA, out PageCount) || PageCount <= 0)
+            {
+                TempData["Error"] = "Sayfa sayısı geçerli bir sayı olmalı.";
+                return RedirectToAction("UpdateBook", new { id = p.ID });
+            }
+
+            int yearOfPublicaiton = 0;
+            if (!int.TryParse(p.BASIMYIL, out yearOfPublicaiton) || yearOfPublicaiton <= 0)
+            {
+                TempData["Error"] = "Basım yılı geçerli bir değer olmalı.";
+                return RedirectToAction("UpdateBook", new { id = p.ID });
+            }
             var kitap = db.TBL_KITAP.Find(p.ID);
-            kitap.AD = p.AD;
-            kitap.KATEGORI = p.KATEGORI;
-            kitap.YAZAR = p.YAZAR;
-            kitap.BASIMYIL = p.BASIMYIL;
-            kitap.YAYINEVI = p.YAYINEVI;
-            kitap.SAYFA = p.SAYFA;
-            kitap.DURUM = p.DURUM;
-            db.SaveChanges();
+            if (kitap == null)
+            {
+                TempData["Error"] = "Güncellenecek kitap bulunamadı.";
+                return RedirectToAction("BookList");
+            }
+
+            try
+            {
+                kitap.AD = p.AD.Trim();
+                kitap.KATEGORI = p.KATEGORI;
+                kitap.YAZAR = p.YAZAR;
+                kitap.BASIMYIL = p.BASIMYIL;
+                kitap.YAYINEVI = p.YAYINEVI.Trim();
+                kitap.SAYFA = p.SAYFA;
+                kitap.DURUM = p.DURUM;
+                db.SaveChanges();
+                TempData["Message"] = "Kitap bilgileri güncellendi.";
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Kitap güncellenirken bir hata oluştu.";
+                return RedirectToAction("UpdateBook", new { id = p.ID });
+            }
+
             return RedirectToAction("BookList");
         }
     }

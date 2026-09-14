@@ -130,10 +130,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\BookController.cs" />
+    <Compile Include="Controllers\BorrowedBooksController.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\PenaltyController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -151,6 +154,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\sp_helpdiagrams_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\sysdiagrams.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -265,6 +274,12 @@
     <Content Include="Views\Book\BookList.cshtml" />
     <Content Include="Views\Book\CreateBook.cshtml" />
     <Content Include="Views\Book\UpdateBook.cshtml" />
+    <Content Include="Views\BorrowedBooks\MoveBookList.cshtml" />
+    <Content Include="Views\BorrowedBooks\CreateLend.cshtml" />
+    <Content Include="Views\BorrowedBooks\UpdateLend.cshtml" />
+    <Content Include="Views\Penalty\PenaltyList.cshtml" />
+    <Content Include="Views\Shared\_UILayout.cshtml" />
+    <Content Include="Views\Default\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

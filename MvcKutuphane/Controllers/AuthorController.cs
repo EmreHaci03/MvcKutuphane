@@ -27,17 +27,56 @@ namespace MvcKutuphane.Controllers
         [HttpPost]
         public ActionResult CreateAuthor(TBL_YAZAR p)
         {
-            db.TBL_YAZAR.Add(p);
-            db.SaveChanges();
-            return RedirectToAction("AuthorList");
+            if (string.IsNullOrWhiteSpace(p.AD) || string.IsNullOrWhiteSpace(p.SOYAD))
+            {
+                TempData["Error"] = "Ad ve soyad alanları boş bırakılamaz.";
+                return RedirectToAction("CreateAuthor");
+            }
+
+            bool ExistAuthor = db.TBL_YAZAR.Any(x => x.AD.Trim().ToLower() == p.AD.Trim().ToLower()
+                                          && x.SOYAD.Trim().ToLower() == p.SOYAD.Trim().ToLower());
+
+            if (ExistAuthor)
+            {
+                TempData["Error"] = "Bu isimde bir yazar zaten kayıtlı.";
+                return RedirectToAction("CreateAuthor");
+            }
+
+            try
+            {
+                p.AD = p.AD.Trim();
+                p.SOYAD = p.SOYAD.Trim();
+                db.TBL_YAZAR.Add(p);
+                db.SaveChanges();
+                TempData["Message"] = "Yazar eklendi.";
+                return RedirectToAction("AuthorList");
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Yazar eklenirken bir hata oluştu.";
+                return RedirectToAction("CreateAuthor");
+            }
         }
 
         [HttpPost]
         public ActionResult DeleteAuthor(int id)
         {
             var Author = db.TBL_YAZAR.Find(id);
-            db.TBL_YAZAR.Remove(Author);
-            db.SaveChanges();
+            if (Author == null)
+            {
+                TempData["Error"] = "Silmek istediğiniz yazar bilgisi alınamadı.";
+                return RedirectToAction("AuthorList");
+            }
+            try
+            {
+                db.TBL_YAZAR.Remove(Author);
+                db.SaveChanges();
+                TempData["Message"] = "Yazar silindi.";
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Bu yazara ait kitaplar olduğu için silinemiyor.";
+            }
             return RedirectToAction("AuthorList");
         }
 
@@ -45,18 +84,45 @@ namespace MvcKutuphane.Controllers
         public ActionResult UpdateAuthor(int id)
         {
             var Author = db.TBL_YAZAR.Find(id);
+
+            if (Author == null)
+            {
+                TempData["Error"] = "Güncellemek istediğiniz yazar bilgisi alınamadı.";
+                return RedirectToAction("AuthorList");
+            }
             return View(Author);
         }
 
         [HttpPost]
         public ActionResult UpdateAuthor(TBL_YAZAR p)
         {
+            if (string.IsNullOrWhiteSpace(p.AD) || string.IsNullOrWhiteSpace(p.SOYAD))
+            {
+                TempData["Error"] = "Ad ve soyad alanları boş bırakılamaz.";
+                return RedirectToAction("UpdateAuthor", new { id = p.ID });
+            }
+
             var Author = db.TBL_YAZAR.Find(p.ID);
-            Author.AD = p.AD;
-            Author.SOYAD= p.SOYAD;
-            Author.DETAY= p.DETAY;
-            db.SaveChanges();
-            return RedirectToAction("AuthorList");
+            if (Author == null)
+            {
+                TempData["Error"] = "Güncellenecek yazar bulunamadı.";
+                return RedirectToAction("AuthorList");
+            }
+
+            try
+            {
+                Author.AD = p.AD.Trim();
+                Author.SOYAD = p.SOYAD.Trim();
+                Author.DETAY = p.DETAY;
+                db.SaveChanges();
+                TempData["Message"] = "Yazar bilgileri güncellendi.";
+                return RedirectToAction("AuthorList");
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Yazar güncellenirken bir hata oluştu.";
+                return RedirectToAction("UpdateAuthor", new { id = p.ID });
+            }
         }
     }
 }

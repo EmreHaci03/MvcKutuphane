@@ -159,6 +159,18 @@
     }
 </style>
 
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Message"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--forest); margin-bottom:20px; color:var(--forest);">
+        @TempData["Message"]
+    </div>
+}
 <h1 style="margin-bottom:4px;">Üyeyi Düzenle</h1>
 <p style="color:var(--ink-soft); margin-bottom:28px;">"@Model.AD @Model.SOYAD" bilgilerini güncelleyin.</p>
 

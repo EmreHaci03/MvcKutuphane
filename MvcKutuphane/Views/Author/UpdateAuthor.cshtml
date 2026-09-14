@@ -185,6 +185,12 @@
     }
 </style>
 
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
 <h1 style="margin-bottom:4px;">Yazarı Düzenle</h1>
 <p style="color:var(--ink-soft); margin-bottom:28px;">"@Model.AD @Model.SOYAD" bilgilerini güncelleyin.</p>
 
@@ -255,7 +261,8 @@
 
 </div>
 
-<script>(function () {
+<script>
+    (function () {
         var adInput = document.getElementById("adInput");
         var soyadInput = document.getElementById("soyadInput");
         var previewName = document.getElementById("previewName");

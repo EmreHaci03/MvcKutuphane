@@ -26,17 +26,59 @@ namespace MvcKutuphane.Controllers
         [HttpPost]
         public ActionResult CreateMember(TBL_UYELER p)
         {
-            db.TBL_UYELER.Add(p);
-            db.SaveChanges();
-            return RedirectToAction("MemberList");
+            if (string.IsNullOrWhiteSpace(p.AD) || string.IsNullOrWhiteSpace(p.SOYAD))
+            {
+                TempData["Error"] = "Ad ve soyad alanları boş bırakılamaz.";
+                return RedirectToAction("CreateMember");
+            }
+
+            bool AnyMember = db.TBL_UYELER.Any(x => x.KULLANICIADI.Trim().ToLower() == p.KULLANICIADI.Trim().ToLower());
+            if (AnyMember)
+            {
+                TempData["Error"] = "Bu kullanıcı adı zaten kullanılıyor.";
+                return RedirectToAction("CreateMember");
+            }
+
+            try
+            {
+                p.AD = p.AD.Trim();
+                p.SOYAD = p.SOYAD.Trim();
+                p.KULLANICIADI = p.KULLANICIADI.Trim();
+                p.MAIL = p.MAIL?.Trim();
+                p.TELEFON = p.TELEFON?.Trim();
+                p.OKUL = p.OKUL?.Trim();
+
+                db.TBL_UYELER.Add(p);
+                db.SaveChanges();
+                TempData["Message"] = "Üye eklendi.";
+                return RedirectToAction("MemberList");
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Üye eklenirken bir hata oluştu.";
+                return RedirectToAction("CreateMember");
+            }
         }
 
         [HttpPost]
         public ActionResult DeleteMember(int id)
         {
             var Member = db.TBL_UYELER.Find(id);
-            db.TBL_UYELER.Remove(Member);
-            db.SaveChanges();
+            if (Member == null)
+            {
+                TempData["Error"] = "Üye bulunamadı.";
+                return RedirectToAction("MemberList");
+            }
+            try
+            {
+                db.TBL_UYELER.Remove(Member);
+                db.SaveChanges();
+                TempData["Message"] = "Üye silindi.";
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Üye Silinirken Hata Oluştu Lütfen Tekrar Deneyiniz.";
+            }
             return RedirectToAction("MemberList");
         }
 
@@ -44,27 +86,53 @@ namespace MvcKutuphane.Controllers
         public ActionResult UpdateMember(int id)
         {
             var Member = db.TBL_UYELER.Find(id);
+            if (Member == null)
+            {
+                TempData["Error"] = "Güncellenmek İstenen üye Bilgileri Alınamadı.";
+                return RedirectToAction("MemberList");
+            }
             return View(Member);
         }
 
         [HttpPost]
         public ActionResult UpdateMember(TBL_UYELER p)
         {
+            if (string.IsNullOrWhiteSpace(p.AD) || string.IsNullOrWhiteSpace(p.SOYAD))
+            {
+                TempData["Error"] = "Ad ve soyad alanları boş bırakılamaz.";
+                return RedirectToAction("UpdateMember", new { id = p.ID });
+            }
+
             var Member = db.TBL_UYELER.Find(p.ID);
             if (Member == null)
             {
-                TempData["Error"] = "Üye Bilgisi Bulunamadı";
+                TempData["Error"] = "Üye bilgisi bulunamadı.";
                 return RedirectToAction("MemberList");
             }
-            Member.AD = p.AD;
-            Member.SOYAD = p.SOYAD;
-            Member.MAIL = p.MAIL;
-            Member.KULLANICIADI = p.KULLANICIADI;
-            Member.SIFRE = p.SIFRE;
-            Member.FOTOGRAF = p.FOTOGRAF;
-            Member.TELEFON=p.TELEFON;
-            Member.OKUL = p.OKUL;
-            db.SaveChanges();
+
+            try
+            {
+                Member.AD = p.AD.Trim();
+                Member.SOYAD = p.SOYAD.Trim();
+                Member.MAIL = p.MAIL?.Trim();
+                Member.KULLANICIADI = p.KULLANICIADI?.Trim();
+                if (!string.IsNullOrWhiteSpace(p.SIFRE))
+                {
+                    Member.SIFRE = p.SIFRE.Trim();
+                }
+                Member.FOTOGRAF = p.FOTOGRAF;
+                Member.TELEFON = p.TELEFON?.Trim();
+                Member.OKUL = p.OKUL?.Trim();
+
+                db.SaveChanges();
+                TempData["Message"] = "Üye bilgileri güncellendi.";
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Üye güncellenirken bir hata oluştu.";
+                return RedirectToAction("UpdateMember", new { id = p.ID });
+            }
+
             return RedirectToAction("MemberList");
         }
 

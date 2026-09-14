@@ -1,0 +1,298 @@
+﻿@model MvcKutuphane.Models.Entities.TBL_HAREKET
+@using System.Web.Mvc
+@{
+    ViewBag.Title = "Ödünç Kaydını Düzenle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .form-layout {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            background: var(--surface);
+            font-family: var(--font-body);
+            font-size: 0.98rem;
+            color: var(--ink);
+            appearance: none;
+        }
+
+        .form-group select {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b5d52' stroke-width='1.6'><path d='M6 9l6 6 6-6'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 36px;
+        }
+
+        .form-group input[readonly] {
+            background: var(--surface-warm);
+            color: var(--ink-soft);
+            cursor: not-allowed;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--oxblood);
+        }
+
+    .form-hint {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        margin-top: 6px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .validation-summary-errors {
+        background: #f7e9e6;
+        border: 1px solid #e6c3ba;
+        color: var(--oxblood-dark);
+        padding: 12px 16px;
+        border-radius: var(--radius-s);
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
+
+    .field-validation-error {
+        display: block;
+        color: var(--oxblood);
+        font-size: 0.85rem;
+        margin-top: 6px;
+    }
+
+    .input-validation-error {
+        border-color: var(--oxblood) !important;
+    }
+
+    .side-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+        .side-panel .panel h3 {
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+
+    .preview-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--brass);
+        border-radius: var(--radius-m);
+        padding: 20px;
+    }
+
+    .preview-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.9rem;
+    }
+
+        .preview-row:last-child {
+            border-bottom: none;
+        }
+
+        .preview-row .label {
+            color: var(--ink-soft);
+        }
+
+        .preview-row .value {
+            color: var(--ink);
+            font-weight: 600;
+            text-align: right;
+        }
+
+    .tips-list {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+    }
+
+        .tips-list li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+    @@media (max-width: 900px) {
+        .form-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 520px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Message"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--forest); margin-bottom:20px; color:var(--forest);">
+        @TempData["Message"]
+    </div>
+}
+
+<h1 style="margin-bottom:4px;">Ödünç Kaydını Düzenle</h1>
+<p style="color:var(--ink-soft); margin-bottom:28px;">Bu ödünç işleminin bilgilerini güncelleyin.</p>
+
+<div class="form-layout">
+
+    <div class="panel">
+        @using (Html.BeginForm("UpdateLend", "BorrowedBooks", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ID)
+            @Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
+
+            <div class="form-group">
+                <label>İşlem No</label>
+                <input type="text" value="@Model.ID" readonly />
+            </div>
+
+            <div class="form-group">
+                <label>Kitap</label>
+                @Html.DropDownList("KITAP", (List<SelectListItem>)ViewBag.Kitaplar, "Kitap seçin", new { @class = "input-text", id = "kitapInput" })
+                @Html.ValidationMessage("KITAP", "", new { @class = "field-validation-error" })
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Üye</label>
+                    @Html.DropDownList("UYE", (List<SelectListItem>)ViewBag.Uyeler, "Üye seçin", new { @class = "input-text", id = "uyeInput" })
+                    @Html.ValidationMessage("UYE", "", new { @class = "field-validation-error" })
+                </div>
+                <div class="form-group">
+                    <label>Görevli Personel</label>
+                    @Html.DropDownList("PERSONEL", (List<SelectListItem>)ViewBag.Personeller, "Personel seçin", new { @class = "input-text", id = "personelInput" })
+                    @Html.ValidationMessage("PERSONEL", "", new { @class = "field-validation-error" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Alış Tarihi</label>
+                    <input type="date" class="input-text" name="ALISTARIH" id="alisTarihInput" value="@Model.ALISTARIH" />
+                </div>
+                <div class="form-group">
+                    <label>Teslim Tarihi</label>
+                    <input type="date" class="input-text" name="IADETARIH" id="iadeTarihInput" value="@Model.IADETARIH" />
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Değişiklikleri kaydet</button>
+                <a class="btn btn-ghost" href="@Url.Action("MoveBookList", "BorrowedBooks")">Vazgeç</a>
+            </div>
+        }
+    </div>
+
+    <div class="side-panel">
+        <div class="panel">
+            <h3>İşlem özeti</h3>
+            <div class="preview-card">
+                <div class="preview-row"><span class="label">Kitap</span><span class="value" id="previewKitap">—</span></div>
+                <div class="preview-row"><span class="label">Üye</span><span class="value" id="previewUye">—</span></div>
+                <div class="preview-row"><span class="label">Personel</span><span class="value" id="previewPersonel">—</span></div>
+                <div class="preview-row"><span class="label">Alış tarihi</span><span class="value" id="previewAlis">—</span></div>
+                <div class="preview-row"><span class="label">Teslim tarihi</span><span class="value" id="previewIade">—</span></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Dikkat edilmesi gerekenler</h3>
+            <ul class="tips-list">
+                <li>Kitap veya üyeyi değiştirmek, önceki kayıtla ilişkiyi tamamen değiştirir.</li>
+                <li>Teslim tarihini alış tarihinden önceki bir gün yapmayın.</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    (function () {
+        var kitapInput = document.getElementById("kitapInput");
+        var uyeInput = document.getElementById("uyeInput");
+        var personelInput = document.getElementById("personelInput");
+        var alisTarihInput = document.getElementById("alisTarihInput");
+        var iadeTarihInput = document.getElementById("iadeTarihInput");
+
+        var previewKitap = document.getElementById("previewKitap");
+        var previewUye = document.getElementById("previewUye");
+        var previewPersonel = document.getElementById("previewPersonel");
+        var previewAlis = document.getElementById("previewAlis");
+        var previewIade = document.getElementById("previewIade");
+
+        function selectedText(select) {
+            var opt = select.options[select.selectedIndex];
+            if (!opt || opt.value === "") return "—";
+            return opt.text;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return "—";
+            var parts = dateStr.split("-");
+            if (parts.length !== 3) return dateStr;
+            return parts[2] + "." + parts[1] + "." + parts[0];
+        }
+
+        function update() {
+            previewKitap.textContent = selectedText(kitapInput);
+            previewUye.textContent = selectedText(uyeInput);
+            previewPersonel.textContent = selectedText(personelInput);
+            previewAlis.textContent = formatDate(alisTarihInput.value);
+            previewIade.textContent = formatDate(iadeTarihInput.value);
+        }
+
+        kitapInput.addEventListener("change", update);
+        uyeInput.addEventListener("change", update);
+        personelInput.addEventListener("change", update);
+        alisTarihInput.addEventListener("change", update);
+        iadeTarihInput.addEventListener("change", update);
+        update();
+    })();</script>

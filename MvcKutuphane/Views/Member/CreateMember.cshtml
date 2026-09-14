@@ -153,6 +153,19 @@
     }
 </style>
 
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Message"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--forest); margin-bottom:20px; color:var(--forest);">
+        @TempData["Message"]
+    </div>
+}
+
 <h1 style="margin-bottom:4px;">Yeni Üye Ekle</h1>
 <p style="color:var(--ink-soft); margin-bottom:28px;">Kütüphaneye yeni bir üye kaydedin.</p>
 
@@ -177,21 +190,21 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.MAİL, "E-posta")
-                @Html.TextBoxFor(m => m.MAİL, new { @class = "input-text", type = "email", autocomplete = "off" })
-                @Html.ValidationMessageFor(m => m.MAİL, "", new { @class = "field-validation-error" })
+                @Html.LabelFor(m => m.MAIL, "E-posta")
+                @Html.TextBoxFor(m => m.MAIL, new { @class = "input-text", type = "email", autocomplete = "off" })
+                @Html.ValidationMessageFor(m => m.MAIL, "", new { @class = "field-validation-error" })
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    @Html.LabelFor(m => m.KULLANİCİADİ, "Kullanıcı Adı")
-                    @Html.TextBoxFor(m => m.KULLANİCİADİ, new { @class = "input-text", autocomplete = "off" })
-                    @Html.ValidationMessageFor(m => m.KULLANİCİADİ, "", new { @class = "field-validation-error" })
+                    @Html.LabelFor(m => m.KULLANICIADI, "Kullanıcı Adı")
+                    @Html.TextBoxFor(m => m.KULLANICIADI, new { @class = "input-text", autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.KULLANICIADI, "", new { @class = "field-validation-error" })
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.ŞİFRE, "Şifre")
-                    @Html.PasswordFor(m => m.ŞİFRE, new { @class = "input-text", autocomplete = "new-password" })
-                    @Html.ValidationMessageFor(m => m.ŞİFRE, "", new { @class = "field-validation-error" })
+                    @Html.LabelFor(m => m.SIFRE, "Şifre")
+                    @Html.PasswordFor(m => m.SIFRE, new { @class = "input-text", autocomplete = "new-password" })
+                    @Html.ValidationMessageFor(m => m.SIFRE, "", new { @class = "field-validation-error" })
                 </div>
             </div>
 
