@@ -363,54 +363,71 @@
                 <span>Kütüphanem</span>
             </div>
 
+
             <nav class="sidebar-nav">
+
+                <div class="sidebar-section-label">Genel</div>
+                <a href="@Url.Action("Index", "Dashboard")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Dashboard" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="7" height="9" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="14" y="3" width="7" height="5" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="14" y="12" width="7" height="9" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="3" y="16" width="7" height="5" rx="1" stroke="currentColor" stroke-width="1.5" /></svg>
+                    Panel
+                </a>
                 <div class="sidebar-section-label">Katalog</div>
                 <a href="@Url.Action("BookList", "Book")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Book" ? "active" : "")">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5C4.7 20 4 19.3 4 18.5v-13Z" stroke="currentColor" stroke-width="1.5" /><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.5" /></svg>
                     Kitaplar
                 </a>
-                <a href="@Url.Action("Index", "Category")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Category" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="13" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="4" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="13" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /></svg>
-                    Kategoriler @*Tamamlandı*@
-                </a>
-                <a href="@Url.Action("EmployeeList", "Employee")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Personel" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5" /><circle cx="9" cy="11" r="2" stroke="currentColor" stroke-width="1.5" /><path d="M6 16c.6-1.5 1.8-2.3 3-2.3s2.4.8 3 2.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><path d="M14 10h4M14 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-                    Personel @*Tamamlandı*@
-                </a>
-                <a href="@Url.Action("AuthorList", "Author")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Author" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 20c1.5-4.5 4-9 8.5-13.5C14 5 16 4 18 4c0 2-1 4-2.5 5.5C11 14 6.5 16.5 4 20Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-                        <path d="M12.5 9.5 15 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                        <path d="M4 20H2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                    </svg>
-                    Yazarlar @*Tamamlandı*@
+
+                <a href="@Url.Action("Index", "Statistic")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Statistics" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.5 14.7 8l6 .9-4.4 4.2 1 6-5.3-2.8L6.7 19l1-6L3.3 8.9l6-.9Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
+                    İstatistikler
                 </a>
 
-                <div class="sidebar-section-label">İşlemler</div>
-                <a href="@Url.Action("MoveBookList", "BorrowedBooks")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Loan" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-                    Ödünç işlemleri
-                </a>
-                <a href="@Url.Action("MemberList", "Member")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Member" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" /><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-                    Üyeler @*Tamamlandı*@
-                </a>
+                    <a href="@Url.Action("Index", "Category")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Category" ? "active" : "")">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="13" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="4" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="13" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /></svg>
+                        Kategoriler
+                    </a>
+                    <a href="@Url.Action("EmployeeList", "Employee")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Personel" ? "active" : "")">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5" /><circle cx="9" cy="11" r="2" stroke="currentColor" stroke-width="1.5" /><path d="M6 16c.6-1.5 1.8-2.3 3-2.3s2.4.8 3 2.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><path d="M14 10h4M14 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                        Personel
+                    </a>
+                    <a href="@Url.Action("AuthorList", "Author")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Author" ? "active" : "")">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 20c1.5-4.5 4-9 8.5-13.5C14 5 16 4 18 4c0 2-1 4-2.5 5.5C11 14 6.5 16.5 4 20Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                            <path d="M12.5 9.5 15 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                            <path d="M4 20H2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                        Yazarlar
+                    </a>
 
-                <a href="@Url.Action("PenaltyList", "Penalty")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Penalty" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="1.5" /></svg>
-                    Cezalar
-                </a>
+                    <div class="sidebar-section-label">İşlemler</div>
+                    <a href="@Url.Action("MoveBookList", "BorrowedBooks")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Loan" ? "active" : "")">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                        Ödünç işlemleri
+                    </a>
+                    <a href="@Url.Action("ReturnedBooksList", "Transaction")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "BorrowedBooks" && ViewContext.RouteData.Values["action"].ToString() == "ReturnedBooksList" ? "active" : "")">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                        İade Geçmişi
+                    </a>
+                    <a href="@Url.Action("MemberList", "Member")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Member" ? "active" : "")">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" /><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                        Üyeler @*Tamamlandı*@
+                    </a>
 
-                <div class="sidebar-section-label">Sistem</div>
-                <a href="@Url.Action("Index", "Report")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Report" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 19V9M12 19V5M19 19v-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-                    Raporlar
-                </a>
-                <a href="@Url.Action("Index", "Settings")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Settings" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" /><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-                    Ayarlar
-                </a>
-            </nav>
+                    <a href="@Url.Action("PenaltyList", "Penalty")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Penalty" ? "active" : "")">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="1.5" /></svg>
+                        Cezalar
+                    </a>
+
+                    <div class="sidebar-section-label">Sistem</div>
+                    <a href="@Url.Action("Index", "Report")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Report" ? "active" : "")">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 19V9M12 19V5M19 19v-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                        Raporlar
+                    </a>
+                    <a href="@Url.Action("Index", "Settings")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Settings" ? "active" : "")">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" /><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                        Ayarlar
+                    </a>
+</nav>
 
             <div class="sidebar-foot">
                 Kütüphanem Yönetim Paneli

@@ -36,6 +36,8 @@ namespace MvcKutuphane.Models.Entities
         public virtual DbSet<TBL_PERSONEL> TBL_PERSONEL { get; set; }
         public virtual DbSet<TBL_UYELER> TBL_UYELER { get; set; }
         public virtual DbSet<TBL_YAZAR> TBL_YAZAR { get; set; }
+        public virtual DbSet<TBL_MESAJ> TBL_MESAJ { get; set; }
+        public virtual DbSet<TBL_BULTEN> TBL_BULTEN { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

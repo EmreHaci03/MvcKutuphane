@@ -1,8 +1,479 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = null;
     Layout = "~/Views/Shared/_UILayout.cshtml";
 }
 
-<h2>Index</h2>
+<style>
+    .home-hero {
+        margin: -56px -28px 64px;
+        padding: 76px 28px 64px;
+        background: radial-gradient(ellipse 700px 420px at 82% -10%, rgba(169, 121, 59, 0.16), transparent 60%), radial-gradient(ellipse 600px 400px at 5% 110%, rgba(122, 42, 46, 0.10), transparent 60%), var(--surface-warm);
+        border-bottom: 1px solid var(--border);
+    }
 
+    .home-hero-inner {
+        max-width: 1180px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 48px;
+        align-items: center;
+    }
+
+    .home-hero h1 {
+        margin-bottom: 20px;
+    }
+
+    .home-hero .lede {
+        font-size: 1.14rem;
+        color: var(--ink-soft);
+        max-width: 46ch;
+        margin-bottom: 32px;
+    }
+
+    .home-hero-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .home-hero-stats {
+        display: flex;
+        gap: 32px;
+        margin-top: 44px;
+        padding-top: 28px;
+        border-top: 1px solid var(--border-strong);
+    }
+
+        .home-hero-stats .stat-num {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1.7rem;
+            color: var(--oxblood);
+            line-height: 1;
+        }
+
+        .home-hero-stats .stat-label {
+            font-size: 0.84rem;
+            color: var(--ink-soft);
+            margin-top: 4px;
+        }
+
+    .stack-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-l);
+        box-shadow: var(--shadow-lift);
+        padding: 26px;
+        width: 100%;
+        max-width: 340px;
+        margin: 0 auto;
+    }
+
+        .stack-card .row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+            .stack-card .row:last-child {
+                border-bottom: none;
+            }
+
+    .spine-chip {
+        width: 34px;
+        height: 46px;
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+    .stack-card .t1 {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--ink);
+    }
+
+    .stack-card .t2 {
+        font-size: 0.8rem;
+        color: var(--ink-soft);
+    }
+
+    .home-section {
+        margin-bottom: 72px;
+    }
+
+    .home-section-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 36px;
+        flex-wrap: wrap;
+    }
+
+        .home-section-head p {
+            color: var(--ink-soft);
+            max-width: 52ch;
+            margin: 8px 0 0;
+        }
+
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 24px;
+    }
+
+    .book-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        overflow: hidden;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+        }
+
+    .book-spine {
+        height: 150px;
+        border-bottom: 3px solid var(--brass);
+        display: flex;
+        align-items: flex-end;
+        padding: 12px 14px;
+        color: var(--surface-warm);
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 0.92rem;
+        line-height: 1.2;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .book-spine img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .book-spine .spine-label {
+            position: relative;
+            z-index: 1;
+        }
+
+        .book-spine.has-image {
+            background: #2a211c;
+        }
+
+            .book-spine.has-image::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);
+                z-index: 0;
+            }
+
+    .book-info {
+        padding: 16px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .book-info .author {
+            color: var(--ink-soft);
+            font-size: 0.87rem;
+            margin: 0;
+        }
+
+    .category-strip {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .category-chip {
+        padding: 10px 20px;
+        border-radius: 999px;
+        border: 1px solid var(--border-strong);
+        background: var(--surface);
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+    }
+
+        .category-chip:hover {
+            border-color: var(--oxblood);
+            color: var(--oxblood);
+        }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+    }
+
+    .feature-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: var(--surface-warm);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--oxblood);
+        margin-bottom: 18px;
+    }
+
+        .feature-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+    .feature-card p {
+        color: var(--ink-soft);
+    }
+
+    .cta-band {
+        background: var(--oxblood-dark);
+        color: #ecdfd2;
+        border-radius: var(--radius-l);
+        padding: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+        .cta-band h2 {
+            color: #f4ead9;
+            margin-bottom: 8px;
+        }
+
+        .cta-band p {
+            color: #d9c9b8;
+            margin: 0;
+            max-width: 44ch;
+        }
+
+        .cta-band .btn-primary {
+            background: var(--brass);
+            border-color: var(--brass);
+            color: #2a1a0e;
+        }
+
+            .cta-band .btn-primary:hover {
+                background: var(--brass-light);
+            }
+
+    @@media (max-width: 980px) {
+        .home-hero-inner {
+            grid-template-columns: 1fr;
+        }
+
+        .feature-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @@media (max-width: 760px) {
+        .home-hero {
+            margin: -32px -20px 48px;
+            padding: 48px 20px;
+        }
+
+        h1 {
+            font-size: 2.1rem;
+        }
+
+        .home-hero-stats {
+            flex-wrap: wrap;
+            gap: 22px;
+        }
+
+        .feature-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .cta-band {
+            flex-direction: column;
+            text-align: center;
+            padding: 34px 24px;
+        }
+    }
+</style>
+
+
+
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--forest); margin-bottom:20px; color:var(--forest);">
+        @TempData["Message"]
+    </div>
+}
+
+<section class="home-hero">
+    <div class="home-hero-inner">
+        <div>
+            <p class="eyebrow">Şehrin en eski koleksiyonu</p>
+            <h1>Her kitabın bir<br />raf arkadaşı vardır.</h1>
+            <p class="lede">@(ViewBag.ToplamKitap ?? 0) eserlik koleksiyonumuz, uzman kürasyonlu listeler ve dijital üyelik ile okuma alışkanlığınızı büyütün.</p>
+            <div class="home-hero-actions">
+                <a class="btn btn-primary" href="@Url.Action("BookList", "Catalog")">Kataloğu keşfet</a>
+                <a class="btn btn-ghost" href="@Url.Action("Register", "Account")">Üye ol</a>
+            </div>
+
+            <div class="home-hero-stats">
+                <div>
+                    <div class="stat-num">@(ViewBag.ToplamKitap ?? 0)</div>
+                    <div class="stat-label">Kitap</div>
+                </div>
+                <div>
+                    <div class="stat-num">@(ViewBag.ToplamUye ?? 0)</div>
+                    <div class="stat-label">Aktif üye</div>
+                </div>
+                <div>
+                    <div class="stat-num">@(ViewBag.ToplamKategori ?? 0)</div>
+                    <div class="stat-label">Kategori</div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="stack-card">
+                @if (ViewBag.SonKitaplar != null)
+                {
+                    var renkler = new[] { "#7a2a2e", "#2f4a3e", "#a9793b" };
+                    int i = 0;
+                    foreach (var kitap in (List<MvcKutuphane.Models.Entities.TBL_KITAP>)ViewBag.SonKitaplar)
+                    {
+                        var yazar = kitap.TBL_YAZAR != null ? kitap.TBL_YAZAR.AD + " " + kitap.TBL_YAZAR.SOYAD : "-";
+                        <div class="row">
+                            <div class="spine-chip" style="background:@renkler[i % renkler.Length];"></div>
+                            <div>
+                                <div class="t1">@kitap.AD</div>
+                                <div class="t2">@yazar</div>
+                            </div>
+                        </div>
+                        i++;
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="home-section-head">
+        <div>
+            <p class="eyebrow" style="margin-bottom:8px;">Kataloğa göz atın</p>
+            <h2>Öne çıkan kitaplar</h2>
+        </div>
+        <a class="btn btn-ghost" href="@Url.Action("BookList", "Catalog")">Tüm kitapları gör</a>
+    </div>
+
+    @if (ViewBag.OneCikanlar != null)
+    {
+        <div class="book-grid">
+            @{
+                var renkler2 = new[] { "#7a2a2e", "#2f4a3e", "#a9793b", "#5b1f22" };
+                int j = 0;
+            }
+            @foreach (var kitap in (List<MvcKutuphane.Models.Entities.TBL_KITAP>)ViewBag.OneCikanlar)
+            {
+                var yazarAdi = kitap.TBL_YAZAR != null ? kitap.TBL_YAZAR.AD + " " + kitap.TBL_YAZAR.SOYAD : "Bilinmeyen Yazar";
+                var renk = renkler2[j % renkler2.Length];
+                var hasImage = !string.IsNullOrEmpty(kitap.FOTOGRAF);
+                j++;
+
+                <div class="book-card">
+                    <div class="book-spine @(hasImage ? "has-image" : "")" style="@(hasImage ? "" : "background:" + renk + ";")">
+                        @if (hasImage)
+                        {
+                            <img src="@kitap.FOTOGRAF" alt="@kitap.AD" onerror="this.style.display='none';" />
+                        }
+                        <span class="spine-label">@kitap.AD</span>
+                    </div>
+                    <div class="book-info">
+                        <h3 style="font-size: 1.02rem; margin-bottom: 4px;">@kitap.AD</h3>
+                        <p class="author">@yazarAdi</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>
+
+<section class="home-section">
+    <div class="home-section-head">
+        <div>
+            <p class="eyebrow" style="margin-bottom:8px;">İlgi alanınızı seçin</p>
+            <h2>Kategorilere göz atın</h2>
+        </div>
+        <a class="btn btn-ghost" href="@Url.Action("Index", "Categories")">Tüm kategoriler</a>
+    </div>
+
+    @if (ViewBag.Kategoriler != null)
+    {
+        <div class="category-strip">
+            @foreach (var kategori in (List<MvcKutuphane.Models.Entities.TBL_KATEGORI>)ViewBag.Kategoriler)
+            {
+                <a class="category-chip" href="@Url.Action("BookListWithCategory", "Catalog", new { id = kategori.ID })">@kategori.CategoryName</a>
+            }
+        </div>
+    }
+</section>
+
+<section class="home-section">
+    <div class="home-section-head">
+        <div>
+            <p class="eyebrow" style="margin-bottom:8px;">Neden Kütüphanem</p>
+            <h2>Okumayı kolaylaştıran bir deneyim</h2>
+        </div>
+    </div>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 9h18" /></svg></div>
+            <h3 style="font-size:1.15rem;">Zengin katalog</h3>
+            <p>Klasiklerden yeni baskılara, her zevke uygun binlerce eser.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" /></svg></div>
+            <h3 style="font-size:1.15rem;">Hızlı ödünç süreci</h3>
+            <p>Dijital üyelik kartınızla dakikalar içinde kitabınızı alın.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6M12 3.2a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Z" /></svg></div>
+            <h3 style="font-size:1.15rem;">Uzman öneriler</h3>
+            <p>Kürasyonlu listeler ve okuyucu topluluğundan tavsiyeler.</p>
+        </div>
+    </div>
+</section>
+
+<section class="home-section" style="margin-bottom: 0;">
+    <div class="cta-band">
+        <div>
+            <h2>Bugün üye olun, ilk kitabınızı hemen alın.</h2>
+            <p>Kayıt işlemi iki dakikadan az sürer, ilk ay tamamen ücretsizdir.</p>
+        </div>
+        <a class="btn btn-primary" href="@Url.Action("Register", "Account")">Hemen üye ol</a>
+    </div>
+</section>

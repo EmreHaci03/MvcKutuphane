@@ -313,6 +313,7 @@
                     <th>Yazar</th>
                     <th>Yayınevi</th>
                     <th>Sayfa</th>
+                    <th>Fotoğraf</th>
                     <th>Durum</th>
                     <th></th>
                 </tr>
@@ -327,6 +328,22 @@
                         <td>@kitap.TBL_YAZAR.AD  @kitap.TBL_YAZAR.SOYAD</td>
                         <td>@kitap.YAYINEVI</td>
                         <td>@kitap.SAYFA</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(kitap.FOTOGRAF))
+                            {
+                                var fotoSrc = kitap.FOTOGRAF.StartsWith("http") ? kitap.FOTOGRAF : Url.Content("~/Content/uploads/books/" + kitap.FOTOGRAF);
+                                <img src="@fotoSrc" alt="@kitap.AD" style="width:44px; height:60px; object-fit:cover; border-radius:3px; border:1px solid var(--border);" />
+                            }
+                            else
+                            {
+                                <div style="width:44px; height:60px; border-radius:3px; background:var(--surface-warm); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--ink-soft);">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:18px; height:18px;">
+                                        <path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5C4.7 20 4 19.3 4 18.5v-13Z" stroke="currentColor" stroke-width="1.5" />
+                                        <path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.5" />
+                                    </svg>
+                                </div>
+                            }
+                        </td>
                         <td>
                             @if (kitap.DURUM == true)
                             {

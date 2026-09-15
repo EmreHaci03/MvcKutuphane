@@ -1,0 +1,278 @@
+﻿@{
+    ViewBag.Title = "Hakkımızda";
+    ViewBag.Lede = "Şehrin en eski koleksiyonlarından yeni baskılara, her okuyucuya bir raf.";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<style>
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 48px;
+        align-items: center;
+        margin-bottom: 64px;
+    }
+
+        .about-grid h2 {
+            margin-bottom: 16px;
+        }
+
+        .about-grid p {
+            color: var(--ink-soft);
+            font-size: 1.02rem;
+            margin-bottom: 16px;
+        }
+
+    .about-visual {
+        background: var(--surface-warm);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-l);
+        padding: 40px;
+        box-shadow: var(--shadow-card);
+    }
+
+        .about-visual .stack-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 160px;
+        }
+
+        .about-visual .spine {
+            border-radius: 3px 3px 0 0;
+            flex: 1;
+        }
+
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-bottom: 64px;
+        padding: 36px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+        .stat-item .num {
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            font-weight: 600;
+            color: var(--oxblood);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-item .label {
+            color: var(--ink-soft);
+            font-size: 0.92rem;
+        }
+
+    .value-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+        margin-bottom: 64px;
+    }
+
+    .value-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        padding: 28px;
+    }
+
+    .value-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: var(--surface-warm);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--oxblood);
+        margin-bottom: 18px;
+    }
+
+        .value-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+    .value-card h3 {
+        font-size: 1.15rem;
+        margin-bottom: 10px;
+    }
+
+    .value-card p {
+        color: var(--ink-soft);
+        margin: 0;
+    }
+
+    .timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-bottom: 20px;
+    }
+
+    .timeline-item {
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        gap: 24px;
+        padding: 24px 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+    .timeline-year {
+        font-family: var(--font-display);
+        font-weight: 600;
+        color: var(--brass);
+        font-size: 1.3rem;
+    }
+
+    .timeline-content h4 {
+        margin-bottom: 6px;
+        font-size: 1.05rem;
+    }
+
+    .timeline-content p {
+        color: var(--ink-soft);
+        margin: 0;
+    }
+
+    @@media (max-width: 900px) {
+        .about-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stat-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 32px 16px;
+        }
+
+        .value-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 560px) {
+        .stat-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .timeline-item {
+            grid-template-columns: 70px 1fr;
+            gap: 14px;
+        }
+    }
+</style>
+
+<section class="about-grid">
+    <div>
+        <p class="eyebrow">Hikayemiz</p>
+        <h2>Kitapla insanı buluşturan bir gelenek</h2>
+        <p>Kütüphanem, okumayı bir alışkanlık değil bir yaşam biçimi haline getirmek isteyen herkes için kuruldu. Şehrin en eski koleksiyonlarından günümüzün en yeni baskılarına kadar geniş bir yelpazeyi tek çatı altında topluyoruz.</p>
+        <p>Amacımız sadece kitap ödünç vermek değil; okuma kültürünü destekleyen, meraklı zihinleri bir araya getiren bir topluluk oluşturmak. Her üyemizin kendine ait bir raf bulabileceğine inanıyoruz.</p>
+    </div>
+    <div class="about-visual">
+        <div class="stack-row">
+            <div class="spine" style="background:#7a2a2e; height:70%;"></div>
+            <div class="spine" style="background:#2f4a3e; height:100%;"></div>
+            <div class="spine" style="background:#a9793b; height:55%;"></div>
+            <div class="spine" style="background:#5b1f22; height:85%;"></div>
+            <div class="spine" style="background:#2f4a3e; height:65%;"></div>
+            <div class="spine" style="background:#7a2a2e; height:95%;"></div>
+        </div>
+    </div>
+</section>
+
+<section class="stat-grid">
+    <div class="stat-item">
+        <div class="num">@ViewBag.BookCount+</div>
+        <div class="label">Kitap</div>
+    </div>
+    <div class="stat-item">
+        <div class="num">@ViewBag.ActiveMember</div>
+        <div class="label">Aktif üye</div>
+    </div>
+    <div class="stat-item">
+        <div class="num">@ViewBag.Category</div>
+        <div class="label">Kategori</div>
+    </div>
+</section>
+
+<section style="margin-bottom: 64px;">
+    <div style="text-align:center; margin-bottom: 40px;">
+        <p class="eyebrow" style="justify-content:center;">Neyi önemsiyoruz</p>
+        <h2>Değerlerimiz</h2>
+    </div>
+    <div class="value-grid">
+        <div class="value-card">
+            <div class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 9h18" /></svg>
+            </div>
+            <h3>Erişilebilirlik</h3>
+            <p>Her yaştan ve her ilgi alanından okuyucunun kolayca kitaba ulaşabileceği bir sistem kurduk.</p>
+        </div>
+        <div class="value-card">
+            <div class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.6"><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6M12 3.2a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Z" /></svg>
+            </div>
+            <h3>Topluluk</h3>
+            <p>Okuma etkinlikleri ve öneri listeleriyle okuyucuları bir araya getiren canlı bir topluluk hedefliyoruz.</p>
+        </div>
+        <div class="value-card">
+            <div class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.6"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" /></svg>
+            </div>
+            <h3>Süreklilik</h3>
+            <p>Koleksiyonumuzu düzenli olarak güncelleyerek güncel ve klasik eserleri bir arada sunuyoruz.</p>
+        </div>
+    </div>
+</section>
+
+<section style="margin-bottom: 40px;">
+    <div style="margin-bottom: 32px;">
+        <p class="eyebrow">Yol haritamız</p>
+        <h2>Bugüne nasıl geldik</h2>
+    </div>
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-year">2015</div>
+            <div class="timeline-content">
+                <h4>İlk raflar kuruldu</h4>
+                <p>Küçük bir koleksiyonla, mahalle ölçeğinde bir kütüphane olarak yola çıktık.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-year">2019</div>
+            <div class="timeline-content">
+                <h4>Dijital üyelik sistemi</h4>
+                <p>Üyelerimizin ödünç işlemlerini takip edebileceği çevrimiçi sistemi hayata geçirdik.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-year">2023</div>
+            <div class="timeline-content">
+                <h4>Koleksiyon 4.000'i aştı</h4>
+                <p>Kategori çeşitliliğimizi genişleterek şehrin en kapsamlı koleksiyonlarından birine ulaştık.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-year">2026</div>
+            <div class="timeline-content">
+                <h4>Yeni nesil kütüphane deneyimi</h4>
+                <p>Bugün, okuma alışkanlığını büyütmeye devam eden canlı bir topluluğa dönüştük.</p>
+            </div>
+        </div>
+    </div>
+</section>

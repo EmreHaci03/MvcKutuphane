@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Kullanım Şartları";
+    ViewBag.Lede = "Kütüphanem web sitesini kullanırken uymanız gereken şartlar.";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<style>
+    .legal-wrap {
+        max-width: 820px;
+        margin: 0 auto;
+    }
+
+    .legal-updated {
+        color: var(--ink-soft);
+        font-size: 0.88rem;
+        margin-bottom: 40px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .legal-section {
+        margin-bottom: 36px;
+    }
+
+        .legal-section h2 {
+            font-size: 1.25rem;
+            margin-bottom: 14px;
+        }
+
+        .legal-section p {
+            color: var(--ink-soft);
+            margin-bottom: 12px;
+            line-height: 1.65;
+        }
+
+        .legal-section ul {
+            margin: 0 0 12px;
+            padding-left: 22px;
+            color: var(--ink-soft);
+        }
+
+        .legal-section li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+    .legal-note {
+        background: var(--surface-warm);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--brass);
+        border-radius: var(--radius-m);
+        padding: 20px 24px;
+        margin-top: 48px;
+    }
+
+        .legal-note p {
+            margin: 0;
+            color: var(--ink-soft);
+            font-size: 0.94rem;
+        }
+</style>
+
+<div class="legal-wrap">
+
+    <p class="legal-updated">Son güncelleme: 1 Eylül 2026</p>
+
+    <div class="legal-section">
+        <h2>1. Kabul Beyanı</h2>
+        <p>Kütüphanem web sitesini kullanarak bu kullanım şartlarını kabul etmiş sayılırsınız. Şartları kabul etmiyorsanız siteyi kullanmamanızı rica ederiz.</p>
+    </div>
+
+    <div class="legal-section">
+        <h2>2. Hesap Sorumluluğu</h2>
+        <ul>
+            <li>Üyelik bilgilerinizin gizliliğini korumak sizin sorumluluğunuzdadır.</li>
+            <li>Hesabınız üzerinden gerçekleştirilen tüm işlemlerden siz sorumlusunuz.</li>
+            <li>Şüpheli bir hesap erişimi fark ederseniz bizimle iletişime geçmelisiniz.</li>
+        </ul>
+    </div>
+
+    <div class="legal-section">
+        <h2>3. İçeriğin Kullanımı</h2>
+        <p>Sitede yer alan metin, görsel ve tasarım öğeleri Kütüphanem'e aittir. İçeriklerin izinsiz kopyalanması, çoğaltılması veya ticari amaçla kullanılması yasaktır.</p>
+    </div>
+
+    <div class="legal-section">
+        <h2>4. Uygun Kullanım</h2>
+        <ul>
+            <li>Siteyi yasa dışı veya yetkisiz amaçlarla kullanmamalısınız.</li>
+            <li>Sistemin işleyişini bozacak veya diğer kullanıcıları etkileyecek girişimlerde bulunulamaz.</li>
+            <li>Sahte bilgilerle üyelik oluşturulamaz.</li>
+        </ul>
+    </div>
+
+    <div class="legal-section">
+        <h2>5. Hizmetin Değiştirilmesi</h2>
+        <p>Kütüphanem, sunduğu hizmetleri, özellikleri veya bu kullanım şartlarını önceden bildirimde bulunmaksızın değiştirme hakkını saklı tutar.</p>
+    </div>
+
+    <div class="legal-section">
+        <h2>6. Sorumluluğun Sınırlandırılması</h2>
+        <p>Kütüphanem, sitenin kesintisiz veya hatasız çalışacağını garanti etmez ve sitenin kullanımından doğabilecek dolaylı zararlardan sorumlu tutulamaz.</p>
+    </div>
+
+    <div class="legal-note">
+        <p>Bu şartlar zaman zaman güncellenebilir. Sorularınız için <a href="@Url.Action("Index", "Contact")">İletişim sayfamızdan</a> bize ulaşabilirsiniz.</p>
+    </div>
+
+</div>

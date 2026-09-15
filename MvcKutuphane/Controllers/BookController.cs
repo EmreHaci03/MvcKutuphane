@@ -58,6 +58,11 @@ namespace MvcKutuphane.Controllers
                 TempData["Error"] = "Sayfa sayısı boş bırakılamaz.";
                 return RedirectToAction("CreateBook");
             }
+            if (string.IsNullOrWhiteSpace(p.FOTOGRAF))
+            {
+                TempData["Error"] = "Kitap Fotoğrafı Boş Bırakılamaz.";
+                return RedirectToAction("CreateBook");
+            }
 
             int numberofPages = 0;
             if (!int.TryParse(p.SAYFA, out numberofPages) || numberofPages <= 0)
@@ -168,6 +173,13 @@ namespace MvcKutuphane.Controllers
                 return RedirectToAction("UpdateBook", new { id = p.ID });
             }
 
+            if (string.IsNullOrWhiteSpace(p.FOTOGRAF))
+            {
+                TempData["Error"] = "Kitap Fotoğrafı Boş Bırakılamaz.";
+                return RedirectToAction("UpdateBook", new { id = p.ID });
+            }
+
+
             int PageCount = 0;
             if (!int.TryParse(p.SAYFA, out PageCount) || PageCount <= 0)
             {
@@ -196,6 +208,7 @@ namespace MvcKutuphane.Controllers
                 kitap.BASIMYIL = p.BASIMYIL;
                 kitap.YAYINEVI = p.YAYINEVI.Trim();
                 kitap.SAYFA = p.SAYFA;
+                kitap.FOTOGRAF = p.FOTOGRAF;
                 kitap.DURUM = p.DURUM;
                 db.SaveChanges();
                 TempData["Message"] = "Kitap bilgileri güncellendi.";

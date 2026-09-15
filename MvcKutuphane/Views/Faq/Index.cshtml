@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "Sıkça Sorulan Sorular";
+    ViewBag.Lede = "Merak ettiklerinize hızlıca göz atın, aradığınızı bulamazsanız bize ulaşın.";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<style>
+    .faq-wrap {
+        max-width: 780px;
+        margin: 0 auto;
+    }
+
+    .faq-item {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        margin-bottom: 14px;
+        overflow: hidden;
+    }
+
+    .faq-question {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 20px 24px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1.02rem;
+        color: var(--ink);
+    }
+
+        .faq-question .icon {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            color: var(--oxblood);
+            transition: transform 0.2s ease;
+        }
+
+    .faq-item.is-open .faq-question .icon {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.25s ease;
+    }
+
+    .faq-answer-inner {
+        padding: 0 24px 22px;
+        color: var(--ink-soft);
+        font-size: 0.96rem;
+        line-height: 1.6;
+    }
+
+    .faq-cta {
+        text-align: center;
+        margin-top: 48px;
+        padding: 36px;
+        background: var(--surface-warm);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-l);
+    }
+
+        .faq-cta h3 {
+            margin-bottom: 8px;
+        }
+
+        .faq-cta p {
+            color: var(--ink-soft);
+            margin-bottom: 20px;
+        }
+</style>
+
+<div class="faq-wrap">
+
+    <div class="faq-item">
+        <button type="button" class="faq-question">
+            Üye olmak için ne yapmam gerekiyor?
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                "Üye ol" sayfasından ad, soyad, e-posta ve kullanıcı adı bilgilerinizi girerek birkaç dakika içinde üyeliğinizi oluşturabilirsiniz. Üyelik ücretsizdir ve onay bekletilmeden hemen aktif olur.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button type="button" class="faq-question">
+            Bir seferde kaç kitap ödünç alabilirim?
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                Standart üyelik ile aynı anda en fazla 3 kitap ödünç alabilirsiniz. Elinizdeki kitapları iade ettikçe yeni kitap alma hakkınız otomatik olarak yenilenir.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button type="button" class="faq-question">
+            Kitabı zamanında iade etmezsem ne olur?
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                Belirlenen teslim tarihinden sonra iade edilen kitaplar için günlük gecikme cezası uygulanır. Ödenmemiş cezanız varsa yeni kitap ödünç alamazsınız; cezanızı ödedikten sonra ödünç alma işlemine devam edebilirsiniz.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button type="button" class="faq-question">
+            İstediğim kitap koleksiyonda yoksa ne yapabilirim?
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                İletişim sayfamızdan "Kitap talebi" konusunu seçerek bize ulaşabilirsiniz. Talepleriniz değerlendirilerek koleksiyonumuza eklenmesi mümkün olan kitaplar öncelikli olarak temin edilir.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button type="button" class="faq-question">
+            Kütüphane hangi saatlerde açık?
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                Pazartesi–Cuma günleri 09:00–20:00, Cumartesi günleri 10:00–17:00 arası hizmet veriyoruz. Pazar günleri kapalıyız.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button type="button" class="faq-question">
+            Üyeliğimi nasıl iptal ettirebilirim?
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                Üyeliğinizi iptal ettirmek için, üzerinizde ödünçte kitap ve ödenmemiş cezanız bulunmadığından emin olduktan sonra İletişim sayfasından bize ulaşmanız yeterlidir.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-cta">
+        <h3>Aradığınız cevabı bulamadınız mı?</h3>
+        <p>Bize doğrudan yazın, size yardımcı olalım.</p>
+        <a class="btn btn-primary" href="@Url.Action("Index", "Contact")">İletişime geçin</a>
+    </div>
+
+</div>
+
+<script>
+    (function () {
+        var questions = document.querySelectorAll(".faq-question");
+
+        questions.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                var item = btn.closest(".faq-item");
+                var answer = item.querySelector(".faq-answer");
+                var isOpen = item.classList.contains("is-open");
+
+                if (isOpen) {
+                    answer.style.maxHeight = null;
+                    item.classList.remove("is-open");
+                } else {
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                    item.classList.add("is-open");
+                }
+            });
+        });
+    })();
+</script>

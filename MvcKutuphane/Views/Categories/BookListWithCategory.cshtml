@@ -1,0 +1,251 @@
+﻿@model List<MvcKutuphane.Models.Entities.TBL_KITAP>
+@{
+    var kategoriAdi = Model != null && Model.Any() && Model.First().TBL_KATEGORI != null ? Model.First().TBL_KATEGORI.CategoryName : "Kategori";
+    ViewBag.Title = kategoriAdi;
+    ViewBag.Lede = kategoriAdi + " kategorisindeki tüm eserler.";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<style>
+    .catalog-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+    }
+
+    .catalog-search {
+        flex: 1;
+        min-width: 240px;
+        max-width: 420px;
+        position: relative;
+    }
+
+        .catalog-search input {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            background: var(--surface);
+            font-family: var(--font-body);
+            font-size: 0.98rem;
+            color: var(--ink);
+        }
+
+            .catalog-search input:focus {
+                outline: none;
+                border-color: var(--oxblood);
+            }
+
+        .catalog-search svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: var(--ink-soft);
+        }
+
+    .catalog-count {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 24px;
+    }
+
+    .book-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        overflow: hidden;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+        }
+
+    .book-spine {
+        height: 150px;
+        border-bottom: 3px solid var(--brass);
+        display: flex;
+        align-items: flex-end;
+        padding: 12px 14px;
+        color: var(--surface-warm);
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 0.92rem;
+        line-height: 1.2;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .book-spine img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .book-spine .spine-label {
+            position: relative;
+            z-index: 1;
+        }
+
+        .book-spine.has-image {
+            background: #2a211c;
+        }
+
+            .book-spine.has-image::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);
+                z-index: 0;
+            }
+
+    .book-info {
+        padding: 16px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .book-info .author {
+            color: var(--ink-soft);
+            font-size: 0.87rem;
+            margin: 0 0 10px;
+        }
+
+        .book-info .meta {
+            color: var(--ink-soft);
+            font-size: 0.8rem;
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+        }
+
+    .badge-status {
+        font-size: 0.76rem;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 999px;
+    }
+
+    .badge-available {
+        color: var(--forest);
+        background: #eef3ec;
+    }
+
+    .badge-loaned {
+        color: var(--oxblood);
+        background: #f7e9e6;
+    }
+
+    .catalog-empty {
+        text-align: center;
+        padding: 70px 20px;
+        color: var(--ink-soft);
+    }
+
+        .catalog-empty h3 {
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+</style>
+
+<div class="catalog-toolbar">
+    <div class="catalog-search">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6" />
+            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+        <input type="text" id="catalogSearchInput" placeholder="Bu kategoride ara..." autocomplete="off" />
+    </div>
+    <a class="btn btn-ghost" href="@Url.Action("Index", "Categories")">Tüm kategoriler</a>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <p class="catalog-count" id="catalogCount">@Model.Count() kitap listeleniyor</p>
+
+    <div class="book-grid" id="bookGrid">
+        @{
+            var renkler = new[] { "#7a2a2e", "#2f4a3e", "#a9793b", "#5b1f22" };
+            int i = 0;
+        }
+        @foreach (var kitap in Model)
+        {
+            var yazarAdi = kitap.TBL_YAZAR != null ? kitap.TBL_YAZAR.AD + " " + kitap.TBL_YAZAR.SOYAD : "Bilinmeyen Yazar";
+            var renk = renkler[i % renkler.Length];
+            var hasImage = !string.IsNullOrEmpty(kitap.FOTOGRAF);
+            i++;
+
+            <div class="book-card" data-name="@((kitap.AD + " " + yazarAdi).ToLower())">
+                <div class="book-spine @(hasImage ? "has-image" : "")" style="@(hasImage ? "" : "background:" + renk + ";")">
+                    @if (hasImage)
+                    {
+                        <img src="@kitap.FOTOGRAF" alt="@kitap.AD" onerror="this.style.display='none';" />
+                    }
+                    <span class="spine-label">@kitap.AD</span>
+                </div>
+                <div class="book-info">
+                    <h3 style="font-size: 1.02rem; margin-bottom: 4px;">@kitap.AD</h3>
+                    <p class="author">@yazarAdi</p>
+                    <div class="meta">
+                        <span>@kitap.BASIMYIL</span>
+                        @if (kitap.DURUM == true)
+                        {
+                            <span class="badge-status badge-available">Rafta</span>
+                        }
+                        else
+                        {
+                            <span class="badge-status badge-loaned">Ödünçte</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="catalog-empty">
+        <h3>Bu kategoride kitap bulunamadı</h3>
+        <p>Yakında bu kategoriye yeni eserler eklenecek.</p>
+        <a class="btn btn-primary" href="@Url.Action("Index", "Categories")" style="margin-top:16px;">Diğer kategorilere göz at</a>
+    </div>
+}
+
+<script>(function () {
+        var input = document.getElementById("catalogSearchInput");
+        var grid = document.getElementById("bookGrid");
+        var countLabel = document.getElementById("catalogCount");
+        if (!input || !grid) return;
+
+        var cards = Array.prototype.slice.call(grid.querySelectorAll(".book-card"));
+
+        input.addEventListener("input", function () {
+            var term = input.value.trim().toLowerCase();
+            var visible = 0;
+            cards.forEach(function (card) {
+                var match = card.getAttribute("data-name").indexOf(term) !== -1;
+                card.style.display = match ? "" : "none";
+                if (match) visible++;
+            });
+            if (countLabel) countLabel.textContent = visible + " kitap listeleniyor";
+        });
+    })();</script>

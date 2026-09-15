@@ -15,6 +15,13 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="TBL_BULTEN">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MAIL" Type="nvarchar" MaxLength="90" />
+        </EntityType>
         <EntityType Name="TBL_CEZALAR">
           <Key>
             <PropertyRef Name="ID" />
@@ -65,6 +72,17 @@
           <Property Name="YAYINEVI" Type="varchar" MaxLength="50" />
           <Property Name="SAYFA" Type="varchar" MaxLength="4" />
           <Property Name="DURUM" Type="bit" />
+          <Property Name="FOTOGRAF" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="TBL_MESAJ">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ADSOYAD" Type="nvarchar" MaxLength="80" />
+          <Property Name="MAIL" Type="nvarchar" MaxLength="80" />
+          <Property Name="KONU" Type="nvarchar" MaxLength="30" />
+          <Property Name="MESAJ" Type="nvarchar" MaxLength="400" />
         </EntityType>
         <EntityType Name="TBL_PERSONEL">
           <Key>
@@ -213,11 +231,13 @@
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="DbKutuphaneModelStoreContainer">
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_BULTEN" EntityType="Self.TBL_BULTEN" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_CEZALAR" EntityType="Self.TBL_CEZALAR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_HAREKET" EntityType="Self.TBL_HAREKET" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_KASA" EntityType="Self.TBL_KASA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_KATEGORI" EntityType="Self.TBL_KATEGORI" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_KITAP" EntityType="Self.TBL_KITAP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_MESAJ" EntityType="Self.TBL_MESAJ" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_PERSONEL" EntityType="Self.TBL_PERSONEL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_UYELER" EntityType="Self.TBL_UYELER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_YAZAR" EntityType="Self.TBL_YAZAR" Schema="dbo" store:Type="Tables" />
@@ -324,6 +344,7 @@
           <NavigationProperty Name="TBL_HAREKET" Relationship="Self.FK_TBL_HAREKET_TBL_KITAP" FromRole="TBL_KITAP" ToRole="TBL_HAREKET" />
           <NavigationProperty Name="TBL_KATEGORI" Relationship="Self.FK_TBL_KITAP_TBL_KATEGORI" FromRole="TBL_KITAP" ToRole="TBL_KATEGORI" />
           <NavigationProperty Name="TBL_YAZAR" Relationship="Self.FK_TBL_KITAP_TBL_YAZAR" FromRole="TBL_KITAP" ToRole="TBL_YAZAR" />
+          <Property Name="FOTOGRAF" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TBL_PERSONEL">
           <Key>
@@ -511,6 +532,8 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="TBL_MESAJ" EntityType="DbKutuphaneModel.TBL_MESAJ" />
+          <EntitySet Name="TBL_BULTEN" EntityType="DbKutuphaneModel.TBL_BULTEN" />
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -523,6 +546,23 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="TBL_MESAJ">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ADSOYAD" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="MAIL" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="KONU" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="MESAJ" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TBL_BULTEN">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MAIL" Type="String" MaxLength="90" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -585,6 +625,7 @@
           <EntitySetMapping Name="TBL_KITAP">
             <EntityTypeMapping TypeName="DbKutuphaneModel.TBL_KITAP">
               <MappingFragment StoreEntitySet="TBL_KITAP">
+                <ScalarProperty Name="FOTOGRAF" ColumnName="FOTOGRAF" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="AD" ColumnName="AD" />
                 <ScalarProperty Name="KATEGORI" ColumnName="KATEGORI" />
@@ -653,6 +694,25 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="DbKutuphaneModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="DbKutuphaneModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="TBL_MESAJ">
+            <EntityTypeMapping TypeName="DbKutuphaneModel.TBL_MESAJ">
+              <MappingFragment StoreEntitySet="TBL_MESAJ">
+                <ScalarProperty Name="MESAJ" ColumnName="MESAJ" />
+                <ScalarProperty Name="KONU" ColumnName="KONU" />
+                <ScalarProperty Name="MAIL" ColumnName="MAIL" />
+                <ScalarProperty Name="ADSOYAD" ColumnName="ADSOYAD" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_BULTEN">
+            <EntityTypeMapping TypeName="DbKutuphaneModel.TBL_BULTEN">
+              <MappingFragment StoreEntitySet="TBL_BULTEN">
+                <ScalarProperty Name="MAIL" ColumnName="MAIL" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

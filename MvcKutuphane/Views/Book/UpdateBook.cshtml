@@ -139,27 +139,64 @@
         border-left: 4px solid var(--brass);
         border-radius: var(--radius-m);
         padding: 20px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
     }
 
-        .preview-card .cat-id {
-            font-size: 0.75rem;
-            color: var(--ink-soft);
-            letter-spacing: 0.03em;
-            margin-bottom: 8px;
+    .preview-cover {
+        width: 60px;
+        height: 82px;
+        border-radius: 3px;
+        border: 1px solid var(--border);
+        object-fit: cover;
+        flex-shrink: 0;
+        display: none;
+        background: var(--surface-warm);
+    }
+
+    .preview-cover-placeholder {
+        width: 60px;
+        height: 82px;
+        border-radius: 3px;
+        border: 1px solid var(--border);
+        background: var(--surface-warm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--ink-soft);
+        flex-shrink: 0;
+    }
+
+        .preview-cover-placeholder svg {
+            width: 22px;
+            height: 22px;
         }
 
-        .preview-card h4 {
-            font-family: var(--font-display);
-            font-size: 1.15rem;
-            margin: 0 0 6px;
-            color: var(--ink);
-        }
+    .preview-text {
+        flex: 1;
+        min-width: 0;
+    }
 
-        .preview-card p {
-            font-size: 0.85rem;
-            color: var(--ink-soft);
-            margin: 0;
-        }
+    .preview-card .cat-id {
+        font-size: 0.75rem;
+        color: var(--ink-soft);
+        letter-spacing: 0.03em;
+        margin-bottom: 8px;
+    }
+
+    .preview-card h4 {
+        font-family: var(--font-display);
+        font-size: 1.15rem;
+        margin: 0 0 6px;
+        color: var(--ink);
+    }
+
+    .preview-card p {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        margin: 0;
+    }
 
     .tips-list {
         margin: 0;
@@ -192,7 +229,7 @@
         @TempData["Error"]
     </div>
 }
-}
+
 <h1 style="margin-bottom:4px;">Kitabı Düzenle</h1>
 <p style="color:var(--ink-soft); margin-bottom:28px;">"@Model.AD" bilgilerini güncelleyin.</p>
 
@@ -249,6 +286,13 @@
             </div>
 
             <div class="form-group">
+                @Html.LabelFor(m => m.FOTOGRAF, "Kitap Kapağı (Görsel URL)")
+                @Html.TextBoxFor(m => m.FOTOGRAF, new { @class = "input-text", id = "fotografInput", placeholder = "https://ornek.com/kapak.jpg", autocomplete = "off" })
+                @Html.ValidationMessageFor(m => m.FOTOGRAF, "", new { @class = "field-validation-error" })
+                <p class="form-hint">Bir görsel adresi (URL) yapıştırın. Boş bırakılırsa varsayılan ikon gösterilir.</p>
+            </div>
+
+            <div class="form-group">
                 <label>Durum</label>
                 <div class="checkbox-row">
                     <input type="checkbox" name="DURUM" id="durumInput" value="true" checked="@(Model.DURUM == true)" />
@@ -268,9 +312,18 @@
         <div class="panel">
             <h3>Önizleme</h3>
             <div class="preview-card">
-                <div class="cat-id">Kitap No: @Model.ID</div>
-                <h4 id="previewName">@Model.AD</h4>
-                <p id="previewDetail">Kategori ve yazar seçimi değişince güncellenir.</p>
+                <img id="previewCover" class="preview-cover" src="@Model.FOTOGRAF" alt="" onerror="this.style.display='none'; document.getElementById('previewCoverPlaceholder').style.display='flex';" onload="document.getElementById('previewCoverPlaceholder').style.display='none';" style="@(string.IsNullOrEmpty(Model.FOTOGRAF) ? "display:none;" : "display:block;")" />
+                <div id="previewCoverPlaceholder" class="preview-cover-placeholder" style="@(string.IsNullOrEmpty(Model.FOTOGRAF) ? "display:flex;" : "display:none;")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5C4.7 20 4 19.3 4 18.5v-13Z" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                </div>
+                <div class="preview-text">
+                    <div class="cat-id">Kitap No: @Model.ID</div>
+                    <h4 id="previewName">@Model.AD</h4>
+                    <p id="previewDetail">Kategori ve yazar seçimi değişince güncellenir.</p>
+                </div>
             </div>
         </div>
 
@@ -290,8 +343,11 @@
         var adInput = document.getElementById("adInput");
         var kategoriInput = document.getElementById("kategoriInput");
         var yazarInput = document.getElementById("yazarInput");
+        var fotografInput = document.getElementById("fotografInput");
         var previewName = document.getElementById("previewName");
         var previewDetail = document.getElementById("previewDetail");
+        var previewCover = document.getElementById("previewCover");
+        var previewCoverPlaceholder = document.getElementById("previewCoverPlaceholder");
         if (!adInput || !previewName) return;
 
         function update() {
@@ -307,9 +363,21 @@
             previewDetail.textContent = parts.length > 0 ? parts.join(" · ") : "Kategori ve yazar seçilmedi.";
         }
 
+        function updateCover() {
+            var url = fotografInput.value.trim();
+            if (url === "") {
+                previewCover.style.display = "none";
+                previewCoverPlaceholder.style.display = "flex";
+                return;
+            }
+            previewCover.src = url;
+            previewCover.style.display = "block";
+        }
+
         adInput.addEventListener("input", update);
         kategoriInput.addEventListener("change", update);
         yazarInput.addEventListener("change", update);
+        fotografInput.addEventListener("input", updateCover);
         update();
     })();
 </script>

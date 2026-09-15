@@ -21,6 +21,8 @@
         <AssociationConnector Association="DbKutuphaneModel.FK_TBL_HAREKET_TBL_UYELER" ManuallyRouted="false" />
         <AssociationConnector Association="DbKutuphaneModel.FK_TBL_KITAP_TBL_KATEGORI" ManuallyRouted="false" />
         <AssociationConnector Association="DbKutuphaneModel.FK_TBL_KITAP_TBL_YAZAR" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DbKutuphaneModel.TBL_MESAJ" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbKutuphaneModel.TBL_BULTEN" Width="1.5" PointX="6.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

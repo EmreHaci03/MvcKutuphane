@@ -1,0 +1,427 @@
+﻿@{
+    ViewBag.Title = "Panel";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .dash-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .dash-stat {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        padding: 22px;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .dash-stat-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+        .dash-stat-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .dash-stat-icon.c1 {
+            background: #f7e9e6;
+            color: var(--oxblood);
+        }
+
+        .dash-stat-icon.c2 {
+            background: #eef3ec;
+            color: var(--forest);
+        }
+
+        .dash-stat-icon.c3 {
+            background: #fbf0dd;
+            color: var(--brass);
+        }
+
+        .dash-stat-icon.c4 {
+            background: #f7e9e6;
+            color: var(--oxblood-dark);
+        }
+
+    .dash-stat .num {
+        font-family: var(--font-display);
+        font-size: 1.7rem;
+        font-weight: 600;
+        color: var(--ink);
+        line-height: 1;
+        margin-bottom: 4px;
+    }
+
+    .dash-stat .label {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+    }
+
+    .dash-charts {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .chart-panel-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+        .chart-panel-head h3 {
+            font-size: 1.05rem;
+            margin: 0;
+        }
+
+        .chart-panel-head span {
+            font-size: 0.82rem;
+            color: var(--ink-soft);
+        }
+
+    .chart-canvas-wrap {
+        position: relative;
+        height: 260px;
+    }
+
+    .donut-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .donut-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+    }
+
+        .donut-legend-item .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .donut-legend-item .val {
+            margin-left: auto;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+    .dash-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 20px;
+    }
+
+    .dash-section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+        .dash-section-head h3 {
+            font-size: 1.05rem;
+            margin: 0;
+        }
+
+        .dash-section-head a {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--forest);
+        }
+
+    .quick-links {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .quick-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-s);
+        background: var(--surface-warm);
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink);
+    }
+
+        .quick-link:hover {
+            border-color: var(--oxblood);
+            color: var(--oxblood);
+        }
+
+        .quick-link svg {
+            width: 17px;
+            height: 17px;
+            flex-shrink: 0;
+            color: var(--brass);
+        }
+
+    @@media (max-width: 900px) {
+        .dash-charts {
+            grid-template-columns: 1fr;
+        }
+
+        .dash-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<h1 style="margin-bottom:4px;">Genel Bakış</h1>
+<p style="color:var(--ink-soft); margin-bottom:28px;">Kütüphane sisteminin güncel durumu.</p>
+
+<!-- ==================== KART ALANI (Statik örnek değerler - ViewBag ile değiştirilecek) ==================== -->
+<div class="dash-stats">
+    <div class="dash-stat">
+        <div class="dash-stat-icon c1">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5C4.7 20 4 19.3 4 18.5v-13Z" stroke="currentColor" stroke-width="1.5" /><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.5" /></svg>
+        </div>
+        <div>
+            <div class="num">124</div>
+            <div class="label">Toplam kitap</div>
+        </div>
+    </div>
+
+    <div class="dash-stat">
+        <div class="dash-stat-icon c2">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" /><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+        </div>
+        <div>
+            <div class="num">38</div>
+            <div class="label">Toplam üye</div>
+        </div>
+    </div>
+
+    <div class="dash-stat">
+        <div class="dash-stat-icon c3">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+        </div>
+        <div>
+            <div class="num">12</div>
+            <div class="label">Aktif ödünç</div>
+        </div>
+    </div>
+
+    <div class="dash-stat">
+        <div class="dash-stat-icon c4">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="1.5" /></svg>
+        </div>
+        <div>
+            <div class="num">5</div>
+            <div class="label">Ödenmemiş ceza</div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== GRAFİK ALANI (Statik örnek değerler - ViewBag ile değiştirilecek) ==================== -->
+<div class="dash-charts">
+    <div class="panel">
+        <div class="chart-panel-head">
+            <h3>Son 7 günlük ödünç hareketi</h3>
+            <span>Günlük işlem sayısı</span>
+        </div>
+        <div class="chart-canvas-wrap">
+            <canvas id="lendChart"></canvas>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="chart-panel-head">
+            <h3>Kitap durumu</h3>
+        </div>
+        <div class="chart-canvas-wrap" style="height:200px;">
+            <canvas id="statusChart"></canvas>
+        </div>
+        <div class="donut-legend">
+            <div class="donut-legend-item"><span class="dot" style="background:#2f4a3e;"></span> Rafta mevcut <span class="val">96</span></div>
+            <div class="donut-legend-item"><span class="dot" style="background:#7a2a2e;"></span> Ödünçte <span class="val">28</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== KATEGORİ DAĞILIMI + EN AKTİF ÜYELER ==================== -->
+<div class="dash-grid">
+    <div class="panel">
+        <div class="chart-panel-head">
+            <h3>Kategoriye göre kitap dağılımı</h3>
+        </div>
+        <div class="chart-canvas-wrap" style="height:260px;">
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="chart-panel-head">
+            <h3>En aktif üyeler</h3>
+            <span>Toplam ödünç sayısına göre</span>
+        </div>
+        <div class="chart-canvas-wrap" style="height:220px;">
+            <canvas id="topMembersChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+    (function () {
+        // Statik örnek grafik verisi - controller'da ViewBag ile doldurup
+        // aşağıdaki iki satırı @@Html.Raw(ViewBag.XXX ?? "[]") şekline çevir.
+        var gunLabels = ["09 Eyl", "10 Eyl", "11 Eyl", "12 Eyl", "13 Eyl", "14 Eyl", "15 Eyl"];
+        var gunVerisi = [2, 4, 1, 3, 5, 2, 3];
+
+        var lendCtx = document.getElementById("lendChart");
+        if (lendCtx) {
+            new Chart(lendCtx, {
+                type: "line",
+                data: {
+                    labels: gunLabels,
+                    datasets: [{
+                        label: "Ödünç verilen kitap",
+                        data: gunVerisi,
+                        borderColor: "#7a2a2e",
+                        backgroundColor: "rgba(122, 42, 46, 0.08)",
+                        tension: 0.35,
+                        fill: true,
+                        pointBackgroundColor: "#7a2a2e",
+                        pointRadius: 4,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1, color: "#6b5d52" }, grid: { color: "#e3d9c2" } },
+                        x: { ticks: { color: "#6b5d52" }, grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        var uyeEtiketleri = @Html.Raw(ViewBag.MemberTag ?? "[]");
+        var uyeVerisi = @Html.Raw(ViewBag.MemberData ?? "[]");
+
+        var memCtx = document.getElementById("topMembersChart");
+        if (memCtx) {
+            new Chart(memCtx, {
+                type: "bar",
+                data: {
+                    labels: uyeEtiketleri,
+                    datasets: [{
+                        label: "Ödünç sayısı",
+                        data: uyeVerisi,
+                        backgroundColor: "#2f4a3e",
+                        borderRadius: 4,
+                        maxBarThickness: 26
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { beginAtZero: true, ticks: { stepSize: 1, color: "#6b5d52" }, grid: { color: "#e3d9c2" } },
+                        y: { ticks: { color: "#6b5d52" }, grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        var statusCtx = document.getElementById("statusChart");
+        if (statusCtx) {
+            new Chart(statusCtx, {
+                type: "doughnut",
+                data: {
+                    labels: ["Rafta mevcut", "Ödünçte"],
+                    datasets: [{
+                        data: [96, 28],
+                        backgroundColor: ["#2f4a3e", "#7a2a2e"],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "68%",
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            var kategoriEtiketleri = @Html.Raw(ViewBag.CategoryTags ?? "[]");
+            var kategoriVerisi = @Html.Raw(ViewBag.CategoryData ?? "[]");
+            var renkPaleti = ["#7a2a2e", "#2f4a3e", "#a9793b", "#5b1f22", "#6b5d52", "#cfa768"];
+
+            var catCtx = document.getElementById("categoryChart");
+            if (catCtx) {
+                new Chart(catCtx, {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels: kategoriEtiketleri,
+
+                        datasets: [{
+
+                            label: "Kitap sayısı",
+
+                            data: kategoriVerisi,
+                            backgroundColor: kategoriEtiketleri.map(function (_, i) { return renkPaleti[i % renkPaleti.length]; }),
+
+                            borderRadius: 4,
+                            maxBarThickness: 30
+
+                        }]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: { legend: { display: false } },
+
+                        scales: {
+
+                            y: { beginAtZero: true, ticks: { stepSize: 1, color: "#6b5d52" }, grid: { color: "#e3d9c2" } },
+
+                            x: { ticks: { color: "#6b5d52" }, grid: { display: false } }
+                        }
+
+                    }
+                });
+            }
+        }
+    })();
+</script>

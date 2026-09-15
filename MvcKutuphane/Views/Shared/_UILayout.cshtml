@@ -837,7 +837,7 @@
 
     <header class="site-header">
         <div class="wrap header-row">
-            <a class="brand" href="@Url.Action("Index", "Home")">
+            <a class="brand" href="@Url.Action("Index", "Default")">
                 <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M4 8c5-3 11-3 16 0v24c-5-3-11-3-16 0V8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
                     <path d="M36 8c-5-3-11-3-16 0v24c5-3 11-3 16 0V8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
@@ -851,8 +851,8 @@
             </button>
 
             <nav class="primary-nav" id="primary-nav">
-                <a class="current" href="@Url.Action("Index", "Home")">Ana Sayfa</a>
-                <a href="@Url.Action("Index", "Books")">Kitaplar</a>
+                <a class="current" href="@Url.Action("Index", "Default")">Ana Sayfa</a>
+                <a href="@Url.Action("BookList", "Catalog")">Kitaplar</a>
                 <a href="@Url.Action("Index", "Categories")">Kategoriler</a>
                 <a href="@Url.Action("Index", "About")">Hakkımızda</a>
                 <a href="@Url.Action("Index", "Contact")">İletişim</a>
@@ -887,88 +887,8 @@
         var showHero = ViewBag.ShowHero as bool? ?? false;
     }
 
-    @if (showHero)
-    {
-        <section class="hero">
-            <div class="wrap hero-inner">
-                <div>
-                    <p class="eyebrow">Şehrin en eski koleksiyonu</p>
-                    <h1>Her kitabın bir<br />raf arkadaşı vardır.</h1>
-                    <p class="lede">4.200'den fazla eser, uzman kürasyonlu koleksiyonlar ve dijital üyelik ile okuma alışkanlığınızı büyütün.</p>
-                    <div class="hero-actions">
-                        <a class="btn btn-primary" href="@Url.Action("Index", "Books")">Kataloğu keşfet</a>
-                        <a class="btn btn-ghost" href="@Url.Action("Register", "Account")">Üye ol</a>
-                    </div>
-
-                    <div class="hero-stats">
-                        <div>
-                            <div class="stat-num">4.200+</div>
-                            <div class="stat-label">Kitap</div>
-                        </div>
-                        <div>
-                            <div class="stat-num">1.850</div>
-                            <div class="stat-label">Aktif üye</div>
-                        </div>
-                        <div>
-                            <div class="stat-num">32</div>
-                            <div class="stat-label">Kategori</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="hero-visual">
-                    <div class="stack-card">
-                        <div class="row">
-                            <div class="spine-chip" style="background:#7a2a2e;"></div>
-                            <div class="row-text">
-                                <div class="t1">Sessiz Ev</div>
-                                <div class="t2">Orhan Pamuk</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="spine-chip" style="background:#2f4a3e;"></div>
-                            <div class="row-text">
-                                <div class="t1">Kürk Mantolu Madonna</div>
-                                <div class="t2">Sabahattin Ali</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="spine-chip" style="background:#a9793b;"></div>
-                            <div class="row-text">
-                                <div class="t1">Simyacı</div>
-                                <div class="t2">Paulo Coelho</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    }
-    else if (!string.IsNullOrEmpty(pageTitle))
-    {
-        <section class="hero" style="padding: 0;">
-            <div class="wrap" style="padding: 48px 28px 40px;">
-                <p class="eyebrow">Raflar arasında</p>
-                <h1 style="font-size: 2.3rem;">@pageTitle</h1>
-                @if (ViewBag.Lede != null)
-                {
-                    <p class="lede" style="margin-bottom:0;">@ViewBag.Lede</p>
-                }
-            </div>
-        </section>
-    }
-
     <main class="site-main">
         <div class="wrap">
-            @if (TempData["Message"] != null)
-            {
-                <div class="flash flash-ok">@TempData["Message"]</div>
-            }
-            @if (TempData["Error"] != null)
-            {
-                <div class="flash flash-error">@TempData["Error"]</div>
-            }
-
             @RenderBody()
         </div>
     </main>
@@ -987,23 +907,24 @@
 
             <div class="footer-col">
                 <h4>Keşfet</h4>
-                <a href="@Url.Action("Index", "Books")">Kitap kataloğu</a>
+                <a href="@Url.Action("BookList", "Catalog")">Kitap kataloğu</a>
                 <a href="@Url.Action("Index", "Categories")">Kategoriler</a>
-                <a href="@Url.Action("Register", "Account")">Üyelik koşulları</a>
+                <a href="@Url.Action("Index", "MembershipTerms")">Üyelik koşulları</a>
             </div>
 
             <div class="footer-col">
                 <h4>Kurumsal</h4>
                 <a href="@Url.Action("Index", "About")">Hakkımızda</a>
                 <a href="@Url.Action("Index", "Contact")">İletişim</a>
-                <a href="#">Sıkça sorulan sorular</a>
+                <a href="/Faq/Index/">Sıkça sorulan sorular</a>
             </div>
 
             <div class="footer-col">
                 <h4>Bültenimize katılın</h4>
                 <p>Yeni gelen kitaplar ve etkinliklerden ilk siz haberdar olun.</p>
-                <form class="newsletter-form" onsubmit="return false;">
-                    <input type="email" placeholder="E-posta adresiniz" />
+                <form class="newsletter-form" method="post" action="@Url.Action("Index","Newsletter")">
+                    @Html.AntiForgeryToken()
+                    <input type="email" name="Email" placeholder="E-posta adresiniz" />
                     <button type="submit">Katıl</button>
                 </form>
             </div>
@@ -1012,9 +933,9 @@
         <div class="footer-bottom">
             <p>&copy; @DateTime.Now.Year Kütüphanem. Tüm hakları saklıdır.</p>
             <div class="footer-bottom-links">
-                <a href="#">Gizlilik</a>
-                <a href="#">Kullanım Şartları</a>
-                <a href="#">Çerezler</a>
+                <a href="@Url.Action("Privacy", "Legal")">Gizlilik</a>
+                <a href="@Url.Action("Terms", "Legal")">Kullanım Şartları</a>
+                <a href="@Url.Action("Cookies", "Legal")">Çerezler</a>
             </div>
         </div>
     </footer>

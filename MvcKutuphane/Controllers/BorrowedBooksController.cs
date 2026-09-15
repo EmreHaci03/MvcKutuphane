@@ -19,7 +19,7 @@ namespace MvcKutuphane.Controllers
                          .Include(x => x.TBL_KITAP)
                          .Include(x => x.TBL_PERSONEL)
                          .Include(x => x.TBL_UYELER)
-                         .Where(x => x.UYEGETIRDIGITARIH == null) 
+                         .Where(x => x.UYEGETIRDIGITARIH == null ) 
                          .ToList();
 
             return View(MoveBook);

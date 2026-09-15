@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "Çerezler";
+    ViewBag.Lede = "Sitemizde kullanılan çerezler ve amaçları hakkında bilgi.";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<style>
+    .legal-wrap {
+        max-width: 820px;
+        margin: 0 auto;
+    }
+
+    .legal-updated {
+        color: var(--ink-soft);
+        font-size: 0.88rem;
+        margin-bottom: 40px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .legal-section {
+        margin-bottom: 36px;
+    }
+
+        .legal-section h2 {
+            font-size: 1.25rem;
+            margin-bottom: 14px;
+        }
+
+        .legal-section p {
+            color: var(--ink-soft);
+            margin-bottom: 12px;
+            line-height: 1.65;
+        }
+
+    table.cookie-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        margin-bottom: 12px;
+    }
+
+        table.cookie-table th, table.cookie-table td {
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        table.cookie-table th {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--ink-soft);
+            background: var(--surface-warm);
+        }
+
+        table.cookie-table td {
+            color: var(--ink-soft);
+        }
+
+            table.cookie-table td:first-child {
+                color: var(--ink);
+                font-weight: 500;
+            }
+
+    .legal-note {
+        background: var(--surface-warm);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--brass);
+        border-radius: var(--radius-m);
+        padding: 20px 24px;
+        margin-top: 48px;
+    }
+
+        .legal-note p {
+            margin: 0;
+            color: var(--ink-soft);
+            font-size: 0.94rem;
+        }
+</style>
+
+<div class="legal-wrap">
+
+    <p class="legal-updated">Son güncelleme: 1 Eylül 2026</p>
+
+    <div class="legal-section">
+        <h2>1. Çerez Nedir?</h2>
+        <p>Çerezler, ziyaret ettiğiniz web sitelerinin tarayıcınıza kaydettiği küçük metin dosyalarıdır. Bu dosyalar, sitenin düzgün çalışmasını sağlamak ve deneyiminizi kişiselleştirmek amacıyla kullanılır.</p>
+    </div>
+
+    <div class="legal-section">
+        <h2>2. Hangi Çerezleri Kullanıyoruz?</h2>
+        <table class="cookie-table">
+            <thead>
+                <tr>
+                    <th>Çerez Türü</th>
+                    <th>Amaç</th>
+                    <th>Süre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Oturum çerezi</td>
+                    <td>Giriş yapmış kullanıcının oturumunu korur</td>
+                    <td>Tarayıcı kapanana kadar</td>
+                </tr>
+                <tr>
+                    <td>Tercih çerezi</td>
+                    <td>Arama ve filtreleme tercihlerinizi hatırlar</td>
+                    <td>30 gün</td>
+                </tr>
+                <tr>
+                    <td>Güvenlik çerezi</td>
+                    <td>Form gönderimlerinde sahtecilik girişimlerini önler</td>
+                    <td>Oturum süresince</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="legal-section">
+        <h2>3. Çerezleri Nasıl Kontrol Edebilirsiniz?</h2>
+        <p>Tarayıcınızın ayarlarından çerezleri silebilir veya çerez kullanımını tamamen engelleyebilirsiniz. Ancak çerezleri devre dışı bırakmanız durumunda sitenin bazı bölümleri (örneğin oturum açma) düzgün çalışmayabilir.</p>
+    </div>
+
+    <div class="legal-section">
+        <h2>4. Üçüncü Taraf Çerezleri</h2>
+        <p>Sitemizde harita gösterimi gibi hizmetler için üçüncü taraf sağlayıcıların (ör. Google Haritalar) çerezleri kullanılabilir. Bu çerezler ilgili sağlayıcının kendi gizlilik politikasına tabidir.</p>
+    </div>
+
+    <div class="legal-note">
+        <p>Çerez kullanımımızla ilgili sorularınız için <a href="@Url.Action("Index", "Contact")">İletişim sayfamızdan</a> bize ulaşabilirsiniz.</p>
+    </div>
+
+</div>
