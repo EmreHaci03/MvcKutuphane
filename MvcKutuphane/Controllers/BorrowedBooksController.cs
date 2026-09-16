@@ -62,7 +62,7 @@ namespace MvcKutuphane.Controllers
 
         [HttpPost]
         public ActionResult CreateLend(TBL_HAREKET p)
-        {          
+        {
             if (p.ALISTARIH.HasValue && p.IADETARIH.HasValue && p.ALISTARIH.Value > p.IADETARIH.Value)
             {
                 TempData["Error"] = "Kitap alış tarihi, iade tarihinden geç olamaz.";
@@ -85,13 +85,13 @@ namespace MvcKutuphane.Controllers
 
             bool existMember = db.TBL_UYELER.Any(x => x.ID == p.UYE);
             bool existEmployee = db.TBL_PERSONEL.Any(x => x.ID == p.PERSONEL);
-            if(!existMember || !existEmployee)
+            if (!existMember || !existEmployee)
             {
                 TempData["Error"] = "Geçerli bir üye ve personel seçiniz.";
                 return RedirectToAction("CreateLend");
             }
 
-            bool unpaidMemberFine = db.TBL_CEZALAR.Any(x => x.UYE == p.UYE);
+            bool unpaidMemberFine = db.TBL_CEZALAR.Any(x => x.UYE == p.UYE && x.ODENDI == false);
             if (unpaidMemberFine)
             {
                 var memberInfo = db.TBL_UYELER.Find(p.UYE);
@@ -112,7 +112,6 @@ namespace MvcKutuphane.Controllers
                 TempData["Error"] = "Ekleme sırasında hata oluştu, lütfen tekrar deneyiniz.";
                 return RedirectToAction("CreateLend");
             }
-
         }
 
         [HttpPost]

@@ -7,10 +7,12 @@
     var toplamCeza = Model != null ? Model.Count : 0;
 
     decimal toplamTutar = 0;
+    decimal odenmemisTutar = 0;
 
     if (Model != null)
     {
         toplamTutar = Model.Sum(x => x.CEZA ?? 0);
+        odenmemisTutar = Model.Where(x => x.ODENDI == false).Sum(x => x.CEZA ?? 0);
     }
 }
 
@@ -69,6 +71,7 @@
     .penalty-stats {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
     }
 
     .penalty-stat {
@@ -101,6 +104,10 @@
             color: var(--brass);
         }
 
+        .penalty-stat.unpaid strong {
+            color: var(--oxblood);
+        }
+
     /* LIST */
     .penalty-list {
         display: grid;
@@ -124,6 +131,10 @@
             inset: 0 auto 0 0;
             width: 4px;
             background: var(--oxblood);
+        }
+
+        .penalty-card.is-paid::before {
+            background: var(--forest);
         }
 
         .penalty-card:hover {
@@ -162,11 +173,43 @@
             height: 17px;
         }
 
+    .penalty-meta-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
     .penalty-id {
         color: var(--ink-soft);
         font-size: 0.74rem;
         opacity: 0.8;
     }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+
+        .status-badge svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .status-badge.paid {
+            color: var(--forest);
+            background: #eef3ec;
+        }
+
+        .status-badge.unpaid {
+            color: var(--oxblood);
+            background: #f7e9e6;
+        }
 
     /* TITLE */
     .penalty-title {
@@ -277,6 +320,31 @@
             margin-right: 5px;
         }
 
+    .pay-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 18px;
+        border-radius: var(--radius-s);
+        font-size: 0.85rem;
+        font-weight: 700;
+        border: 1px solid var(--oxblood);
+        background: var(--oxblood);
+        color: var(--surface-warm);
+        cursor: pointer;
+        font-family: var(--font-body);
+    }
+
+        .pay-btn:hover {
+            background: var(--oxblood-dark);
+            border-color: var(--oxblood-dark);
+        }
+
+        .pay-btn svg {
+            width: 15px;
+            height: 15px;
+        }
+
     /* EMPTY */
     .penalty-empty {
         position: relative;
@@ -349,6 +417,102 @@
         line-height: 1.6;
     }
 
+    /* MODAL */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(42, 33, 28, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: 20px;
+    }
+
+        .modal-overlay.is-open {
+            display: flex;
+        }
+
+    .modal-box {
+        background: var(--surface);
+        border-radius: var(--radius-m);
+        max-width: 420px;
+        width: 100%;
+        padding: 28px;
+        box-shadow: 0 20px 60px -12px rgba(42, 33, 28, 0.45);
+        border-top: 4px solid var(--forest);
+    }
+
+    .modal-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: #eef3ec;
+        color: var(--forest);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+        .modal-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+    .modal-box h3 {
+        margin-bottom: 8px;
+    }
+
+    .modal-box p {
+        color: var(--ink-soft);
+        font-size: 0.95rem;
+        margin-bottom: 0;
+    }
+
+        .modal-box p strong {
+            color: var(--ink);
+        }
+
+    .modal-amount-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface-warm);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-s);
+        padding: 14px 16px;
+        margin-top: 16px;
+    }
+
+        .modal-amount-box span {
+            font-size: 0.82rem;
+            color: var(--ink-soft);
+        }
+
+        .modal-amount-box strong {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--oxblood);
+        }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 26px;
+    }
+
+    .btn-confirm-pay {
+        background: var(--forest);
+        color: var(--surface-warm);
+        border-color: var(--forest);
+    }
+
+        .btn-confirm-pay:hover {
+            background: #223a2f;
+        }
+
     /* RESPONSIVE */
     @@media (max-width: 850px) {
         .penalty-info {
@@ -390,6 +554,16 @@
 
         .penalty-description {
             font-size: 0.89rem;
+        }
+
+        .penalty-footer {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .pay-btn {
+            width: 100%;
+            justify-content: center;
         }
     }
 
@@ -447,6 +621,11 @@
                 <strong>@toplamTutar.ToString("N2") ₺</strong>
             </div>
 
+            <div class="penalty-stat unpaid">
+                <span>Ödenmemiş</span>
+                <strong>@odenmemisTutar.ToString("N2") ₺</strong>
+            </div>
+
         </div>
 
     </div>
@@ -458,7 +637,10 @@
 
             @foreach (var ceza in Model)
             {
-                <article class="penalty-card">
+                bool odendiMi = ceza.ODENDI == true;
+                decimal tutar = ceza.CEZA ?? 0;
+
+                <article class="penalty-card @(odendiMi ? "is-paid" : "")">
 
                     <div class="penalty-inner">
 
@@ -492,9 +674,25 @@
 
                             </div>
 
-                            <span class="penalty-id">
-                                Kayıt #@ceza.ID
-                            </span>
+                            <div class="penalty-meta-right">
+                                @if (odendiMi)
+                                {
+                                    <span class="status-badge paid">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                                        Ödendi
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge unpaid">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" /><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+                                        Ödenmedi
+                                    </span>
+                                }
+                                <span class="penalty-id">
+                                    Kayıt #@ceza.ID
+                                </span>
+                            </div>
 
                         </div>
 
@@ -660,9 +858,17 @@
 
                             </span>
 
-                            <span>
-                                Kayıt No: @ceza.ID
-                            </span>
+                            @if (odendiMi)
+                            {
+                                <span>Kayıt No: @ceza.ID</span>
+                            }
+                            else
+                            {
+                                <button type="button" class="pay-btn" onclick="openPayModal('@ceza.ID', '@tutar.ToString("N2")')">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                                    Öde
+                                </button>
+                            }
 
                         </div>
 
@@ -710,3 +916,51 @@
     }
 
 </div>
+
+<!-- ÖDEME ONAY MODALI -->
+<div class="modal-overlay" id="payModal">
+    <div class="modal-box">
+        <div class="modal-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </div>
+        <h3>Ceza ödemesi yapılsın mı?</h3>
+        <p>Aşağıdaki tutar için ödeme işlemini onaylıyor musunuz?</p>
+
+        <div class="modal-amount-box">
+            <span>Ödenecek tutar</span>
+            <strong id="payModalAmount">0,00 ₺</strong>
+        </div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" onclick="closePayModal()">Vazgeç</button>
+            @using (Html.BeginForm("PayPenalty", "MemberMyPenalties", FormMethod.Post, new { style = "display:inline;" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" id="payPenaltyId" value="" />
+                <button type="submit" class="btn btn-confirm-pay">Evet, öde</button>
+            }
+        </div>
+    </div>
+</div>
+
+<script>var payModal = document.getElementById("payModal");
+
+    function openPayModal(id, amount) {
+        document.getElementById("payPenaltyId").value = id;
+        document.getElementById("payModalAmount").textContent = amount + " ₺";
+        payModal.classList.add("is-open");
+    }
+
+    function closePayModal() {
+        payModal.classList.remove("is-open");
+    }
+
+    payModal.addEventListener("click", function (e) {
+        if (e.target === payModal) closePayModal();
+    });
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closePayModal();
+    });</script>

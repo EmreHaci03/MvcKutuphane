@@ -1,0 +1,336 @@
+﻿@model List<MvcKutuphane.Models.Entities.TBL_CEZALAR>
+
+@{
+    ViewBag.Title = "Ödenen Cezalarım";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+
+    var toplamCeza = Model != null ? Model.Count : 0;
+    decimal toplamTutar = Model != null ? Model.Sum(x => x.CEZA ?? 0) : 0;
+}
+
+<style>
+    .sub-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sub-tab {
+        padding: 10px 18px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+    }
+
+        .sub-tab:hover {
+            color: var(--oxblood);
+        }
+
+        .sub-tab.active {
+            color: var(--oxblood);
+            border-bottom-color: var(--oxblood);
+        }
+
+    .penalty-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-bottom: 40px;
+    }
+
+    .penalty-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+    }
+
+    .penalty-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: var(--brass);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+    }
+
+    .penalty-eyebrow-line {
+        width: 28px;
+        height: 1px;
+        background: var(--brass);
+    }
+
+    .penalty-header h1 {
+        margin: 0 0 7px;
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-size: 2.15rem;
+        line-height: 1.15;
+    }
+
+    .penalty-header p {
+        margin: 0;
+        max-width: 620px;
+        color: var(--ink-soft);
+        font-size: 0.94rem;
+        line-height: 1.6;
+    }
+
+    .penalty-stats {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .penalty-stat {
+        min-width: 125px;
+        padding: 13px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-s);
+        box-shadow: var(--shadow-card);
+    }
+
+        .penalty-stat span {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--ink-soft);
+            font-size: 0.67rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .penalty-stat strong {
+            color: var(--forest);
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            line-height: 1;
+        }
+
+    .penalty-list {
+        display: grid;
+        gap: 14px;
+    }
+
+    .penalty-card {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--forest);
+        border-radius: var(--radius-m);
+        padding: 18px 22px;
+        box-shadow: var(--shadow-card);
+    }
+
+    .penalty-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #eef3ec;
+        color: var(--forest);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+        .penalty-icon svg {
+            width: 19px;
+            height: 19px;
+        }
+
+    .penalty-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+        .penalty-info h3 {
+            font-family: var(--font-display);
+            font-size: 1.02rem;
+            margin: 0 0 4px;
+            color: var(--ink);
+        }
+
+    .penalty-dates {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+    }
+
+        .penalty-dates span strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+    .penalty-amount-side {
+        text-align: right;
+        flex-shrink: 0;
+    }
+
+        .penalty-amount-side .amount {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 12px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--forest);
+        background: #eef3ec;
+        margin-top: 6px;
+    }
+
+        .status-badge svg {
+            width: 11px;
+            height: 11px;
+        }
+
+    .penalty-empty {
+        text-align: center;
+        padding: 70px 24px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        box-shadow: var(--shadow-card);
+    }
+
+    .penalty-empty-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 18px;
+        border-radius: 50%;
+        background: #edf3ee;
+        color: var(--forest);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .penalty-empty-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+    .penalty-empty h3 {
+        margin: 0 0 8px;
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-size: 1.3rem;
+    }
+
+    .penalty-empty p {
+        max-width: 400px;
+        margin: 0 auto;
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    @@media (max-width: 700px) {
+        .penalty-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .penalty-card {
+            flex-wrap: wrap;
+        }
+
+        .penalty-amount-side {
+            text-align: left;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="penalty-page">
+
+    <div class="sub-tabs">
+        <a href="@Url.Action("Index", "MemberMyPenalties")" class="sub-tab">Ödenmemiş Cezalarım</a>
+        <a href="@Url.Action("MyOldPenalties", "MemberMyPenalties")" class="sub-tab active">Ödenen Cezalarım</a>
+    </div>
+
+    <div class="penalty-header">
+        <div>
+            <div class="penalty-eyebrow">
+                <span class="penalty-eyebrow-line"></span>
+                Hesabım
+            </div>
+            <h1>Ödenen Cezalarım</h1>
+            <p>Daha önce ödemesini tamamladığınız ceza kayıtlarının geçmişi.</p>
+        </div>
+
+        <div class="penalty-stats">
+            <div class="penalty-stat">
+                <span>Toplam Kayıt</span>
+                <strong>@toplamCeza</strong>
+            </div>
+            <div class="penalty-stat">
+                <span>Toplam Ödenen</span>
+                <strong>@toplamTutar.ToString("N2") ₺</strong>
+            </div>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="penalty-list">
+            @foreach (var ceza in Model)
+            {
+                <div class="penalty-card">
+                    <div class="penalty-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </div>
+
+                    <div class="penalty-info">
+                        <h3>Kütüphane Ceza İşlemi <span style="color:var(--ink-soft); font-weight:400; font-size:0.85rem;">#@ceza.ID</span></h3>
+                        <div class="penalty-dates">
+                            <span>Başlangıç: <strong>@(ceza.CEZABASLANGIC.HasValue ? ceza.CEZABASLANGIC.Value.ToString("dd.MM.yyyy") : "-")</strong></span>
+                            <span>Bitiş: <strong>@(ceza.CEZABITIS.HasValue ? ceza.CEZABITIS.Value.ToString("dd.MM.yyyy") : "-")</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="penalty-amount-side">
+                        <div class="amount">@ceza.CEZA ₺</div>
+                        <span class="status-badge">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                            Ödendi
+                        </span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="penalty-empty">
+            <div class="penalty-empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 3l9 4.5v5.8c0 4.2-3.2 6.8-9 8.7-5.8-1.9-9-4.5-9-8.7V7.5L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                    <path d="M8 12l2.5 2.5L16 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+            <h3>Henüz ödenmiş bir cezanız yok</h3>
+            <p>Ödediğiniz cezalar burada listelenecek.</p>
+        </div>
+    }
+
+</div>

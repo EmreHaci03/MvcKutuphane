@@ -20,6 +20,7 @@ namespace MvcKutuphane.Models.Entities
         public Nullable<System.DateTime> CEZABITIS { get; set; }
         public Nullable<decimal> CEZA { get; set; }
         public Nullable<int> HAREKET { get; set; }
+        public Nullable<bool> ODENDI { get; set; }
     
         public virtual TBL_HAREKET TBL_HAREKET { get; set; }
         public virtual TBL_UYELER TBL_UYELER { get; set; }

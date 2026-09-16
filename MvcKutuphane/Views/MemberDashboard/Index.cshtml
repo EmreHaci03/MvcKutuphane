@@ -1,0 +1,389 @@
+﻿@{
+    ViewBag.Title = "Panelim";
+    ViewBag.Lede = "Hesabınıza dair genel özet.";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<style>
+    .dash-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .dash-stat {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--brass);
+        border-radius: var(--radius-m);
+        padding: 20px;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+        .dash-stat.c-oxblood {
+            border-left-color: var(--oxblood);
+        }
+
+        .dash-stat.c-forest {
+            border-left-color: var(--forest);
+        }
+
+    .dash-stat-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: var(--surface-warm);
+        color: var(--oxblood);
+    }
+
+        .dash-stat-icon svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        .dash-stat-icon.forest {
+            color: var(--forest);
+        }
+
+        .dash-stat-icon.brass {
+            color: var(--brass);
+        }
+
+    .dash-stat .num {
+        font-family: var(--font-display);
+        font-size: 1.55rem;
+        font-weight: 600;
+        color: var(--ink);
+        line-height: 1;
+        margin-bottom: 4px;
+    }
+
+    .dash-stat .label {
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+    }
+
+    .dash-charts-row {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .chart-panel-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+        .chart-panel-head h3 {
+            font-size: 1.02rem;
+            margin: 0;
+        }
+
+        .chart-panel-head span {
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+        }
+
+    .chart-canvas-wrap {
+        position: relative;
+        height: 240px;
+    }
+
+        .chart-canvas-wrap.small {
+            height: 200px;
+        }
+
+    .donut-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .donut-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+    }
+
+        .donut-legend-item .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .donut-legend-item .val {
+            margin-left: auto;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+    .active-book-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 13px 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+        .active-book-row:last-child {
+            border-bottom: none;
+        }
+
+    .active-book-spine {
+        width: 32px;
+        height: 44px;
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+    .active-book-text {
+        flex: 1;
+        min-width: 0;
+    }
+
+        .active-book-text .t1 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--ink);
+        }
+
+        .active-book-text .t2 {
+            font-size: 0.78rem;
+            color: var(--ink-soft);
+        }
+
+    .badge-mini {
+        font-size: 0.74rem;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 999px;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+        .badge-mini.ok {
+            color: var(--forest);
+            background: #eef3ec;
+        }
+
+        .badge-mini.late {
+            color: var(--oxblood);
+            background: #f7e9e6;
+        }
+
+    .category-empty, .activity-empty {
+        color: var(--ink-soft);
+        font-size: 0.88rem;
+        text-align: center;
+        padding: 30px 10px;
+    }
+
+    @@media (max-width: 900px) {
+        .dash-charts-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<h1 style="margin-bottom:4px;">Merhaba, Cem Aydın</h1>
+<p style="color:var(--ink-soft); margin-bottom:28px;">Hesabınızın genel durumu aşağıda özetlenmiştir.</p>
+
+<!-- KARTLAR -->
+<div class="dash-stats">
+    <div class="dash-stat">
+        <div class="dash-stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5C4.7 20 4 19.3 4 18.5v-13Z" stroke="currentColor" stroke-width="1.5" /><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.5" /></svg>
+        </div>
+        <div>
+            <div class="num">@ViewBag.ActiveLendCount</div>
+            <div class="label">Şu an elimde</div>
+        </div>
+    </div>
+
+    <div class="dash-stat c-forest">
+        <div class="dash-stat-icon forest">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </div>
+        <div>
+            <div class="num">@ViewBag.TotalBookCount</div>
+            <div class="label">Toplam okunan</div>
+        </div>
+    </div>
+
+    <div class="dash-stat c-oxblood">
+        <div class="dash-stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="1.5" /></svg>
+        </div>
+        <div>
+            <div class="num">@(ViewBag.SumPenalty ?? 0) ₺</div>
+            <div class="label">Ödenmemiş ceza</div>
+        </div>
+    </div>
+
+    <div class="dash-stat">
+        <div class="dash-stat-icon brass">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="13" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="4" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="13" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /></svg>
+        </div>
+        <div>
+            <div class="num" style="font-size:1.15rem;">@ViewBag.TopCategoryName</div>
+            <div class="label">En çok okuduğum tür</div>
+        </div>
+    </div>
+</div>
+
+<!-- GRAFİKLER -->
+<div class="dash-charts-row">
+    <div class="panel">
+        <div class="chart-panel-head">
+            <h3>Son 7 günlük okuma aktivitem</h3>
+            <span>Ödünç alınan kitap sayısı</span>
+        </div>
+        <div class="chart-canvas-wrap">
+            <canvas id="myActivityChart"></canvas>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="chart-panel-head">
+            <h3>Okuduğum kategoriler</h3>
+        </div>
+        <div class="chart-canvas-wrap small">
+            <canvas id="myCategoryChart"></canvas>
+        </div>
+        <div class="donut-legend" id="categoryLegend"></div>
+    </div>
+</div>
+
+<!-- ELİMDEKİ KİTAPLAR -->
+<div class="panel">
+    <div class="chart-panel-head">
+        <h3>Şu an elimdeki kitaplar</h3>
+        <a href="@Url.Action("ActiveLend", "MemberBorrowedBook")" style="font-size:0.85rem; font-weight:600;">Tümünü gör</a>
+    </div>
+
+    @if (ViewBag.ActivelendBook != null && ((List<MvcKutuphane.Models.Entities.TBL_HAREKET>)ViewBag.ActivelendBook).Any())
+    {
+        foreach (var h in (List<MvcKutuphane.Models.Entities.TBL_HAREKET>)ViewBag.ActivelendBook)
+        {
+            var kitapAd = h.TBL_KITAP != null ? h.TBL_KITAP.AD : "-";
+            bool gecikmisMi = h.IADETARIH.HasValue && h.IADETARIH.Value < DateTime.Now;
+
+            <div class="active-book-row">
+                <div class="active-book-spine" style="background:@(gecikmisMi ? "#7a2a2e" : "#2f4a3e");"></div>
+                <div class="active-book-text">
+                    <div class="t1">@kitapAd</div>
+                    <div class="t2">Teslim tarihi: @(h.IADETARIH.HasValue ? h.IADETARIH.Value.ToString("dd.MM.yyyy") : "-")</div>
+                </div>
+                @if (gecikmisMi)
+                {
+                    <span class="badge-mini late">Süresi geçti</span>
+                }
+                else
+                {
+                    <span class="badge-mini ok">Zamanında</span>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <p style="color:var(--ink-soft); margin:0;">Şu anda ödünç aldığınız bir kitap yok.</p>
+    }
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+    (function () {
+        // ---- Haftalık aktivite çizgi grafiği (GERÇEK VERİ) ----
+        var haftaLabels = @Html.Raw(ViewBag.WeekLabels ?? "[]");
+        var haftaVerisi = @Html.Raw(ViewBag.WeekData ?? "[]");
+
+        var actCtx = document.getElementById("myActivityChart");
+        if (actCtx && haftaLabels.length > 0) {
+            new Chart(actCtx, {
+                type: "line",
+                data: {
+                    labels: haftaLabels,
+                    datasets: [{
+                        label: "Ödünç alınan kitap",
+                        data: haftaVerisi,
+                        borderColor: "#7a2a2e",
+                        backgroundColor: "rgba(122, 42, 46, 0.08)",
+                        tension: 0.35,
+                        fill: true,
+                        pointBackgroundColor: "#7a2a2e",
+                        pointRadius: 4,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1, color: "#6b5d52" }, grid: { color: "#e3d9c2" } },
+                        x: { ticks: { color: "#6b5d52" }, grid: { display: false } }
+                    }
+                }
+            });
+        } else if (actCtx) {
+            actCtx.parentElement.innerHTML = '<p class="activity-empty">Son 7 günde ödünç işlemi bulunmuyor.</p>';
+        }
+
+        // ---- Kategori donut (GERÇEK VERİ) ----
+        var kategoriLabels = @Html.Raw(ViewBag.CategoryLabels ?? "[]");
+        var kategoriVerisi = @Html.Raw(ViewBag.CategoryData ?? "[]");
+        var renkPaleti = ["#7a2a2e", "#2f4a3e", "#a9793b", "#6b5d52", "#cfa768", "#5b1f22"];
+
+        var catCtx = document.getElementById("myCategoryChart");
+        var legendWrap = document.getElementById("categoryLegend");
+
+        if (catCtx && kategoriLabels.length > 0) {
+            var renkler = kategoriLabels.map(function (_, i) { return renkPaleti[i % renkPaleti.length]; });
+
+            new Chart(catCtx, {
+                type: "doughnut",
+                data: {
+                    labels: kategoriLabels,
+                    datasets: [{
+                        data: kategoriVerisi,
+                        backgroundColor: renkler,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "68%",
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            kategoriLabels.forEach(function (label, i) {
+                var item = document.createElement("div");
+                item.className = "donut-legend-item";
+                item.innerHTML = '<span class="dot" style="background:' + renkler[i] + ';"></span> ' + label + ' <span class="val">' + kategoriVerisi[i] + '</span>';
+                legendWrap.appendChild(item);
+            });
+        } else if (catCtx) {
+            catCtx.parentElement.innerHTML = '<p class="category-empty">Henüz kategori verisi bulunmuyor.</p>';
+        }
+    })();
+</script>

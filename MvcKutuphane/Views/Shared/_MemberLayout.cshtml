@@ -1,9 +1,23 @@
-﻿@* ===========================================================
-    _MemberLayout.cshtml — Kütüphanem Üye Paneli (Sidebar'lı)
-    Konum: Views/Shared/_MemberLayout.cshtml
-    Kullanım: üye alanı view'larında en üste ekleyin ->
-    @{ Layout = "~/Views/Shared/_MemberLayout.cshtml"; }
-    =========================================================== *@
+﻿@{ 
+    string memberName = "Üyem";
+    string memberInitial = "Ü";
+    string Mail = Session["Mail"] as string;
+    if (!string.IsNullOrEmpty(Mail))
+    {
+        using(var db =new MvcKutuphane.Models.Entities.DbKutuphaneEntities2())
+        {
+            var Member = db.TBL_UYELER.FirstOrDefault(x => x.MAIL == Mail);
+            if (Member != null)
+            {
+                memberName = Member.AD + " " + Member.SOYAD;
+                memberInitial = (!string.IsNullOrWhiteSpace(Member.AD) && !string.IsNullOrWhiteSpace(Member.SOYAD))
+                    ? Member.AD.Substring(0, 1).ToUpper() + Member.SOYAD.Substring(0, 1).ToUpper()
+                    : "Ü";
+            }
+        }
+    }
+}
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -14,6 +28,84 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet" />
 
     <style>
+        .sidebar-nav-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: var(--radius-s);
+            color: #ead9c8;
+            font-size: 0.94rem;
+            font-weight: 500;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-body);
+            margin-bottom: 2px;
+        }
+
+            .sidebar-nav-toggle svg:first-child {
+                width: 18px;
+                height: 18px;
+                flex-shrink: 0;
+                opacity: 0.85;
+            }
+
+            .sidebar-nav-toggle span {
+                flex: 1;
+                text-align: left;
+            }
+
+            .sidebar-nav-toggle .chevron {
+                width: 14px;
+                height: 14px;
+                flex-shrink: 0;
+                transition: transform 0.2s ease;
+            }
+
+            .sidebar-nav-toggle:hover {
+                background: rgba(255,255,255,0.06);
+                color: #ffffff;
+            }
+
+            .sidebar-nav-toggle.active {
+                color: #ffffff;
+            }
+
+            .sidebar-nav-toggle.open .chevron {
+                transform: rotate(180deg);
+            }
+
+        .sidebar-submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease;
+            padding-left: 30px;
+        }
+
+            .sidebar-submenu.is-open {
+                max-height: 200px;
+            }
+
+            .sidebar-submenu a {
+                display: block;
+                padding: 8px 12px;
+                font-size: 0.88rem;
+                color: #d9c4b0;
+                border-radius: var(--radius-s);
+                margin-bottom: 2px;
+            }
+
+                .sidebar-submenu a:hover {
+                    background: rgba(255,255,255,0.06);
+                    color: #ffffff;
+                }
+
+                .sidebar-submenu a.active {
+                    color: var(--brass-light);
+                    font-weight: 600;
+                }
         :root {
             --bg: #f7f3ea;
             --surface: #ffffff;
@@ -433,14 +525,30 @@
                 </a>
 
                 <div class="sidebar-section-label">Kitaplarım</div>
-                <a href="@Url.Action("Index", "MyLoans")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "MyLoans" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5C4.7 20 4 19.3 4 18.5v-13Z" stroke="currentColor" stroke-width="1.5" /><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.5" /></svg>
-                    Ödünç Kitaplarım
-                </a>
-                <a href="@Url.Action("Index", "MemberMyPenalties")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "MyPenalties" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="1.5" /></svg>
-                    Cezalarım
-                </a>
+                <div class="sidebar-group">
+                    <button type="button" class="sidebar-nav-toggle @(ViewContext.RouteData.Values["controller"].ToString() == "MemberBorrowedBook" ? "active open" : "")" onclick="toggleSubmenu(this)">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5C4.7 20 4 19.3 4 18.5v-13Z" stroke="currentColor" stroke-width="1.5" /><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.5" /></svg>
+                        <span>Ödünç Kitaplarım</span>
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </button>
+
+                    <div class="sidebar-submenu @(ViewContext.RouteData.Values["controller"].ToString() == "MemberBorrowedBook" ? "is-open" : "")">
+                        <a href="@Url.Action("ActiveLend", "MemberBorrowedBook")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "MemberBorrowedBook" && ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")">Aktif Ödünçlerim</a>
+                        <a href="@Url.Action("History", "MemberBorrowedBook")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "MemberBorrowedBook" && ViewContext.RouteData.Values["action"].ToString() == "History" ? "active" : "")">Geçmiş Ödünçlerim</a>
+                    </div>
+                </div>
+                <div class="sidebar-group">
+                    <button type="button" class="sidebar-nav-toggle @(ViewContext.RouteData.Values["controller"].ToString() == "MemberMyPenalties" ? "active open" : "")" onclick="toggleSubmenu(this)">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="1.5" /></svg>
+                        <span>Cezalarım</span>
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </button>
+
+                    <div class="sidebar-submenu @(ViewContext.RouteData.Values["controller"].ToString() == "MemberMyPenalties" ? "is-open" : "")">
+                        <a href="@Url.Action("Index", "MemberMyPenalties")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "MemberMyPenalties" && ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")">Ödenmemiş Cezalarım</a>
+                        <a href="@Url.Action("MyOldPenalties", "MemberMyPenalties")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "MemberMyPenalties" && ViewContext.RouteData.Values["action"].ToString() == "Paid" ? "active" : "")">Ödenen Cezalarım</a>
+                    </div>
+                </div>
 
                 <div class="sidebar-section-label">Hesap</div>
                 <a href="@Url.Action("Index", "MemberProfile")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Profile" ? "active" : "")">
@@ -551,6 +659,22 @@
                 sidebar.classList.toggle("is-open");
             });
         })();
+    </script>
+    <script>
+        (function () {
+            var toggle = document.getElementById("sidebarToggle");
+            var sidebar = document.getElementById("memberSidebar");
+            if (!toggle || !sidebar) return;
+            toggle.addEventListener("click", function () {
+                sidebar.classList.toggle("is-open");
+            });
+        })();
+
+        function toggleSubmenu(btn) {
+            btn.classList.toggle("open");
+            var submenu = btn.nextElementSibling;
+            submenu.classList.toggle("is-open");
+        }
     </script>
     @RenderSection("scripts", required: false)
 </body>

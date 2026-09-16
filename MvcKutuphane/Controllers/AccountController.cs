@@ -39,7 +39,7 @@ namespace MvcKutuphane.Controllers
                 TempData["Error"] = "E-posta veya şifre hatalı.";
                 return RedirectToAction("Login");
             }
-            FormsAuthentication.SetAuthCookie(member.MAIL, false);
+            FormsAuthentication.SetAuthCookie(member.MAIL, false); //Authorize 
 
 
             Session["Mail"] = member.MAIL; 

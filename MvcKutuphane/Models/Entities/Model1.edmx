@@ -43,6 +43,7 @@
           <Property Name="CEZABITIS" Type="smalldatetime" />
           <Property Name="CEZA" Type="decimal" Precision="18" Scale="2" />
           <Property Name="HAREKET" Type="int" />
+          <Property Name="ODENDI" Type="bit" />
         </EntityType>
         <EntityType Name="TBL_DUYURU">
           <Key>
@@ -334,6 +335,7 @@
           <Property Name="HAREKET" Type="Int32" />
           <NavigationProperty Name="TBL_HAREKET" Relationship="Self.FK_TBL_CEZALAR_TBL_HAREKET" FromRole="TBL_CEZALAR" ToRole="TBL_HAREKET" />
           <NavigationProperty Name="TBL_UYELER" Relationship="Self.FK_TBL_CEZALAR_TBL_UYELER" FromRole="TBL_CEZALAR" ToRole="TBL_UYELER" />
+          <Property Name="ODENDI" Type="Boolean" />
         </EntityType>
         <EntityType Name="TBL_HAREKET">
           <Key>
@@ -661,6 +663,7 @@
           <EntitySetMapping Name="TBL_CEZALAR">
             <EntityTypeMapping TypeName="DbKutuphaneModel.TBL_CEZALAR">
               <MappingFragment StoreEntitySet="TBL_CEZALAR">
+                <ScalarProperty Name="ODENDI" ColumnName="ODENDI" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="UYE" ColumnName="UYE" />
                 <ScalarProperty Name="CEZABASLANGIC" ColumnName="CEZABASLANGIC" />

@@ -1,0 +1,438 @@
+﻿@model List<MvcKutuphane.Models.Entities.TBL_HAREKET>
+
+@{
+    ViewBag.Title = "Aktif Ödünçlerim";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+
+    var toplamKayit = Model != null ? Model.Count : 0;
+    var gecikenSayisi = Model != null
+        ? Model.Count(x => x.IADETARIH.HasValue && x.IADETARIH.Value < DateTime.Now)
+        : 0;
+}
+
+<style>
+    .sub-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sub-tab {
+        padding: 10px 18px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+    }
+
+        .sub-tab:hover {
+            color: var(--oxblood);
+        }
+
+        .sub-tab.active {
+            color: var(--oxblood);
+            border-bottom-color: var(--oxblood);
+        }
+
+    .active-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-bottom: 40px;
+    }
+
+    .active-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+    }
+
+    .active-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: var(--brass);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+    }
+
+    .active-eyebrow-line {
+        width: 28px;
+        height: 1px;
+        background: var(--brass);
+    }
+
+    .active-header h1 {
+        margin: 0 0 7px;
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-size: 2.15rem;
+        line-height: 1.15;
+    }
+
+    .active-header p {
+        margin: 0;
+        max-width: 620px;
+        color: var(--ink-soft);
+        font-size: 0.94rem;
+        line-height: 1.6;
+    }
+
+    .active-stats {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .active-stat {
+        min-width: 125px;
+        padding: 13px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-s);
+        box-shadow: var(--shadow-card);
+    }
+
+        .active-stat span {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--ink-soft);
+            font-size: 0.67rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .active-stat strong {
+            color: var(--forest);
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            line-height: 1;
+        }
+
+        .active-stat.overdue strong {
+            color: var(--oxblood);
+        }
+
+    .active-list {
+        display: grid;
+        gap: 16px;
+    }
+
+    .active-card {
+        position: relative;
+        overflow: hidden;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        box-shadow: var(--shadow-card);
+    }
+
+        .active-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: var(--forest);
+        }
+
+        .active-card.is-overdue::before {
+            background: var(--oxblood);
+        }
+
+    .active-inner {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 20px 22px 20px 27px;
+        flex-wrap: wrap;
+    }
+
+    .active-spine {
+        width: 46px;
+        height: 62px;
+        border-radius: 4px;
+        background: var(--forest);
+        flex-shrink: 0;
+    }
+
+    .active-card.is-overdue .active-spine {
+        background: var(--oxblood);
+    }
+
+    .active-info {
+        flex: 1;
+        min-width: 200px;
+    }
+
+        .active-info h3 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            margin: 0 0 6px;
+            color: var(--ink);
+        }
+
+    .active-dates {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+    }
+
+        .active-dates span strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+    .active-side {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .active-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 14px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+        .active-status svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .active-status.ok {
+            color: var(--forest);
+            background: #eef3ec;
+        }
+
+        .active-status.soon {
+            color: var(--brass);
+            background: #fbf0dd;
+        }
+
+        .active-status.overdue {
+            color: var(--oxblood);
+            background: #f7e9e6;
+        }
+
+    .renew-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border-radius: var(--radius-s);
+        font-size: 0.82rem;
+        font-weight: 700;
+        border: 1px solid var(--border-strong);
+        background: var(--surface);
+        color: var(--ink);
+        cursor: pointer;
+        font-family: var(--font-body);
+        white-space: nowrap;
+    }
+
+        .renew-btn:hover {
+            border-color: var(--oxblood);
+            color: var(--oxblood);
+        }
+
+        .renew-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+    .active-empty {
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        padding: 76px 24px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        box-shadow: var(--shadow-card);
+    }
+
+    .active-empty-icon {
+        width: 68px;
+        height: 68px;
+        margin: 0 auto 19px;
+        border-radius: 50%;
+        background: #edf3ee;
+        color: var(--forest);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .active-empty-icon svg {
+            width: 31px;
+            height: 31px;
+        }
+
+    .active-empty h3 {
+        margin: 0 0 8px;
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+    }
+
+    .active-empty p {
+        max-width: 420px;
+        margin: 0 auto 20px;
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    @@media (max-width: 700px) {
+        .active-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .active-stats {
+            width: 100%;
+        }
+
+        .active-stat {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .active-inner {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .active-side {
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .renew-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="active-page">
+
+    <div class="sub-tabs">
+        <a href="@Url.Action("ActiveLend", "MemberBorrowedBook")" class="sub-tab active">Aktif Ödünçlerim</a>
+        <a href="@Url.Action("History", "MemberBorrowedBook")" class="sub-tab">Geçmiş Ödünçlerim</a>
+    </div>
+
+    <div class="active-header">
+        <div>
+            <div class="active-eyebrow">
+                <span class="active-eyebrow-line"></span>
+                Hesabım
+            </div>
+            <h1>Aktif Ödünçlerim</h1>
+            <p>Şu anda elinizde bulunan, henüz iade edilmemiş kitaplar.</p>
+        </div>
+
+        <div class="active-stats">
+            <div class="active-stat">
+                <span>Elimdeki</span>
+                <strong>@toplamKayit</strong>
+            </div>
+            <div class="active-stat overdue">
+                <span>Süresi Geçen</span>
+                <strong>@gecikenSayisi</strong>
+            </div>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="active-list">
+            @foreach (var h in Model)
+            {
+                var kitapAd = h.TBL_KITAP != null ? h.TBL_KITAP.AD : "-";
+                bool gecikmisMi = h.IADETARIH.HasValue && h.IADETARIH.Value < DateTime.Now;
+                int kalanGun = h.IADETARIH.HasValue ? (int)(h.IADETARIH.Value.Date - DateTime.Now.Date).TotalDays : 0;
+                bool yaklasıyorMu = !gecikmisMi && kalanGun <= 3;
+
+                <div class="active-card @(gecikmisMi ? "is-overdue" : "")">
+                    <div class="active-inner">
+                        <div class="active-spine"></div>
+
+                        <div class="active-info">
+                            <h3>@kitapAd</h3>
+                            <div class="active-dates">
+                                <span>Alış: <strong>@(h.ALISTARIH.HasValue ? h.ALISTARIH.Value.ToString("dd.MM.yyyy") : "-")</strong></span>
+                                <span>Teslim tarihi: <strong>@(h.IADETARIH.HasValue ? h.IADETARIH.Value.ToString("dd.MM.yyyy") : "-")</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="active-side">
+                            @if (gecikmisMi)
+                            {
+                                <span class="active-status overdue">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" /><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+                                    @(Math.Abs(kalanGun)) gün gecikti
+                                </span>
+                            }
+                            else if (yaklasıyorMu)
+                            {
+                                <span class="active-status soon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="1.8" /></svg>
+                                    @kalanGun gün kaldı
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="active-status ok">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                                    @kalanGun gün kaldı
+                                </span>
+                            }
+
+                            @using (Html.BeginForm("RenewLoan", "MemberBorrowedBook", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@h.ID" />
+                                <button type="submit" class="renew-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4v6h6M20 20v-6h-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M5 15a8 8 0 0 0 14 3M19 9a8 8 0 0 0-14-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+                                    Süreyi uzat
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="active-empty">
+            <div class="active-empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5C4.7 20 4 19.3 4 18.5v-13Z" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+            </div>
+            <h3>Şu anda ödünç kitabınız yok</h3>
+            <p>Koleksiyonu keşfedip yeni bir kitap ödünç alabilirsiniz.</p>
+            <a class="btn btn-primary" href="@Url.Action("BookList", "Catalog")">Kataloğa göz at</a>
+        </div>
+    }
+
+</div>
