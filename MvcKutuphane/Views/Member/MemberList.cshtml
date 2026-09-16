@@ -124,6 +124,32 @@
             background: var(--surface-warm);
         }
 
+    .history-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--border-strong);
+        background: var(--surface-warm);
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--forest);
+        white-space: nowrap;
+    }
+
+        .history-chip:hover {
+            border-color: var(--forest);
+            background: #eef3ec;
+            text-decoration: none;
+        }
+
+        .history-chip svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
     .row-actions {
         display: flex;
         gap: 14px;
@@ -285,7 +311,8 @@
                     <th>E-posta</th>
                     <th>Telefon</th>
                     <th>Okul</th>
-                    <th></th>
+                    <th>Ödünç Alınmış Kitaplar</th>
+                    <th>İşlemler</th>
                 </tr>
             </thead>
             <tbody>
@@ -298,6 +325,12 @@
                         <td>@uye.MAIL</td>
                         <td>@uye.TELEFON</td>
                         <td>@uye.OKUL</td>
+                        <td>
+                            <a href="@Url.Action("MemberReturnedBooks", "Member", new { id = uye.ID })" class="history-chip">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                                İade geçmişi
+                            </a>
+                        </td>
                         <td>
                             <div class="row-actions">
                                 <a href="@Url.Action("UpdateMember", "Member", new { id = uye.ID })">Düzenle</a>

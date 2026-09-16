@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;
 
@@ -123,6 +124,19 @@ namespace MvcKutuphane.Controllers
                 TempData["Error"] = "Yazar güncellenirken bir hata oluştu.";
                 return RedirectToAction("UpdateAuthor", new { id = p.ID });
             }
+        }
+
+        [HttpGet]
+        public ActionResult AuthorBooks(int id)
+        {
+            var AuthorBooks = db.TBL_KITAP.Include(x=>x.TBL_KATEGORI).Include(x=>x.TBL_YAZAR).Where(x => x.YAZAR == id).ToList();
+            if (!AuthorBooks.Any())
+            {
+                TempData["Error"] = "Bu yazara ait kitap bulunamadı.";
+                return RedirectToAction("AuthorList");
+            }
+
+            return View(AuthorBooks);
         }
     }
 }

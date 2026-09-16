@@ -1,0 +1,250 @@
+﻿@model List<MvcKutuphane.Models.Entities.TBL_KITAP>
+@using System.Web
+@{
+    ViewBag.Title = ViewBag.YazarAdi ?? "Yazarın Kitapları";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .book-page-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+        .book-page-head p {
+            color: var(--ink-soft);
+            margin: 6px 0 0;
+        }
+
+    .book-toolbar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+    }
+
+    .book-search {
+        flex: 1;
+        min-width: 220px;
+        position: relative;
+    }
+
+        .book-search input {
+            width: 100%;
+            padding: 11px 14px 11px 38px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            background: var(--surface);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+            .book-search input:focus {
+                outline: none;
+                border-color: var(--oxblood);
+            }
+
+        .book-search svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--ink-soft);
+        }
+
+    .book-count {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin-bottom: 16px;
+    }
+
+    table.data-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        overflow: hidden;
+    }
+
+        table.data-table th, table.data-table td {
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.92rem;
+        }
+
+        table.data-table th {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--ink-soft);
+            background: var(--surface-warm);
+        }
+
+        table.data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.data-table tbody tr:hover {
+            background: var(--surface-warm);
+        }
+
+    .badge {
+        display: inline-block;
+        font-size: 0.78rem;
+        font-weight: 600;
+        border-radius: 999px;
+        padding: 3px 10px;
+    }
+
+    .badge-available {
+        color: var(--forest);
+        background: #eef3ec;
+    }
+
+    .badge-loaned {
+        color: var(--oxblood);
+        background: #f7e9e6;
+    }
+
+    .book-empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--ink-soft);
+    }
+
+        .book-empty h3 {
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+</style>
+
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Message"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--forest); margin-bottom:20px; color:var(--forest);">
+        @TempData["Message"]
+    </div>
+}
+
+<a href="@Url.Action("AuthorList", "Author")" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    Yazarlara geri dön
+</a>
+
+<div class="book-page-head">
+    <div>
+        <h1 style="margin-bottom:4px;">@(ViewBag.YazarAdi ?? "Yazarın Kitapları")</h1>
+        <p>Bu yazara ait tüm kitapların listesi.</p>
+    </div>
+</div>
+
+<div class="book-toolbar">
+    <div class="book-search">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6" />
+            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+        <input type="text" id="bookSearchInput" placeholder="Kitap adına göre ara..." autocomplete="off" />
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <p class="book-count" id="bookCount">@Model.Count() kitap listeleniyor</p>
+
+    <div class="panel" style="padding:0; overflow-x:auto;">
+        <table class="data-table" id="bookTable">
+            <thead>
+                <tr>
+                    <th>Ad</th>
+                    <th>Kategori</th>
+                    <th>Basım Yılı</th>
+                    <th>Yayınevi</th>
+                    <th>Sayfa</th>
+                    <th>Durum</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kitap in Model)
+                {
+                    var kategoriAd = kitap.TBL_KATEGORI != null ? kitap.TBL_KATEGORI.CategoryName : "-";
+
+                    <tr data-name="@(kitap.AD ?? "").ToLower()">
+                        <td>@kitap.AD</td>
+                        <td>@kategoriAd</td>
+                        <td>@kitap.BASIMYIL</td>
+                        <td>@kitap.YAYINEVI</td>
+                        <td>@kitap.SAYFA</td>
+                        <td>
+                            @if (kitap.DURUM == true)
+                            {
+                                <span class="badge badge-available">Rafta</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-loaned">Ödünçte</span>
+                            }
+                        </td>
+                        <td>
+                            <a href="@Url.Action("UpdateBook", "Book", new { id = kitap.ID })" style="font-size:0.85rem; font-weight:600; color:var(--forest);">Düzenle</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="panel book-empty">
+        <h3>Bu yazara ait kitap bulunamadı</h3>
+        <p>Henüz bu yazara ait bir kitap eklenmemiş.</p>
+        <a class="btn btn-primary" href="@Url.Action("CreateBook", "Book")" style="margin-top:12px;">Yeni kitap ekle</a>
+    </div>
+}
+
+<script>(function () {
+        var input = document.getElementById("bookSearchInput");
+        var table = document.getElementById("bookTable");
+        var countLabel = document.getElementById("bookCount");
+        if (!input || !table) return;
+        var rows = Array.prototype.slice.call(table.querySelectorAll("tbody tr"));
+        input.addEventListener("input", function () {
+            var term = input.value.trim().toLowerCase();
+            var visible = 0;
+            rows.forEach(function (row) {
+                var match = row.getAttribute("data-name").indexOf(term) !== -1;
+                row.style.display = match ? "" : "none";
+                if (match) visible++;
+            });
+            if (countLabel) countLabel.textContent = visible + " kitap listeleniyor";
+        });
+    })();</script>

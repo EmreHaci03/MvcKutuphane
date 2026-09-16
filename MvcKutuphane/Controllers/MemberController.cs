@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 using System.Web.Mvc;
 
 namespace MvcKutuphane.Controllers
@@ -134,6 +135,27 @@ namespace MvcKutuphane.Controllers
             }
 
             return RedirectToAction("MemberList");
+        }
+
+        [HttpGet]
+        public ActionResult MemberReturnedBooks(int id)
+        {
+            var uye = db.TBL_UYELER.Find(id);
+            if (uye == null)
+            {
+                TempData["Error"] = "Üye Bulunamadı.";
+                return RedirectToAction("MemberList");
+            }
+
+            var MemberBooks = db.TBL_HAREKET.Include(x => x.TBL_KITAP)
+                .Include(x => x.TBL_PERSONEL)
+                .Include(x => x.TBL_UYELER)
+                .Where(x => x.UYE == id && x.UYEGETIRDIGITARIH.HasValue)
+                .ToList();
+
+            ViewBag.MemberName = uye.AD + " " + uye.SOYAD;
+
+            return View(MemberBooks);
         }
 
     }

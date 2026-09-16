@@ -346,6 +346,8 @@
     <Content Include="Views\MemberBorrowedBook\ActiveLend.cshtml" />
     <Content Include="Views\MemberMyPenalties\MyOldPenalties.cshtml" />
     <Content Include="Views\MemberDashboard\Index.cshtml" />
+    <Content Include="Views\Author\AuthorBooks.cshtml" />
+    <Content Include="Views\Member\MemberReturnedBooks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

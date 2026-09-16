@@ -17,6 +17,60 @@ namespace MvcKutuphane.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public ActionResult Register(TBL_UYELER p)
+        {
+            if (string.IsNullOrWhiteSpace(p.AD) || string.IsNullOrWhiteSpace(p.SOYAD) || string.IsNullOrWhiteSpace(p.SIFRE)
+                || string.IsNullOrWhiteSpace(p.MAIL) || string.IsNullOrWhiteSpace(p.KULLANICIADI))
+            {
+                TempData["Error"] = "Lütfen boş alan bırakmayınız.";
+                return RedirectToAction("Register");
+            }
+            if (!p.MAIL.Contains("@"))
+            {
+                TempData["Error"] = "Lütfen geçerli bir e-posta adresi giriniz.";
+                return RedirectToAction("Register");
+            }
+
+            if (p.SIFRE.Length < 6)
+            {
+                TempData["Error"] = "Şifre en az 6 karakter olmalıdır.";
+                return RedirectToAction("Register");
+            }
+
+            bool AnyMail = db.TBL_UYELER.Any(x => x.MAIL == p.MAIL);
+            bool AnyUsername = db.TBL_UYELER.Any(x => x.KULLANICIADI == p.KULLANICIADI);
+            if (AnyMail)
+            {
+                TempData["Error"] = "Bu Maile Sahip Hesap Bulunmaktadır.";
+                return RedirectToAction("Register");
+
+            }
+            if (AnyUsername)
+            {
+                TempData["Error"] = "Bu Kullanıcı Adına Sahip Hesap Bulunmaktadır.";
+                return RedirectToAction("Register");
+            }
+            try
+            {
+                p.AD = p.AD.Trim();
+                p.SOYAD = p.SOYAD.Trim();
+                p.KULLANICIADI = p.KULLANICIADI.Trim();
+                p.SIFRE = p.SIFRE.Trim();
+                p.MAIL = p.MAIL.Trim();
+
+                db.TBL_UYELER.Add(p);
+                db.SaveChanges();
+                TempData["Message"] = "Hesabınız başarıyla oluşturuldu, giriş yapabilirsiniz.";
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Hesap oluşturma sırasında hata oluştu, lütfen tekrar deneyiniz.";
+                return RedirectToAction("Register");
+            }
+            return RedirectToAction("Login");
+        }
         [HttpGet]
         public ActionResult Login()
         {

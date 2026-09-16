@@ -366,6 +366,7 @@
                     }
                 </div>
                 <div class="auth-actions">
+                    <a href="@Url.Action("AuthorBooks", "Author", new { id = yazar.ID })">Kitapları gör</a>
                     <a href="@Url.Action("UpdateAuthor", "Author", new { id = yazar.ID })">Düzenle</a>
                     <button type="button" class="danger" onclick="openDeleteModal('@yazar.ID', '@tamAd.Replace("'", "\\'")')">Sil</button>
                 </div>

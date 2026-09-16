@@ -72,7 +72,7 @@ namespace MvcKutuphane.Controllers
             ViewBag.CategoryLabels = Newtonsoft.Json.JsonConvert.SerializeObject(MyCategoryDistribution.Select(x => x.Category));
             ViewBag.CategoryData = Newtonsoft.Json.JsonConvert.SerializeObject(MyCategoryDistribution.Select(x => x.Count));
 
-            var MostReadBookCategory = MyCategoryDistribution.First();
+            var MostReadBookCategory = MyCategoryDistribution.FirstOrDefault();
             ViewBag.TopCategoryName = MostReadBookCategory != null ? MostReadBookCategory.Category : "-";
 
             return View();

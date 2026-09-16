@@ -29,6 +29,7 @@ namespace MvcKutuphane.Controllers
         public ActionResult CreateLend()
         {
             List<SelectListItem> Book = (from x in db.TBL_KITAP
+                                         .Where(x=>x.DURUM==true)
                                          select new SelectListItem
                                          {
                                              Value = x.ID.ToString(),
