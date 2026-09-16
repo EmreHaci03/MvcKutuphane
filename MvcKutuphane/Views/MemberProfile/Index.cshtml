@@ -1,0 +1,178 @@
+﻿@model MvcKutuphane.Models.Entities.TBL_UYELER
+
+@{
+    ViewBag.Title = "Profilim";
+    ViewBag.Lede = "Hesap bilgilerinizi görüntüleyin ve güncelleyin.";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<style>
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .profile-card {
+        text-align: center;
+        padding: 36px 24px;
+    }
+
+    .profile-avatar-lg {
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
+        background: var(--oxblood);
+        color: var(--surface-warm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 2rem;
+        margin: 0 auto 18px;
+    }
+
+    .profile-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 4px;
+    }
+
+    .profile-card .username {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+
+    .profile-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: #eef3ec;
+        color: var(--forest);
+        font-size: 0.82rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+    }
+
+        .profile-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+    .profile-since {
+        border-top: 1px solid var(--border);
+        padding-top: 18px;
+        margin-top: 4px;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+    }
+
+        .profile-since strong {
+            color: var(--ink);
+            display: block;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-row .label {
+            font-size: 0.82rem;
+            color: var(--ink-soft);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .info-row .value {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--ink);
+            font-size: 1rem;
+        }
+
+    .panel-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    @@media (max-width: 860px) {
+        .profile-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="profile-grid">
+
+    <div class="panel profile-card">
+        @if (!string.IsNullOrEmpty(Model.FOTOGRAF))
+        {
+            <img src="@Model.FOTOGRAF" alt="@Model.AD" class="profile-avatar-lg" style="object-fit:cover;" onerror="this.style.display='none'; document.getElementById('avatarFallback').style.display='flex';" />
+            <div class="profile-avatar-lg" id="avatarFallback" style="display:none;">@(Model.AD.Length > 0 ? Model.AD.Substring(0, 1).ToUpper() : "")</div>
+        }
+        else
+        {
+            <div class="profile-avatar-lg">@(Model.AD.Length > 0 ? Model.AD.Substring(0, 1).ToUpper() : "")</div>
+        }
+
+        <h3>@Model.AD @Model.SOYAD</h3>
+        <p class="username">@@@Model.KULLANICIADI</p>
+
+        <div class="profile-badge">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            Aktif Üye
+        </div>
+    </div>
+
+
+    <div>
+        <div class="panel">
+            <h3 style="margin-bottom:6px;">Kişisel Bilgiler</h3>
+            <p style="color:var(--ink-soft); font-size:0.9rem; margin-bottom:16px;">Bu bilgiler yalnızca kütüphane hizmetleri için kullanılır.</p>
+
+            <div class="info-row">
+                <span class="label">Ad Soyad</span>
+                <span class="value">@Model.AD  @Model.SOYAD</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Kullanıcı Adı</span>
+                <span class="value">@Model.KULLANICIADI</span>
+            </div>
+            <div class="info-row">
+                <span class="label">E-posta</span>
+                <span class="value">@Model.MAIL</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Telefon</span>
+                <span class="value">@Model.TELEFON</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Okul</span>
+                <span class="value">@Model.OKUL</span>
+            </div>
+
+
+            <div class="panel-actions">
+                <a class="btn btn-primary" href="/MemberProfile/EditInformation/">Bilgilerimi düzenle</a>
+                <a class="btn btn-ghost" href="/MemberProfile/ChangePassword/">Şifremi değiştir</a>
+            </div>
+        </div>
+    </div>
+
+</div>

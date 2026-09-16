@@ -1,9 +1,15 @@
-﻿<!DOCTYPE html>
+﻿@* ===========================================================
+    _MemberLayout.cshtml — Kütüphanem Üye Paneli (Sidebar'lı)
+    Konum: Views/Shared/_MemberLayout.cshtml
+    Kullanım: üye alanı view'larında en üste ekleyin ->
+    @{ Layout = "~/Views/Shared/_MemberLayout.cshtml"; }
+    =========================================================== *@
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.Title - Yönetim Paneli</title>
+    <title>@ViewBag.Title - Üyelik Panelim</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet" />
 
@@ -23,10 +29,11 @@
             --brass-light: #cfa768;
             --radius-s: 3px;
             --radius-m: 6px;
+            --radius-l: 10px;
             --font-display: "Lora", Georgia, "Times New Roman", serif;
             --font-body: "Source Sans 3", "Segoe UI", Arial, sans-serif;
             --shadow-card: 0 1px 2px rgba(42, 33, 28, 0.06), 0 8px 24px -12px rgba(42, 33, 28, 0.18);
-            --sidebar-w: 248px;
+            --sidebar-w: 240px;
         }
 
         * {
@@ -65,11 +72,11 @@
         }
 
         h2 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
         }
 
         h3 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
         }
 
         p {
@@ -77,13 +84,13 @@
         }
 
         /* ---------- Shell ---------- */
-        .admin-shell {
+        .member-shell {
             display: flex;
             min-height: 100vh;
         }
 
         /* ---------- Sidebar ---------- */
-        .admin-sidebar {
+        .member-sidebar {
             width: var(--sidebar-w);
             flex-shrink: 0;
             background: var(--oxblood-dark);
@@ -99,7 +106,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 22px 22px 20px;
+            padding: 22px 22px 18px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
@@ -113,21 +120,55 @@
             .sidebar-brand span {
                 font-family: var(--font-display);
                 font-weight: 600;
-                font-size: 1.15rem;
+                font-size: 1.1rem;
                 color: #f4ead9;
             }
 
+        .sidebar-member {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 22px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--brass);
+            color: #2a1a0e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-member .name {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #f4ead9;
+            line-height: 1.3;
+        }
+
+        .sidebar-member .role {
+            font-size: 0.76rem;
+            color: #c8b7a4;
+        }
+
         .sidebar-nav {
             flex: 1;
-            padding: 18px 12px;
+            padding: 16px 12px;
             overflow-y: auto;
         }
 
         .sidebar-section-label {
             font-size: 0.72rem;
-            text-transform: none;
             color: #b89b83;
-            padding: 8px 12px 6px;
+            padding: 10px 12px 6px;
             letter-spacing: 0.02em;
         }
 
@@ -138,10 +179,9 @@
             padding: 10px 12px;
             border-radius: var(--radius-s);
             color: #ead9c8;
-            font-size: 0.95rem;
+            font-size: 0.94rem;
             font-weight: 500;
             margin-bottom: 2px;
-            transition: background 0.15s ease, color 0.15s ease;
         }
 
             .sidebar-nav a svg {
@@ -167,21 +207,44 @@
                 }
 
         .sidebar-foot {
-            padding: 16px 20px;
+            padding: 14px 12px;
             border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.85rem;
-            color: #c8b7a4;
         }
 
+        .sidebar-logout {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-s);
+            color: #ead9c8;
+            font-size: 0.9rem;
+            font-weight: 500;
+            width: 100%;
+            background: none;
+            border: none;
+        }
+
+            .sidebar-logout svg {
+                width: 17px;
+                height: 17px;
+                flex-shrink: 0;
+            }
+
+            .sidebar-logout:hover {
+                background: rgba(255,255,255,0.06);
+                color: #ffffff;
+            }
+
         /* ---------- Main area ---------- */
-        .admin-main {
+        .member-main {
             flex: 1;
             min-width: 0;
             display: flex;
             flex-direction: column;
         }
 
-        .admin-topbar {
+        .member-topbar {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
             padding: 16px 32px;
@@ -194,39 +257,26 @@
             z-index: 10;
         }
 
-            .admin-topbar .crumb {
+            .member-topbar .crumb {
                 font-size: 0.85rem;
                 color: var(--ink-soft);
             }
 
-                .admin-topbar .crumb strong {
+                .member-topbar .crumb strong {
                     color: var(--ink);
                     font-weight: 600;
                 }
 
-        .topbar-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.9rem;
-            color: var(--ink-soft);
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            padding: 7px 10px;
+            cursor: pointer;
         }
 
-            .topbar-user .avatar {
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                background: var(--oxblood);
-                color: #f4ead9;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-family: var(--font-display);
-                font-weight: 600;
-                font-size: 0.9rem;
-            }
-
-        .admin-content {
+        .member-content {
             padding: 32px;
             flex: 1;
         }
@@ -244,10 +294,32 @@
                 margin-top: 20px;
             }
 
+        .flash {
+            padding: 12px 16px;
+            border-radius: var(--radius-s);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+
+        .flash-ok {
+            background: #eef3ec;
+            border-color: #cfe0c9;
+            color: var(--forest);
+        }
+
+        .flash-error {
+            background: #f7e9e6;
+            border-color: #e6c3ba;
+            color: var(--oxblood-dark);
+        }
+
         .btn {
             display: inline-flex;
             align-items: center;
-            padding: 9px 18px;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 20px;
             border-radius: var(--radius-s);
             font-size: 0.92rem;
             font-weight: 600;
@@ -286,7 +358,7 @@
                 text-align: left;
                 padding: 12px 14px;
                 border-bottom: 1px solid var(--border);
-                font-size: 0.95rem;
+                font-size: 0.92rem;
             }
 
             table.data-table th {
@@ -301,46 +373,28 @@
             outline-offset: 2px;
         }
 
-        @@media (prefers-reduced-motion: reduce) {
-            * {
-                transition: none !important;
-            }
-        }
-
         /* ---------- Responsive ---------- */
         @@media (max-width: 900px) {
-            .admin-sidebar {
+            .member-sidebar {
                 position: fixed;
                 left: -260px;
                 z-index: 100;
                 transition: left 0.2s ease;
-                box-shadow: 0 0 0 9999px rgba(0,0,0,0);
             }
 
-                .admin-sidebar.is-open {
+                .member-sidebar.is-open {
                     left: 0;
                     box-shadow: 0 0 40px rgba(0,0,0,0.35);
                 }
 
-            .admin-content {
+            .member-content {
                 padding: 22px 18px;
             }
 
-            .admin-topbar {
+            .member-topbar {
                 padding: 14px 18px;
             }
-        }
 
-        .sidebar-toggle {
-            display: none;
-            background: none;
-            border: 1px solid var(--border-strong);
-            border-radius: var(--radius-s);
-            padding: 7px 10px;
-            cursor: pointer;
-        }
-
-        @@media (max-width: 900px) {
             .sidebar-toggle {
                 display: inline-flex;
             }
@@ -351,9 +405,9 @@
 </head>
 <body>
 
-    <div class="admin-shell">
+    <div class="member-shell">
 
-        <aside class="admin-sidebar" id="adminSidebar">
+        <aside class="member-sidebar" id="memberSidebar">
             <div class="sidebar-brand">
                 <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M4 8c5-3 11-3 16 0v24c-5-3-11-3-16 0V8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
@@ -363,101 +417,125 @@
                 <span>Kütüphanem</span>
             </div>
 
+            <div class="sidebar-member">
+                <div class="sidebar-avatar">@(ViewBag.MemberInitial ?? "Ü")</div>
+                <div>
+                    <div class="name">@(ViewBag.MemberName ?? "Üyem")</div>
+                    <div class="role">Üye</div>
+                </div>
+            </div>
 
             <nav class="sidebar-nav">
-
                 <div class="sidebar-section-label">Genel</div>
-                <a href="@Url.Action("Index", "Dashboard")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Dashboard" ? "active" : "")">
+                <a href="@Url.Action("Index", "MemberDashboard")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "MemberDashboard" ? "active" : "")">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="7" height="9" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="14" y="3" width="7" height="5" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="14" y="12" width="7" height="9" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="3" y="16" width="7" height="5" rx="1" stroke="currentColor" stroke-width="1.5" /></svg>
-                    Panel
+                    Panelim
                 </a>
-                <div class="sidebar-section-label">Katalog</div>
-                <a href="@Url.Action("BookList", "Book")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Book" ? "active" : "")">
+
+                <div class="sidebar-section-label">Kitaplarım</div>
+                <a href="@Url.Action("Index", "MyLoans")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "MyLoans" ? "active" : "")">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5C4.7 20 4 19.3 4 18.5v-13Z" stroke="currentColor" stroke-width="1.5" /><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.5" /></svg>
-                    Kitaplar
+                    Ödünç Kitaplarım
                 </a>
-
-                <a href="@Url.Action("Index", "Statistic")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Statistics" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.5 14.7 8l6 .9-4.4 4.2 1 6-5.3-2.8L6.7 19l1-6L3.3 8.9l6-.9Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
-                    İstatistikler
-                </a>
-
-                <a href="@Url.Action("Index", "Category")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Category" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="13" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="4" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /><rect x="13" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5" /></svg>
-                    Kategoriler
-                </a>
-                <a href="@Url.Action("EmployeeList", "Employee")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Personel" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5" /><circle cx="9" cy="11" r="2" stroke="currentColor" stroke-width="1.5" /><path d="M6 16c.6-1.5 1.8-2.3 3-2.3s2.4.8 3 2.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><path d="M14 10h4M14 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-                    Personel
-                </a>
-                <a href="@Url.Action("AuthorList", "Author")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Author" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 20c1.5-4.5 4-9 8.5-13.5C14 5 16 4 18 4c0 2-1 4-2.5 5.5C11 14 6.5 16.5 4 20Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-                        <path d="M12.5 9.5 15 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                        <path d="M4 20H2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                    </svg>
-                    Yazarlar
-                </a>
-
-                <div class="sidebar-section-label">İşlemler</div>
-                <a href="@Url.Action("MoveBookList", "BorrowedBooks")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Loan" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-                    Ödünç işlemleri
-                </a>
-                <a href="@Url.Action("ReturnedBooksList", "Transaction")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "BorrowedBooks" && ViewContext.RouteData.Values["action"].ToString() == "ReturnedBooksList" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    İade Geçmişi
-                </a>
-                <a href="@Url.Action("MemberList", "Member")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Member" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" /><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-                    Üyeler @*Tamamlandı*@
-                </a>
-
-                <a href="@Url.Action("PenaltyList", "Penalty")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Penalty" ? "active" : "")">
+                <a href="@Url.Action("Index", "MemberMyPenalties")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "MyPenalties" ? "active" : "")">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v4l3 3M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="1.5" /></svg>
-                    Cezalar
+                    Cezalarım
                 </a>
-                <a href="@Url.Action("AnnouncementList", "Announcement")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Announcement" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11v2a2 2 0 0 0 2 2h1l3 5V4L6 9H5a2 2 0 0 0-2 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><path d="M14 8a4 4 0 0 1 0 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><path d="M17 5a8 8 0 0 1 0 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+
+                <div class="sidebar-section-label">Hesap</div>
+                <a href="@Url.Action("Index", "MemberProfile")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Profile" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" /><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                    Profilim
+                </a>
+
+                <a href="@Url.Action("Index", "MemberMessage")"
+                   class="@(ViewContext.RouteData.Values["controller"].ToString() == "MemberMessages" ? "active" : "")">
+
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v9a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4h-.5A2.5 2.5 0 0 1 3.5 14V6"
+                              stroke="currentColor"
+                              stroke-width="1.5"
+                              stroke-linejoin="round" />
+                        <path d="M8 9h8M8 13h5"
+                              stroke="currentColor"
+                              stroke-width="1.5"
+                              stroke-linecap="round" />
+                    </svg>
+
+                    Mesajlarım
+                </a>
+
+
+                <a href="@Url.Action("Index", "MemberAnnouncement")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "MemberAnnouncement" ? "active" : "")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 10h4l8-4v12l-8-4H4v-4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                        <path d="M8 14l2 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
                     Duyurular
                 </a>
 
-                <a href="@Url.Action("MessageList", "Message")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Message" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5" /><path d="m3 7 9 6 9-6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
-                    Mesajlar
+                <a href="@Url.Action("Index", "Default")"
+                   class="@(ViewContext.RouteData.Values["controller"].ToString() == "Default" ? "active" : "")">
+
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true">
+
+                        <!-- Açık kitap -->
+                        <path d="M3.5 5.5C6.4 4.2 9.3 4.5 12 6v14c-2.7-1.5-5.6-1.8-8.5-.5v-14Z"
+                              stroke="currentColor"
+                              stroke-width="1.5"
+                              stroke-linejoin="round" />
+
+                        <path d="M20.5 5.5C17.6 4.2 14.7 4.5 12 6v14c2.7-1.5 5.6-1.8 8.5-.5v-14Z"
+                              stroke="currentColor"
+                              stroke-width="1.5"
+                              stroke-linejoin="round" />
+
+                        <path d="M12 6v14"
+                              stroke="currentColor"
+                              stroke-width="1.5" />
+
+                        <!-- Vitrin yıldızı -->
+                        <path d="M19 3.5l.55 1.55L21 5.5l-1.45.45L19 7.5l-.55-1.55L17 5.5l1.45-.45L19 3.5Z"
+                              fill="currentColor" />
+                    </svg>
+
+                    Kitap Vitrini
                 </a>
 
-                <div class="sidebar-section-label">Sistem</div>
-                <a href="@Url.Action("Index", "Report")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Report" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 19V9M12 19V5M19 19v-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-                    Raporlar @*Yapılabilir*@
-                </a>
-                <a href="@Url.Action("Index", "Settings")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "Settings" ? "active" : "")">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" /><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-                    Ayarlar
-                </a> @*Yapılabilir*@
+
             </nav>
 
             <div class="sidebar-foot">
-                Kütüphanem Yönetim Paneli
+                <a class="sidebar-logout" href="@Url.Action("LogOut", "Account")">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M16 17l5-5-5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M21 12H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+                    Çıkış yap
+                </a>
             </div>
         </aside>
 
-        <div class="admin-main">
-            <header class="admin-topbar">
+        <div class="member-main">
+            <header class="member-topbar">
                 <div style="display:flex; align-items:center; gap:14px;">
                     <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Menüyü aç">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
                     </button>
-                    <div class="crumb">Yönetim Paneli / <strong>@ViewBag.Title</strong></div>
-                </div>
-                <div class="topbar-user">
-                    <div class="avatar">A</div>
-                    <span>Admin</span>
+                    <div class="crumb">Üyelik Panelim / <strong>@ViewBag.Title</strong></div>
                 </div>
             </header>
 
-            <div class="admin-content">
+            <div class="member-content">
+                @if (TempData["Message"] != null)
+                {
+                    <div class="flash flash-ok">@TempData["Message"]</div>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <div class="flash flash-error">@TempData["Error"]</div>
+                }
+
                 @RenderBody()
             </div>
         </div>
@@ -467,7 +545,7 @@
     <script>
         (function () {
             var toggle = document.getElementById("sidebarToggle");
-            var sidebar = document.getElementById("adminSidebar");
+            var sidebar = document.getElementById("memberSidebar");
             if (!toggle || !sidebar) return;
             toggle.addEventListener("click", function () {
                 sidebar.classList.toggle("is-open");

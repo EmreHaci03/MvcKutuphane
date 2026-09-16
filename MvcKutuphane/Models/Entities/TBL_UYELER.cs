@@ -19,6 +19,7 @@ namespace MvcKutuphane.Models.Entities
         {
             this.TBL_CEZALAR = new HashSet<TBL_CEZALAR>();
             this.TBL_HAREKET = new HashSet<TBL_HAREKET>();
+            this.TBL_BILDIRIM = new HashSet<TBL_BILDIRIM>();
         }
     
         public int ID { get; set; }
@@ -35,5 +36,7 @@ namespace MvcKutuphane.Models.Entities
         public virtual ICollection<TBL_CEZALAR> TBL_CEZALAR { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TBL_HAREKET> TBL_HAREKET { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TBL_BILDIRIM> TBL_BILDIRIM { get; set; }
     }
 }

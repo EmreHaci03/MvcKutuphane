@@ -1,0 +1,643 @@
+﻿@model List<MvcKutuphane.Models.Entities.TBL_BILDIRIM>
+
+@{
+    ViewBag.Title = "Mesajlarım";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+
+    var toplamMesaj = Model != null ? Model.Count : 0;
+    var okunmayanMesaj = Model != null ? Model.Count(x => x.OKUNDU == false) : 0;
+}
+
+<style>
+    .message-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-bottom: 40px;
+    }
+
+    /* HEADER */
+    .message-page-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+    }
+
+    .message-heading {
+        position: relative;
+    }
+
+    .message-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: var(--brass);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+    }
+
+    .message-eyebrow-line {
+        width: 28px;
+        height: 1px;
+        background: var(--brass);
+    }
+
+    .message-page-head h1 {
+        margin: 0 0 7px;
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-size: 2.15rem;
+        line-height: 1.15;
+    }
+
+    .message-page-head p {
+        margin: 0;
+        max-width: 620px;
+        color: var(--ink-soft);
+        font-size: 0.94rem;
+        line-height: 1.6;
+    }
+
+    /* STATS */
+    .message-stats {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .message-stat {
+        min-width: 108px;
+        padding: 12px 15px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-s);
+        box-shadow: var(--shadow-card);
+    }
+
+    .message-stat-label {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--ink-soft);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .message-stat strong {
+        color: var(--oxblood);
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        line-height: 1;
+    }
+
+    .message-stat.unread strong {
+        color: var(--brass);
+    }
+
+    /* LIST */
+    .message-list {
+        display: grid;
+        gap: 15px;
+    }
+
+    /* CARD */
+    .message-card {
+        position: relative;
+        overflow: hidden;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        box-shadow: var(--shadow-card);
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+        .message-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: var(--brass);
+            transition: background 0.18s ease;
+        }
+
+        .message-card:hover {
+            transform: translateY(-3px);
+            border-color: #d8c9bb;
+            box-shadow: 0 14px 32px rgba(42, 33, 28, 0.09);
+        }
+
+            .message-card:hover::before {
+                background: var(--oxblood);
+            }
+
+        .message-card.unread {
+            background: linear-gradient( 90deg, rgba(181, 143, 74, 0.045), transparent 28% ), var(--surface);
+        }
+
+    .message-card-inner {
+        padding: 22px 24px 20px 28px;
+    }
+
+    /* TOP META */
+    .message-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+    }
+
+    .message-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--oxblood);
+        font-size: 0.71rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+        .message-label svg {
+            width: 16px;
+            height: 16px;
+            flex: 0 0 auto;
+        }
+
+    .message-id {
+        color: var(--ink-soft);
+        font-size: 0.74rem;
+        opacity: 0.8;
+    }
+
+    /* UNREAD BADGE */
+    .message-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 9px;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        font-weight: 750;
+        letter-spacing: 0.02em;
+    }
+
+        .message-status.unread {
+            color: #72571e;
+            background: #f7edda;
+            border: 1px solid #ead8b4;
+        }
+
+        .message-status.read {
+            color: #68716d;
+            background: #f2f3f1;
+            border: 1px solid #e1e3df;
+        }
+
+    .message-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    /* SUBJECT */
+    .message-subject-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+    }
+
+    .message-subject {
+        margin: 0;
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-size: 1.32rem;
+        font-weight: 700;
+        line-height: 1.35;
+    }
+
+    .message-card.unread .message-subject {
+        font-weight: 800;
+    }
+
+    /* CONTENT */
+    .message-content {
+        margin: 11px 0 0;
+        color: var(--ink-soft);
+        font-size: 0.92rem;
+        line-height: 1.75;
+        white-space: pre-line;
+    }
+
+    /* FOOTER */
+    .message-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-top: 19px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+        color: var(--ink-soft);
+        font-size: 0.76rem;
+        flex-wrap: wrap;
+    }
+
+    .message-date,
+    .message-type {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .message-footer svg {
+        width: 14px;
+        height: 14px;
+        color: var(--brass);
+        flex: 0 0 auto;
+    }
+
+    .message-date strong {
+        color: var(--ink);
+        font-weight: 650;
+    }
+
+    /* EMPTY */
+    .message-empty {
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        padding: 76px 24px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        box-shadow: var(--shadow-card);
+    }
+
+        .message-empty::before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            top: -130px;
+            right: -80px;
+            border-radius: 50%;
+            background: rgba(181, 143, 74, 0.07);
+        }
+
+        .message-empty::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            bottom: -110px;
+            left: -70px;
+            border-radius: 50%;
+            background: rgba(116, 39, 43, 0.04);
+        }
+
+    .message-empty-icon {
+        position: relative;
+        z-index: 1;
+        width: 68px;
+        height: 68px;
+        margin: 0 auto 19px;
+        border-radius: 50%;
+        background: #f7eee5;
+        color: var(--brass);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 0 0 1px rgba(181, 143, 74, 0.12);
+    }
+
+        .message-empty-icon svg {
+            width: 31px;
+            height: 31px;
+        }
+
+    .message-empty h3 {
+        position: relative;
+        z-index: 1;
+        margin: 0 0 8px;
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+    }
+
+    .message-empty p {
+        position: relative;
+        z-index: 1;
+        max-width: 420px;
+        margin: 0 auto;
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    /* RESPONSIVE */
+    @@media (max-width: 700px) {
+
+        .message-page {
+            padding-bottom: 25px;
+        }
+
+        .message-page-head {
+            align-items: flex-start;
+            margin-bottom: 22px;
+        }
+
+            .message-page-head h1 {
+                font-size: 1.75rem;
+            }
+
+        .message-stats {
+            width: 100%;
+        }
+
+        .message-stat {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .message-card-inner {
+            padding: 19px 18px 18px 22px;
+        }
+
+        .message-subject-row {
+            display: block;
+        }
+
+        .message-status {
+            margin-top: 11px;
+        }
+
+        .message-subject {
+            font-size: 1.14rem;
+        }
+
+        .message-content {
+            font-size: 0.89rem;
+            line-height: 1.7;
+        }
+
+        .message-footer {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 9px;
+        }
+    }
+
+    @@media (max-width: 420px) {
+
+        .message-page-head h1 {
+            font-size: 1.55rem;
+        }
+
+        .message-stat {
+            padding: 10px 11px;
+        }
+
+        .message-stat-label {
+            font-size: 0.61rem;
+        }
+
+        .message-stat strong {
+            font-size: 1.15rem;
+        }
+
+        .message-card-inner {
+            padding-left: 19px;
+        }
+    }
+</style>
+
+<div class="message-page">
+
+    <!-- SAYFA BAŞLIĞI -->
+    <div class="message-page-head">
+
+        <div class="message-heading">
+
+            <div class="message-eyebrow">
+                <span class="message-eyebrow-line"></span>
+                Kütüphane İletişimi
+            </div>
+
+            <h1>Mesajlarım</h1>
+
+            <p>
+                Kütüphaneden size gönderilen bildirimleri ve iletişim kayıtlarını
+                buradan takip edebilirsiniz.
+            </p>
+
+        </div>
+
+        <div class="message-stats">
+
+            <div class="message-stat">
+                <span class="message-stat-label">Toplam Mesaj</span>
+                <strong>@toplamMesaj</strong>
+            </div>
+
+            <div class="message-stat unread">
+                <span class="message-stat-label">Okunmamış</span>
+                <strong>@okunmayanMesaj</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="message-list">
+
+            @foreach (var mesaj in Model)
+            {
+                var okunmadi = mesaj.OKUNDU == false;
+
+                <article class="message-card @(okunmadi ? "unread" : "")">
+
+                    <div class="message-card-inner">
+
+                        <!-- META -->
+                        <div class="message-meta">
+
+                            <div class="message-label">
+
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+
+                                    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v9a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4h-.5A2.5 2.5 0 0 1 3.5 14V6"
+                                          stroke="currentColor"
+                                          stroke-width="1.6"
+                                          stroke-linejoin="round" />
+
+                                    <path d="M8 9h8M8 13h5"
+                                          stroke="currentColor"
+                                          stroke-width="1.5"
+                                          stroke-linecap="round" />
+
+                                </svg>
+
+                                Bildirim
+                            </div>
+
+                            <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;">
+
+                                <span class="message-id">
+                                    #@mesaj.ID
+                                </span>
+
+                                @if (okunmadi)
+                                {
+                                    <span class="message-status unread">
+                                        <span class="message-status-dot"></span>
+                                        Yeni mesaj
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="message-status read">
+                                        <span class="message-status-dot"></span>
+                                        Okundu
+                                    </span>
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- BAŞLIK -->
+                        <div class="message-subject-row">
+
+                            <h2 class="message-subject">
+                                @(string.IsNullOrWhiteSpace(mesaj.BASLIK)
+                                    ? "Başlıksız bildirim"
+                                    : mesaj.BASLIK)
+                            </h2>
+
+                        </div>
+
+
+                        <!-- İÇERİK -->
+                        <p class="message-content">
+                            @mesaj.ICERIK
+                        </p>
+
+
+                        <!-- FOOTER -->
+                        <div class="message-footer">
+
+                            <div class="message-date">
+
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+
+                                    <rect x="3.5"
+                                          y="5"
+                                          width="17"
+                                          height="15"
+                                          rx="2"
+                                          stroke="currentColor"
+                                          stroke-width="1.5" />
+
+                                    <path d="M7 3.5v3M17 3.5v3M3.5 9h17"
+                                          stroke="currentColor"
+                                          stroke-width="1.5"
+                                          stroke-linecap="round" />
+
+                                </svg>
+
+                                <span>
+                                    Gönderim tarihi:
+                                    <strong>
+                                        @(mesaj.GONDERIMTARIH.HasValue
+                                            ? mesaj.GONDERIMTARIH.Value.ToString("dd.MM.yyyy HH:mm")
+                                            : "Tarih belirtilmemiş")
+                                    </strong>
+                                </span>
+
+                            </div>
+
+                            <div class="message-type">
+
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+
+                                    <path d="M4 6h16v12H4z"
+                                          stroke="currentColor"
+                                          stroke-width="1.5"
+                                          stroke-linejoin="round" />
+
+                                    <path d="m4 7 8 6 8-6"
+                                          stroke="currentColor"
+                                          stroke-width="1.5"
+                                          stroke-linejoin="round" />
+
+                                </svg>
+
+                                Kütüphane bildirimi
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+    }
+    else
+    {
+        <!-- BOŞ DURUM -->
+        <div class="message-empty">
+
+            <div class="message-empty-icon">
+
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+
+                    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v9a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4h-.5A2.5 2.5 0 0 1 3.5 14V6"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linejoin="round" />
+
+                    <path d="M8 9h8M8 13h5"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round" />
+
+                </svg>
+
+            </div>
+
+            <h3>Henüz mesajınız bulunmuyor</h3>
+
+            <p>
+                Kütüphane tarafından gönderilen mesajlar ve bildirimler
+                burada görüntülenecek.
+            </p>
+
+        </div>
+    }
+
+</div>

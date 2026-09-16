@@ -1,0 +1,283 @@
+﻿@model MvcKutuphane.Models.Entities.TBL_MESAJ
+@using System.Web
+@{
+    ViewBag.Title = "Mesaj Detayı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .detail-layout {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .detail-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .detail-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--oxblood);
+        color: var(--surface-warm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .detail-header h3 {
+        font-size: 1.15rem;
+        margin-bottom: 4px;
+    }
+
+    .detail-header p {
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+        margin: 0;
+    }
+
+    .detail-subject {
+        display: inline-block;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--forest);
+        background: #eef3ec;
+        border-radius: 999px;
+        padding: 4px 14px;
+        margin-top: 8px;
+    }
+
+    .message-body {
+        background: var(--surface-warm);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        padding: 22px;
+        color: var(--ink);
+        font-size: 0.98rem;
+        line-height: 1.7;
+        white-space: pre-line;
+    }
+
+    .detail-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .side-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+        .side-panel .panel h3 {
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+        }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-row .label {
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .info-row .value {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--ink);
+            font-size: 0.95rem;
+            text-align: right;
+        }
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(42, 33, 28, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: 20px;
+    }
+
+        .modal-overlay.is-open {
+            display: flex;
+        }
+
+    .modal-box {
+        background: var(--surface);
+        border-radius: var(--radius-m);
+        max-width: 420px;
+        width: 100%;
+        padding: 28px;
+        box-shadow: 0 20px 60px -12px rgba(42, 33, 28, 0.45);
+        border-top: 4px solid var(--oxblood);
+    }
+
+    .modal-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: #f7e9e6;
+        color: var(--oxblood);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+        .modal-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+    .modal-box h3 {
+        margin-bottom: 8px;
+    }
+
+    .modal-box p {
+        color: var(--ink-soft);
+        font-size: 0.95rem;
+        margin-bottom: 0;
+    }
+
+        .modal-box p strong {
+            color: var(--ink);
+        }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 26px;
+    }
+
+    .btn-danger {
+        background: var(--oxblood);
+        color: var(--surface-warm);
+        border-color: var(--oxblood);
+    }
+
+        .btn-danger:hover {
+            background: var(--oxblood-dark);
+        }
+
+    @@media (max-width: 900px) {
+        .detail-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<a href="@Url.Action("MessageList", "Message")" style="display:inline-flex; align-items:center; gap:6px; font-size:0.88rem; font-weight:600; margin-bottom:20px;">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:16px; height:16px;"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    Mesajlara geri dön
+</a>
+
+<div class="detail-layout">
+
+    <div class="panel">
+        <div class="detail-header">
+            <div class="detail-avatar">@(!string.IsNullOrWhiteSpace(Model.ADSOYAD) ? Model.ADSOYAD.Trim().Substring(0, 1).ToUpper() : "?")</div>
+            <div>
+                <h3>@Model.ADSOYAD</h3>
+                <p>@Model.MAIL</p>
+                <span class="detail-subject">@Model.KONU</span>
+            </div>
+        </div>
+
+        <div class="message-body">@Model.MESAJ</div>
+
+        <div class="detail-actions">
+            <a class="btn btn-primary" href="mailto:@Model.MAIL?subject=RE: @Model.KONU">
+                Mail ile yanıtla
+            </a>
+            <button type="button" class="btn btn-ghost" style="color:var(--oxblood); border-color:var(--oxblood);" onclick="openDeleteModal()">
+                Mesajı sil
+            </button>
+        </div>
+    </div>
+
+    <div class="side-panel">
+        <div class="panel">
+            <h3>Mesaj Bilgileri</h3>
+            <div class="info-row">
+                <span class="label">Mesaj No</span>
+                <span class="value">#@Model.ID</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Gönderen</span>
+                <span class="value">@Model.ADSOYAD</span>
+            </div>
+            <div class="info-row">
+                <span class="label">E-posta</span>
+                <span class="value">@Model.MAIL</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Konu</span>
+                <span class="value">@Model.KONU</span>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Hızlı Yanıt Önerisi</h3>
+            <p style="color:var(--ink-soft); font-size:0.88rem; margin:0;">
+                Merhaba @Model.ADSOYAD, mesajınız için teşekkür ederiz. Talebinizle ilgili en kısa sürede size dönüş yapacağız.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+        <div class="modal-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path d="M10.3 3.86 2.7 18a1.5 1.5 0 0 0 1.3 2.25h16a1.5 1.5 0 0 0 1.3-2.25L13.7 3.86a1.5 1.5 0 0 0-2.6 0Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+            </svg>
+        </div>
+        <h3>Mesajı sil</h3>
+        <p><strong>@Model.ADSOYAD</strong> adlı kişiden gelen bu mesajı silmek istediğinize emin misiniz?</p>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" onclick="closeDeleteModal()">Vazgeç</button>
+            @using (Html.BeginForm("DeleteMessage", "Message", FormMethod.Post, new { style = "display:inline;" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.ID" />
+                <button type="submit" class="btn btn-danger">Evet, sil</button>
+            }
+        </div>
+    </div>
+</div>
+
+<script>var deleteModal = document.getElementById("deleteModal");
+    function openDeleteModal() { deleteModal.classList.add("is-open"); }
+    function closeDeleteModal() { deleteModal.classList.remove("is-open"); }
+    deleteModal.addEventListener("click", function (e) { if (e.target === deleteModal) closeDeleteModal(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDeleteModal(); });</script>

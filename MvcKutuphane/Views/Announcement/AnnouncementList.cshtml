@@ -1,0 +1,593 @@
+﻿@model List<MvcKutuphane.Models.Entities.TBL_DUYURU>
+@{
+    ViewBag.Title = "Duyurular";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .ann-page-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+        .ann-page-head p {
+            color: var(--ink-soft);
+            margin: 6px 0 0;
+        }
+
+    .ann-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .ann-stat {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        padding: 18px 20px;
+        box-shadow: var(--shadow-card);
+    }
+
+        .ann-stat .num {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--oxblood);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .ann-stat .label {
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+        }
+
+    .ann-toolbar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+    }
+
+    .ann-search {
+        flex: 1;
+        min-width: 220px;
+        position: relative;
+    }
+
+        .ann-search input {
+            width: 100%;
+            padding: 11px 14px 11px 38px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            background: var(--surface);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--ink);
+            box-sizing: border-box;
+        }
+
+            .ann-search input:focus {
+                outline: none;
+                border-color: var(--oxblood);
+            }
+
+        .ann-search svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--ink-soft);
+        }
+
+    .ann-count {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin-bottom: 16px;
+    }
+
+    .ann-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 18px;
+    }
+
+    .ann-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--brass);
+        border-radius: var(--radius-m);
+        padding: 20px 20px 16px;
+        box-shadow: var(--shadow-card);
+        transition: transform 0.15s ease, border-left-color 0.15s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 190px;
+    }
+
+        .ann-card:hover {
+            transform: translateY(-2px);
+            border-left-color: var(--oxblood);
+        }
+
+        .ann-card .ann-id {
+            font-size: 0.75rem;
+            color: var(--ink-soft);
+            letter-spacing: 0.03em;
+            margin-bottom: 8px;
+        }
+
+        .ann-card .ann-date {
+            font-size: 0.78rem;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+        }
+
+        .ann-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.15rem;
+            line-height: 1.3;
+        }
+
+        .ann-card .ann-content {
+            color: var(--ink-soft);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0 0 18px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+    .ann-card-actions {
+        display: flex;
+        gap: 14px;
+    }
+
+        .ann-card-actions a,
+        .ann-card-actions button {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--forest);
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font-family: var(--font-body);
+            text-decoration: none;
+        }
+
+            .ann-card-actions button.danger {
+                color: var(--oxblood);
+            }
+
+            .ann-card-actions a:hover,
+            .ann-card-actions button:hover {
+                text-decoration: underline;
+            }
+
+    .ann-empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--ink-soft);
+    }
+
+        .ann-empty h3 {
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(42, 33, 28, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: 20px;
+    }
+
+        .modal-overlay.is-open {
+            display: flex;
+        }
+
+    .modal-box {
+        background: var(--surface);
+        border-radius: var(--radius-m);
+        max-width: 420px;
+        width: 100%;
+        padding: 28px;
+        box-shadow: 0 20px 60px -12px rgba(42, 33, 28, 0.45);
+        border-top: 4px solid var(--oxblood);
+        animation: modalPop 0.15s ease;
+    }
+
+    @@keyframes modalPop {
+        from {
+            transform: translateY(6px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .modal-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: #f7e9e6;
+        color: var(--oxblood);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+        .modal-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+    .modal-box h3 {
+        margin-bottom: 8px;
+    }
+
+    .modal-box p {
+        color: var(--ink-soft);
+        font-size: 0.95rem;
+        margin-bottom: 0;
+    }
+
+        .modal-box p strong {
+            color: var(--ink);
+        }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 26px;
+    }
+
+    .btn-danger {
+        background: var(--oxblood);
+        color: var(--surface-warm);
+        border-color: var(--oxblood);
+    }
+
+        .btn-danger:hover {
+            background: var(--oxblood-dark);
+        }
+
+    @@media (max-width: 900px) {
+        .ann-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="ann-page-head">
+    <div>
+        <h1 style="margin-bottom:4px;">Duyurular</h1>
+        <p>Üyelere yayınlanan duyuruları yönetin.</p>
+    </div>
+
+    <a class="btn btn-primary"
+       href="@Url.Action("CreateAnnouncement", "Announcement")">
+        Yeni duyuru ekle
+    </a>
+</div>
+
+<div class="ann-stats">
+
+    <div class="ann-stat">
+        <div class="num">
+            @(Model != null ? Model.Count : 0)
+        </div>
+
+        <div class="label">
+            Toplam duyuru
+        </div>
+    </div>
+
+    <div class="ann-stat">
+
+        <div class="num">
+            @if (Model != null && Model.Any())
+            {
+                var sonDuyuru = Model
+                    .Where(x => x.YAYINTARIHI.HasValue)
+                    .OrderByDescending(x => x.YAYINTARIHI)
+                    .FirstOrDefault();
+
+                if (sonDuyuru != null)
+                {
+                    @sonDuyuru.YAYINTARIHI.Value.ToString("dd.MM.yyyy")
+                }
+                else
+                {
+                    @:-
+                }
+            }
+            else
+            {
+                @:-
+            }
+        </div>
+
+        <div class="label">
+            Son yayın tarihi
+        </div>
+
+    </div>
+
+</div>
+
+<div class="ann-toolbar">
+
+    <div class="ann-search">
+
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+
+            <circle cx="11"
+                    cy="11"
+                    r="7"
+                    stroke="currentColor"
+                    stroke-width="1.6" />
+
+            <path d="M21 21l-4.3-4.3"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round" />
+
+        </svg>
+
+        <input type="text"
+               id="annSearchInput"
+               placeholder="Duyuru ara..."
+               autocomplete="off" />
+
+    </div>
+
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <p class="ann-count" id="annCount">
+        @Model.Count() duyuru listeleniyor
+    </p>
+
+    <div class="ann-grid" id="annGrid">
+
+        @foreach (var duyuru in Model.OrderByDescending(x => x.YAYINTARIHI))
+        {
+            <div class="ann-card"
+                 data-name="@((duyuru.BASLIK + " " + duyuru.ICERIK).ToLower())">
+
+                <div>
+
+                    <div class="ann-id">
+                        Duyuru No: @duyuru.ID
+                    </div>
+
+                    <div class="ann-date">
+
+                        @if (duyuru.YAYINTARIHI.HasValue)
+                        {
+                            @duyuru.YAYINTARIHI.Value.ToString("dd.MM.yyyy HH:mm")
+                        }
+                        else
+                        {
+                            @:Yayın tarihi belirtilmemiş
+                        }
+
+                    </div>
+
+                    <h3>
+                        @duyuru.BASLIK
+                    </h3>
+
+                    <p class="ann-content">
+                        @duyuru.ICERIK
+                    </p>
+
+                </div>
+
+                <div class="ann-card-actions">
+
+                    <a href="@Url.Action("UpdateAnnouncement", "Announcement", new { id = duyuru.ID })">
+                        Düzenle
+                    </a>
+
+                    <button type="button"
+                            class="danger"
+                            onclick="openDeleteModal('@duyuru.ID', '@duyuru.BASLIK.Replace("'", "\\'")')">
+                        Sil
+                    </button>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
+else
+{
+    <div class="panel ann-empty">
+
+        <h3>Henüz duyuru eklenmemiş</h3>
+
+        <p>
+            İlk duyuruyu ekleyerek üyelere bilgilendirme yapmaya başlayın.
+        </p>
+
+        <a class="btn btn-primary"
+           href="@Url.Action("CreateAnnouncement", "Announcement")"
+           style="margin-top:12px;">
+            Yeni duyuru ekle
+        </a>
+
+    </div>
+}
+
+<div class="modal-overlay" id="deleteModal">
+
+    <div class="modal-box">
+
+        <div class="modal-icon">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <path d="M12 9v4M12 17h.01"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round" />
+
+                <path d="M10.3 3.86 2.7 18a1.5 1.5 0 0 0 1.3 2.25h16a1.5 1.5 0 0 0 1.3-2.25L13.7 3.86a1.5 1.5 0 0 0-2.6 0Z"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linejoin="round" />
+
+            </svg>
+
+        </div>
+
+        <h3>Duyuruyu sil</h3>
+
+        <p>
+            <strong id="deleteModalAnnouncementName"></strong>
+            duyurusunu silmek istediğinize emin misiniz?
+            Bu işlem geri alınamaz.
+        </p>
+
+        <div class="modal-actions">
+
+            <button type="button"
+                    class="btn btn-ghost"
+                    onclick="closeDeleteModal()">
+                Vazgeç
+            </button>
+
+            @using (Html.BeginForm(
+                "DeleteAnnouncement",
+                "Announcement",
+                FormMethod.Post,
+                new
+                {
+                    id = "deleteAnnouncementForm",
+                    style = "display:inline;"
+                }))
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="id"
+                       id="deleteAnnouncementId"
+                       value="" />
+
+                <button type="submit"
+                        class="btn btn-danger">
+                    Evet, sil
+                </button>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    (function () {
+
+        var input = document.getElementById("annSearchInput");
+        var grid = document.getElementById("annGrid");
+        var countLabel = document.getElementById("annCount");
+
+        if (!input || !grid) return;
+
+        var cards = Array.prototype.slice.call(
+            grid.querySelectorAll(".ann-card")
+        );
+
+        input.addEventListener("input", function () {
+
+            var term = input.value.trim().toLowerCase();
+            var visible = 0;
+
+            cards.forEach(function (card) {
+
+                var name = card.getAttribute("data-name");
+
+                var match = name.indexOf(term) !== -1;
+
+                card.style.display = match ? "" : "none";
+
+                if (match) {
+                    visible++;
+                }
+
+            });
+
+            if (countLabel) {
+                countLabel.textContent =
+                    visible + " duyuru listeleniyor";
+            }
+
+        });
+
+    })();
+
+    var deleteModal = document.getElementById("deleteModal");
+
+    function openDeleteModal(id, name) {
+
+        document.getElementById("deleteAnnouncementId").value = id;
+
+        document.getElementById("deleteModalAnnouncementName").textContent = name;
+
+        deleteModal.classList.add("is-open");
+    }
+
+    function closeDeleteModal() {
+
+        deleteModal.classList.remove("is-open");
+    }
+
+    deleteModal.addEventListener("click", function (e) {
+
+        if (e.target === deleteModal) {
+            closeDeleteModal();
+        }
+
+    });
+
+    document.addEventListener("keydown", function (e) {
+
+        if (e.key === "Escape") {
+            closeDeleteModal();
+        }
+
+    });
+
+</script>

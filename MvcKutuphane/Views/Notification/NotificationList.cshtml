@@ -1,0 +1,457 @@
+﻿@model List<MvcKutuphane.Models.Entities.TBL_BILDIRIM>
+@using System.Web
+@{
+    ViewBag.Title = "Bildirimler";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .notif-page-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+        .notif-page-head p {
+            color: var(--ink-soft);
+            margin: 6px 0 0;
+        }
+
+    .notif-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .notif-stat {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-m);
+        padding: 18px 20px;
+        box-shadow: var(--shadow-card);
+    }
+
+        .notif-stat .num {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--oxblood);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .notif-stat .label {
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+        }
+
+    .notif-toolbar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .notif-search {
+        flex: 1;
+        min-width: 220px;
+        position: relative;
+    }
+
+        .notif-search input {
+            width: 100%;
+            padding: 11px 14px 11px 38px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-s);
+            background: var(--surface);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+            .notif-search input:focus {
+                outline: none;
+                border-color: var(--oxblood);
+            }
+
+        .notif-search svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--ink-soft);
+        }
+
+    .filter-chips {
+        display: flex;
+        gap: 8px;
+    }
+
+    .filter-chip {
+        padding: 9px 16px;
+        border-radius: 999px;
+        border: 1px solid var(--border-strong);
+        background: var(--surface);
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+        .filter-chip.active {
+            background: var(--oxblood);
+            color: var(--surface-warm);
+            border-color: var(--oxblood);
+        }
+
+    .notif-count {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin-bottom: 16px;
+    }
+
+    .notif-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .notif-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--brass);
+        border-radius: var(--radius-m);
+        padding: 18px 20px;
+        box-shadow: var(--shadow-card);
+    }
+
+        .notif-card.is-general {
+            border-left-color: var(--forest);
+        }
+
+    .notif-card-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 8px;
+    }
+
+        .notif-card-head h3 {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+    .notif-target-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.76rem;
+        font-weight: 600;
+        border-radius: 999px;
+        padding: 3px 12px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+        .notif-target-tag.general {
+            color: var(--forest);
+            background: #eef3ec;
+        }
+
+        .notif-target-tag.personal {
+            color: var(--brass);
+            background: #fbf0dd;
+        }
+
+    .notif-body {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        line-height: 1.55;
+        margin-bottom: 12px;
+    }
+
+    .notif-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: var(--ink-soft);
+    }
+
+    .notif-actions {
+        display: flex;
+        gap: 14px;
+    }
+
+        .notif-actions button {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--oxblood);
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font-family: var(--font-body);
+        }
+
+            .notif-actions button:hover {
+                text-decoration: underline;
+            }
+
+    .notif-empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--ink-soft);
+    }
+
+        .notif-empty h3 {
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(42, 33, 28, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: 20px;
+    }
+
+        .modal-overlay.is-open {
+            display: flex;
+        }
+
+    .modal-box {
+        background: var(--surface);
+        border-radius: var(--radius-m);
+        max-width: 420px;
+        width: 100%;
+        padding: 28px;
+        box-shadow: 0 20px 60px -12px rgba(42, 33, 28, 0.45);
+        border-top: 4px solid var(--oxblood);
+    }
+
+    .modal-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: #f7e9e6;
+        color: var(--oxblood);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+        .modal-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+    .modal-box h3 {
+        margin-bottom: 8px;
+    }
+
+    .modal-box p {
+        color: var(--ink-soft);
+        font-size: 0.95rem;
+        margin-bottom: 0;
+    }
+
+        .modal-box p strong {
+            color: var(--ink);
+        }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 26px;
+    }
+
+    .btn-danger {
+        background: var(--oxblood);
+        color: var(--surface-warm);
+        border-color: var(--oxblood);
+    }
+
+        .btn-danger:hover {
+            background: var(--oxblood-dark);
+        }
+</style>
+
+@if (TempData["Error"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--oxblood); margin-bottom:20px; color:var(--oxblood-dark);">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Message"] != null)
+{
+    <div class="panel" style="border-left:4px solid var(--forest); margin-bottom:20px; color:var(--forest);">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="notif-page-head">
+    <div>
+        <h1 style="margin-bottom:4px;">Bildirimler</h1>
+        <p>Üyelere gönderilen bildirim ve duyurular.</p>
+    </div>
+    <a class="btn btn-primary" href="@Url.Action("CreateNotification", "Notification")">Yeni bildirim gönder</a>
+</div>
+
+<div class="notif-stats">
+    <div class="notif-stat">
+        <div class="num">@(Model != null ? Model.Count : 0)</div>
+        <div class="label">Toplam bildirim</div>
+    </div>
+    <div class="notif-stat">
+        <div class="num">@(Model != null ? Model.Count(x => x.UYE == null) : 0)</div>
+        <div class="label">Genel duyuru</div>
+    </div>
+    <div class="notif-stat">
+        <div class="num">@(Model != null ? Model.Count(x => x.UYE != null) : 0)</div>
+        <div class="label">Kişiye özel</div>
+    </div>
+</div>
+
+<div class="notif-toolbar">
+    <div class="notif-search">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6" />
+            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+        <input type="text" id="notifSearchInput" placeholder="Başlık veya içerikte ara..." autocomplete="off" />
+    </div>
+    <div class="filter-chips">
+        <button type="button" class="filter-chip active" data-filter="all">Tümü</button>
+        <button type="button" class="filter-chip" data-filter="general">Genel</button>
+        <button type="button" class="filter-chip" data-filter="personal">Kişiye Özel</button>
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <p class="notif-count" id="notifCount">@Model.Count() bildirim listeleniyor</p>
+
+    <div class="notif-list" id="notifList">
+        @foreach (var n in Model)
+        {
+            var isGeneral = n.UYE == null;
+            var hedefAdi = isGeneral ? "Tüm üyeler" : (n.TBL_UYELER != null ? n.TBL_UYELER.AD + " " + n.TBL_UYELER.SOYAD : "-");
+
+            <div class="notif-card @(isGeneral ? "is-general" : "")" data-status="@(isGeneral ? "general" : "personal")" data-name="@((n.BASLIK + " " + n.ICERIK).ToLower())">
+                <div class="notif-card-head">
+                    <h3>@n.BASLIK</h3>
+                    @if (isGeneral)
+                    {
+                        <span class="notif-target-tag general">Genel Duyuru</span>
+                    }
+                    else
+                    {
+                        <span class="notif-target-tag personal">@hedefAdi</span>
+                    }
+                </div>
+
+                <p class="notif-body">@n.ICERIK</p>
+
+                <div class="notif-meta">
+                    <span>@n.GONDERIMTARIH</span>
+                    <div class="notif-actions">
+                        <button type="button" onclick="openDeleteModal('@n.ID', '@Html.Raw(HttpUtility.JavaScriptStringEncode(n.BASLIK))')">Sil</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="panel notif-empty">
+        <h3>Henüz bildirim gönderilmemiş</h3>
+        <p>İlk duyurunuzu göndererek üyelerinizle iletişime geçin.</p>
+        <a class="btn btn-primary" href="@Url.Action("CreateNotification", "Notification")" style="margin-top:12px;">Yeni bildirim gönder</a>
+    </div>
+}
+
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+        <div class="modal-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path d="M10.3 3.86 2.7 18a1.5 1.5 0 0 0 1.3 2.25h16a1.5 1.5 0 0 0 1.3-2.25L13.7 3.86a1.5 1.5 0 0 0-2.6 0Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+            </svg>
+        </div>
+        <h3>Bildirimi sil</h3>
+        <p><strong id="deleteModalNotifTitle"></strong> başlıklı bildirimi silmek istediğinize emin misiniz?</p>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" onclick="closeDeleteModal()">Vazgeç</button>
+            @using (Html.BeginForm("DeleteNotification", "Notification", FormMethod.Post, new { style = "display:inline;" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" id="deleteNotifId" value="" />
+                <button type="submit" class="btn btn-danger">Evet, sil</button>
+            }
+        </div>
+    </div>
+</div>
+
+<script>(function () {
+        var input = document.getElementById("notifSearchInput");
+        var list = document.getElementById("notifList");
+        var countLabel = document.getElementById("notifCount");
+        var chips = document.querySelectorAll(".filter-chip");
+        if (!list) return;
+
+        var cards = Array.prototype.slice.call(list.querySelectorAll(".notif-card"));
+        var currentFilter = "all";
+
+        function applyFilters() {
+            var term = input ? input.value.trim().toLowerCase() : "";
+            var visible = 0;
+
+            cards.forEach(function (card) {
+                var matchesSearch = card.getAttribute("data-name").indexOf(term) !== -1;
+                var matchesFilter = currentFilter === "all" || card.getAttribute("data-status") === currentFilter;
+                var show = matchesSearch && matchesFilter;
+                card.style.display = show ? "" : "none";
+                if (show) visible++;
+            });
+
+            if (countLabel) countLabel.textContent = visible + " bildirim listeleniyor";
+        }
+
+        if (input) input.addEventListener("input", applyFilters);
+
+        chips.forEach(function (chip) {
+            chip.addEventListener("click", function () {
+                chips.forEach(function (c) { c.classList.remove("active"); });
+                chip.classList.add("active");
+                currentFilter = chip.getAttribute("data-filter");
+                applyFilters();
+            });
+        });
+    })();
+
+    var deleteModal = document.getElementById("deleteModal");
+    function openDeleteModal(id, title) {
+        document.getElementById("deleteNotifId").value = id;
+        document.getElementById("deleteModalNotifTitle").textContent = title;
+        deleteModal.classList.add("is-open");
+    }
+    function closeDeleteModal() { deleteModal.classList.remove("is-open"); }
+    deleteModal.addEventListener("click", function (e) { if (e.target === deleteModal) closeDeleteModal(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDeleteModal(); });</script>

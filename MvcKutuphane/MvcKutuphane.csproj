@@ -129,6 +129,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AboutController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AnnouncementController.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\BorrowedBooksController.cs" />
@@ -142,15 +144,22 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\LegalController.cs" />
+    <Compile Include="Controllers\MemberAnnouncementController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\MemberMessageController.cs" />
+    <Compile Include="Controllers\MemberMyPenaltiesController.cs" />
+    <Compile Include="Controllers\MemberProfileController.cs" />
     <Compile Include="Controllers\MembershipTermsController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\NewsletterController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PenaltyController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChangePasswordViewModel.cs" />
     <Compile Include="Models\Entities\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -175,10 +184,16 @@
     <Compile Include="Models\Entities\sysdiagrams.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\TBL_BILDIRIM.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\TBL_BULTEN.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\TBL_CEZALAR.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\TBL_DUYURU.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\TBL_HAREKET.cs">
@@ -310,6 +325,21 @@
     <Content Include="Views\Legal\Cookies.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Statistic\Index.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Shared\_MemberLayout.cshtml" />
+    <Content Include="Views\MemberProfile\Index.cshtml" />
+    <Content Include="Views\MemberProfile\EditInformation.cshtml" />
+    <Content Include="Views\MemberProfile\ChangePassword.cshtml" />
+    <Content Include="Views\Message\MessageList.cshtml" />
+    <Content Include="Views\Message\MessageDetail.cshtml" />
+    <Content Include="Views\Notification\NotificationList.cshtml" />
+    <Content Include="Views\Announcement\AnnouncementList.cshtml" />
+    <Content Include="Views\Announcement\CreateAnnouncement.cshtml" />
+    <Content Include="Views\MemberAnnouncement\Index.cshtml" />
+    <Content Include="Views\Announcement\UpdateAnnouncement.cshtml" />
+    <Content Include="Views\MemberMessage\Index.cshtml" />
+    <Content Include="Views\MemberMyPenalties\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,332 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Üye Ol - Kütüphanem</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg: #f7f3ea;
+            --surface: #ffffff;
+            --surface-warm: #fbf7ef;
+            --ink: #2a211c;
+            --ink-soft: #6b5d52;
+            --border: #e3d9c2;
+            --border-strong: #d8c9a8;
+            --oxblood: #7a2a2e;
+            --oxblood-dark: #5b1f22;
+            --forest: #2f4a3e;
+            --brass: #a9793b;
+            --radius-s: 3px;
+            --radius-m: 6px;
+            --radius-l: 10px;
+            --font-display: "Lora", Georgia, serif;
+            --font-body: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+            --shadow-card: 0 1px 2px rgba(42,33,28,.06), 0 8px 24px -12px rgba(42,33,28,.18);
+            --shadow-lift: 0 24px 60px -20px rgba(42,33,28,.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            background: radial-gradient(ellipse 700px 420px at 85% -10%, rgba(169,121,59,.14), transparent 60%), radial-gradient(ellipse 600px 400px at 5% 110%, rgba(122,42,46,.10), transparent 60%), var(--bg);
+            color: var(--ink);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        a {
+            color: var(--oxblood);
+            text-decoration: none;
+        }
+
+        h1, h2 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--ink);
+            margin: 0;
+        }
+
+        .auth-shell {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+            .brand-row svg {
+                width: 30px;
+                height: 30px;
+                color: var(--oxblood);
+            }
+
+            .brand-row span {
+                font-family: var(--font-display);
+                font-weight: 600;
+                font-size: 1.3rem;
+                color: var(--ink);
+            }
+
+        .auth-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-l);
+            padding: 40px;
+            box-shadow: var(--shadow-lift);
+        }
+
+            .auth-panel h2 {
+                font-size: 1.5rem;
+                margin-bottom: 6px;
+                text-align: center;
+            }
+
+            .auth-panel .sub {
+                text-align: center;
+                color: var(--ink-soft);
+                font-size: 0.92rem;
+                margin-bottom: 28px;
+            }
+
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+            .form-group label {
+                display: block;
+                font-family: var(--font-display);
+                font-weight: 600;
+                font-size: 0.94rem;
+                color: var(--ink);
+                margin-bottom: 8px;
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="email"],
+            .form-group input[type="password"],
+            .form-group input[type="tel"] {
+                width: 100%;
+                padding: 11px 14px;
+                border: 1px solid var(--border-strong);
+                border-radius: var(--radius-s);
+                background: var(--surface);
+                font-family: var(--font-body);
+                font-size: 0.98rem;
+                color: var(--ink);
+            }
+
+            .form-group input:focus {
+                outline: none;
+                border-color: var(--oxblood);
+            }
+
+        .terms-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.88rem;
+            color: var(--ink-soft);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+            .terms-check input {
+                margin-top: 3px;
+                accent-color: var(--oxblood);
+                flex-shrink: 0;
+            }
+
+            .terms-check a {
+                font-weight: 600;
+            }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: var(--radius-s);
+            font-size: 0.98rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--oxblood);
+            color: var(--surface-warm);
+            border-color: var(--oxblood);
+        }
+
+            .btn-primary:hover {
+                background: var(--oxblood-dark);
+            }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.92rem;
+            color: var(--ink-soft);
+        }
+
+            .auth-switch a {
+                font-weight: 600;
+            }
+
+        .validation-summary-errors {
+            background: #f7e9e6;
+            border: 1px solid #e6c3ba;
+            color: var(--oxblood-dark);
+            padding: 12px 16px;
+            border-radius: var(--radius-s);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .back-home a {
+                color: var(--ink-soft);
+                font-size: 0.88rem;
+            }
+
+                .back-home a:hover {
+                    color: var(--oxblood);
+                }
+
+        @@media (max-width: 480px) {
+            .form-row-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-panel {
+                padding: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-shell">
+
+        <div class="brand-row">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 8c5-3 11-3 16 0v24c-5-3-11-3-16 0V8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                <path d="M36 8c-5-3-11-3-16 0v24c5-3 11-3 16 0V8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                <path d="M20 8v24" stroke="currentColor" stroke-width="1.2" />
+            </svg>
+            <span>Kütüphanem</span>
+        </div>
+
+        <div class="auth-panel">
+            <h2>Üyeliğinizi oluşturun</h2>
+            <p class="sub">Birkaç dakika içinde kaydınızı tamamlayın.</p>
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="validation-summary-errors">@TempData["Error"]</div>
+            }
+
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="AD">Ad</label>
+                        <input type="text" name="AD" id="AD" placeholder="Adınız" autocomplete="off" />
+                    </div>
+                    <div class="form-group">
+                        <label for="SOYAD">Soyad</label>
+                        <input type="text" name="SOYAD" id="SOYAD" placeholder="Soyadınız" autocomplete="off" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="MAIL">E-posta</label>
+                    <input type="email" name="MAIL" id="MAIL" placeholder="ornek@mail.com" autocomplete="off" />
+                </div>
+
+                <div class="form-group">
+                    <label for="KULLANICIADI">Kullanıcı Adı</label>
+                    <input type="text" name="KULLANICIADI" id="KULLANICIADI" placeholder="Bir kullanıcı adı seçin" autocomplete="off" />
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="SIFRE">Şifre</label>
+                        <input type="password" name="SIFRE" id="SIFRE" placeholder="••••••••" autocomplete="new-password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="SifreTekrar">Şifre (Tekrar)</label>
+                        <input type="password" name="SifreTekrar" id="SifreTekrar" placeholder="••••••••" autocomplete="new-password" />
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="TELEFON">Telefon</label>
+                        <input type="tel" name="TELEFON" id="TELEFON" placeholder="05xx xxx xx xx" autocomplete="off" />
+                    </div>
+                    <div class="form-group">
+                        <label for="OKUL">Okul</label>
+                        <input type="text" name="OKUL" id="OKUL" placeholder="Okulunuz (opsiyonel)" autocomplete="off" />
+                    </div>
+                </div>
+
+                <label class="terms-check">
+                    <input type="checkbox" name="KosullarKabul" />
+                    <span>Üyelik koşullarını okudum ve kabul ediyorum.</span>
+                </label>
+
+                <button type="submit" class="btn btn-primary">Üye ol</button>
+            }
+
+            <p class="auth-switch">Zaten üye misiniz? <a href="@Url.Action("Login", "Account")">Giriş yapın</a></p>
+        </div>
+
+        <div class="back-home">
+            <a href="@Url.Action("Index", "Home")">&larr; Ana sayfaya dön</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

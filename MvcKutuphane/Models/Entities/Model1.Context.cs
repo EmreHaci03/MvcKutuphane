@@ -38,6 +38,8 @@ namespace MvcKutuphane.Models.Entities
         public virtual DbSet<TBL_YAZAR> TBL_YAZAR { get; set; }
         public virtual DbSet<TBL_MESAJ> TBL_MESAJ { get; set; }
         public virtual DbSet<TBL_BULTEN> TBL_BULTEN { get; set; }
+        public virtual DbSet<TBL_BILDIRIM> TBL_BILDIRIM { get; set; }
+        public virtual DbSet<TBL_DUYURU> TBL_DUYURU { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

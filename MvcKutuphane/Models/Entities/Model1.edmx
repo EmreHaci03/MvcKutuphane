@@ -15,6 +15,17 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="TBL_BILDIRIM">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UYE" Type="int" />
+          <Property Name="BASLIK" Type="nvarchar" MaxLength="150" />
+          <Property Name="ICERIK" Type="nvarchar" MaxLength="500" />
+          <Property Name="GONDERIMTARIH" Type="datetime" />
+          <Property Name="OKUNDU" Type="bit" />
+        </EntityType>
         <EntityType Name="TBL_BULTEN">
           <Key>
             <PropertyRef Name="ID" />
@@ -32,6 +43,15 @@
           <Property Name="CEZABITIS" Type="smalldatetime" />
           <Property Name="CEZA" Type="decimal" Precision="18" Scale="2" />
           <Property Name="HAREKET" Type="int" />
+        </EntityType>
+        <EntityType Name="TBL_DUYURU">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BASLIK" Type="nvarchar" MaxLength="150" />
+          <Property Name="ICERIK" Type="nvarchar" MaxLength="200" />
+          <Property Name="YAYINTARIHI" Type="datetime" />
         </EntityType>
         <EntityType Name="TBL_HAREKET">
           <Key>
@@ -114,6 +134,18 @@
           <Property Name="SOYAD" Type="nvarchar" MaxLength="30" />
           <Property Name="DETAY" Type="varchar" MaxLength="500" />
         </EntityType>
+        <Association Name="FK_TBL_BILDIRIM_TBL_UYELER">
+          <End Role="TBL_UYELER" Type="Self.TBL_UYELER" Multiplicity="0..1" />
+          <End Role="TBL_BILDIRIM" Type="Self.TBL_BILDIRIM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_UYELER">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TBL_BILDIRIM">
+              <PropertyRef Name="UYE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TBL_CEZALAR_TBL_HAREKET">
           <End Role="TBL_HAREKET" Type="Self.TBL_HAREKET" Multiplicity="0..1" />
           <End Role="TBL_CEZALAR" Type="Self.TBL_CEZALAR" Multiplicity="*" />
@@ -231,8 +263,10 @@
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="DbKutuphaneModelStoreContainer">
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_BILDIRIM" EntityType="Self.TBL_BILDIRIM" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_BULTEN" EntityType="Self.TBL_BULTEN" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_CEZALAR" EntityType="Self.TBL_CEZALAR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_DUYURU" EntityType="Self.TBL_DUYURU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_HAREKET" EntityType="Self.TBL_HAREKET" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_KASA" EntityType="Self.TBL_KASA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_KATEGORI" EntityType="Self.TBL_KATEGORI" Schema="dbo" store:Type="Tables" />
@@ -241,6 +275,10 @@
           <EntitySet Name="TBL_PERSONEL" EntityType="Self.TBL_PERSONEL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_UYELER" EntityType="Self.TBL_UYELER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_YAZAR" EntityType="Self.TBL_YAZAR" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TBL_BILDIRIM_TBL_UYELER" Association="Self.FK_TBL_BILDIRIM_TBL_UYELER">
+            <End Role="TBL_UYELER" EntitySet="TBL_UYELER" />
+            <End Role="TBL_BILDIRIM" EntitySet="TBL_BILDIRIM" />
+          </AssociationSet>
           <AssociationSet Name="FK_TBL_CEZALAR_TBL_HAREKET" Association="Self.FK_TBL_CEZALAR_TBL_HAREKET">
             <End Role="TBL_HAREKET" EntitySet="TBL_HAREKET" />
             <End Role="TBL_CEZALAR" EntitySet="TBL_CEZALAR" />
@@ -369,6 +407,7 @@
           <Property Name="OKUL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="TBL_CEZALAR" Relationship="Self.FK_TBL_CEZALAR_TBL_UYELER" FromRole="TBL_UYELER" ToRole="TBL_CEZALAR" />
           <NavigationProperty Name="TBL_HAREKET" Relationship="Self.FK_TBL_HAREKET_TBL_UYELER" FromRole="TBL_UYELER" ToRole="TBL_HAREKET" />
+          <NavigationProperty Name="TBL_BILDIRIM" Relationship="DbKutuphaneModel.FK_TBL_BILDIRIM_TBL_UYELER" FromRole="TBL_UYELER" ToRole="TBL_BILDIRIM" />
         </EntityType>
         <EntityType Name="TBL_YAZAR">
           <Key>
@@ -534,6 +573,12 @@
           <FunctionImport Name="sp_upgraddiagrams" />
           <EntitySet Name="TBL_MESAJ" EntityType="DbKutuphaneModel.TBL_MESAJ" />
           <EntitySet Name="TBL_BULTEN" EntityType="DbKutuphaneModel.TBL_BULTEN" />
+          <EntitySet Name="TBL_BILDIRIM" EntityType="DbKutuphaneModel.TBL_BILDIRIM" />
+          <AssociationSet Name="FK_TBL_BILDIRIM_TBL_UYELER" Association="DbKutuphaneModel.FK_TBL_BILDIRIM_TBL_UYELER">
+            <End Role="TBL_UYELER" EntitySet="TBL_UYELER" />
+            <End Role="TBL_BILDIRIM" EntitySet="TBL_BILDIRIM" />
+          </AssociationSet>
+          <EntitySet Name="TBL_DUYURU" EntityType="DbKutuphaneModel.TBL_DUYURU" />
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -562,6 +607,39 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MAIL" Type="String" MaxLength="90" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TBL_BILDIRIM">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UYE" Type="Int32" />
+          <Property Name="BASLIK" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ICERIK" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="GONDERIMTARIH" Type="DateTime" Precision="3" />
+          <Property Name="OKUNDU" Type="Boolean" />
+          <NavigationProperty Name="TBL_UYELER" Relationship="DbKutuphaneModel.FK_TBL_BILDIRIM_TBL_UYELER" FromRole="TBL_BILDIRIM" ToRole="TBL_UYELER" />
+        </EntityType>
+        <Association Name="FK_TBL_BILDIRIM_TBL_UYELER">
+          <End Type="DbKutuphaneModel.TBL_UYELER" Role="TBL_UYELER" Multiplicity="0..1" />
+          <End Type="DbKutuphaneModel.TBL_BILDIRIM" Role="TBL_BILDIRIM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_UYELER">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TBL_BILDIRIM">
+              <PropertyRef Name="UYE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TBL_DUYURU">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BASLIK" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ICERIK" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="YAYINTARIHI" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -709,6 +787,28 @@
             <EntityTypeMapping TypeName="DbKutuphaneModel.TBL_BULTEN">
               <MappingFragment StoreEntitySet="TBL_BULTEN">
                 <ScalarProperty Name="MAIL" ColumnName="MAIL" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_BILDIRIM">
+            <EntityTypeMapping TypeName="DbKutuphaneModel.TBL_BILDIRIM">
+              <MappingFragment StoreEntitySet="TBL_BILDIRIM">
+                <ScalarProperty Name="OKUNDU" ColumnName="OKUNDU" />
+                <ScalarProperty Name="GONDERIMTARIH" ColumnName="GONDERIMTARIH" />
+                <ScalarProperty Name="ICERIK" ColumnName="ICERIK" />
+                <ScalarProperty Name="BASLIK" ColumnName="BASLIK" />
+                <ScalarProperty Name="UYE" ColumnName="UYE" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_DUYURU">
+            <EntityTypeMapping TypeName="DbKutuphaneModel.TBL_DUYURU">
+              <MappingFragment StoreEntitySet="TBL_DUYURU">
+                <ScalarProperty Name="YAYINTARIHI" ColumnName="YAYINTARIHI" />
+                <ScalarProperty Name="ICERIK" ColumnName="ICERIK" />
+                <ScalarProperty Name="BASLIK" ColumnName="BASLIK" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
