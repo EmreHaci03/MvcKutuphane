@@ -18,6 +18,7 @@ namespace MvcKutuphane.Models.Entities
         public TBL_KITAP()
         {
             this.TBL_HAREKET = new HashSet<TBL_HAREKET>();
+            this.TBL_KITAPDETAY = new HashSet<TBL_KITAPDETAY>();
         }
     
         public int ID { get; set; }
@@ -34,5 +35,7 @@ namespace MvcKutuphane.Models.Entities
         public virtual ICollection<TBL_HAREKET> TBL_HAREKET { get; set; }
         public virtual TBL_KATEGORI TBL_KATEGORI { get; set; }
         public virtual TBL_YAZAR TBL_YAZAR { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TBL_KITAPDETAY> TBL_KITAPDETAY { get; set; }
     }
 }

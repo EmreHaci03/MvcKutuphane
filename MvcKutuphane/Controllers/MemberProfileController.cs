@@ -9,7 +9,7 @@ using System.Web.Security;
 
 namespace MvcKutuphane.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Member")]
     public class MemberProfileController : Controller
     {
         DbKutuphaneEntities2 db = new DbKutuphaneEntities2();

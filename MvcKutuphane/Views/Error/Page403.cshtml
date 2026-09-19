@@ -1,0 +1,191 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Erişim Reddedildi | Kütüphane</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --oxblood: #7a2a2e;
+            --oxblood-deep: #5b1f22;
+            --forest: #2f4a3e;
+            --brass: #a9793b;
+            --brass-light: #d4a960;
+            --ink: #241c19;
+            --ink-soft: #6f6259;
+            --surface: #ffffff;
+            --surface-warm: #faf6f0;
+            --border: #e7ddd0;
+            --radius-s: 8px;
+            --radius-m: 14px;
+            --shadow-card: 0 18px 40px rgba(36, 28, 25, 0.18);
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--surface-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            body::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image: repeating-linear-gradient(90deg, rgba(47,74,62,0.03) 0 2px, transparent 2px 34px);
+                pointer-events: none;
+            }
+
+        .error-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-m);
+            box-shadow: var(--shadow-card);
+            padding: 52px 44px 44px;
+            text-align: center;
+        }
+
+        .error-icon {
+            width: 84px;
+            height: 84px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            background: linear-gradient(160deg, #eef3ec, #dfe9db);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--forest);
+        }
+
+            .error-icon svg {
+                width: 42px;
+                height: 42px;
+            }
+
+        .error-code {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.14em;
+            color: var(--brass);
+            text-transform: uppercase;
+            margin: 0 0 10px;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: 1.7rem;
+            margin: 0 0 12px;
+            color: var(--ink);
+        }
+
+        p.desc {
+            font-size: 0.96rem;
+            color: var(--ink-soft);
+            line-height: 1.55;
+            margin: 0 0 32px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            border-radius: var(--radius-s);
+            font-size: 0.92rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+
+            .btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
+        .btn-primary {
+            background: linear-gradient(180deg, var(--forest) 0%, #223a30 100%);
+            color: var(--surface-warm);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 10px 20px rgba(47, 74, 62, 0.28);
+            }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--ink);
+            border: 1px solid var(--border);
+        }
+
+            .btn-secondary:hover {
+                border-color: var(--brass);
+                color: var(--brass);
+            }
+
+        .footnote {
+            margin-top: 28px;
+            font-size: 0.78rem;
+            color: var(--ink-soft);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <div class="error-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2l8 3.5v5.2c0 5-3.4 8.9-8 10.3-4.6-1.4-8-5.3-8-10.3V5.5L12 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M9.5 12l2 2 3.5-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none" />
+                <path d="M15 9l-6 6M9 9l6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+        </div>
+        <p class="error-code">Hata 403</p>
+        <h1>Bu bölüme erişiminiz yok</h1>
+        <p class="desc">Bu sayfayı görüntülemek için gerekli yetkiye sahip değilsiniz. Bir hata olduğunu düşünüyorsanız yöneticinizle iletişime geçin.</p>
+        <div class="actions">
+            <a href="@Url.Action("Index", "Default")" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11l9-8 9 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /><path d="M5 10v9a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1v-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                Ana sayfaya dön
+            </a>
+            <a href="@Url.Action("Index", "AdminLogin")" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="1.6" /><path d="M4.5 20a7.5 7.5 0 0115 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+                Farklı hesapla giriş yap
+            </a>
+        </div>
+        <p class="footnote">Hata kodu: 403 · Erişim Reddedildi</p>
+    </div>
+</body>
+</html>

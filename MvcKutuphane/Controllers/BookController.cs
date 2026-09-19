@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MvcKutuphane.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class BookController : Controller
     {
         DbKutuphaneEntities2 db = new DbKutuphaneEntities2();

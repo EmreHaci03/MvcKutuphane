@@ -452,8 +452,8 @@
                     <div class="crumb">Yönetim Paneli / <strong>@ViewBag.Title</strong></div>
                 </div>
                 <div class="topbar-user">
-                    <div class="avatar">A</div>
-                    <span>Admin</span>
+                    <div class="avatar">@(Session["User"] != null ? Session["User"].ToString().Substring(0,1).ToUpper() : "A")</div>
+                    <span>@Session["User"]</span>
                 </div>
             </header>
 

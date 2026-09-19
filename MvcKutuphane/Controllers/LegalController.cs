@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace MvcKutuphane.Controllers
 {
+    [AllowAnonymous]
     public class LegalController : Controller
     {
         public ActionResult Privacy()

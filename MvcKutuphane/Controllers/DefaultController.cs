@@ -5,6 +5,7 @@ using System.Web.Mvc;
 
 namespace MvcKutuphane.Controllers
 {
+    [AllowAnonymous]
     public class DefaultController : Controller
     {
         DbKutuphaneEntities2 db = new DbKutuphaneEntities2();

@@ -8,6 +8,7 @@ using System.Data.Entity;
 
 namespace MvcKutuphane.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class NotificationController : Controller
     {
         DbKutuphaneEntities2 db = new DbKutuphaneEntities2();

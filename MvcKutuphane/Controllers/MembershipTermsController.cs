@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace MvcKutuphane.Controllers
 {
+    [AllowAnonymous]
     public class MembershipTermsController : Controller
     {
-        // GET: MembershipTerms
         public ActionResult Index()
         {
             return View();

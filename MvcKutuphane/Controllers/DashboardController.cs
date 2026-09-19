@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 
 namespace MvcKutuphane.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class DashboardController : Controller
     {
         DbKutuphaneEntities2 db = new DbKutuphaneEntities2();

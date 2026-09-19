@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace MvcKutuphane.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class TransactionController : Controller
     {
         DbKutuphaneEntities2 db = new DbKutuphaneEntities2();   

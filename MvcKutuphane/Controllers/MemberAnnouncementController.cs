@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace MvcKutuphane.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Member")]
     public class MemberAnnouncementController : Controller
     {
         DbKutuphaneEntities2 db = new DbKutuphaneEntities2();

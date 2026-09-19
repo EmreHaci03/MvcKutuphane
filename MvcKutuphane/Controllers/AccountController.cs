@@ -8,6 +8,7 @@ using System.Web.Security;
 
 namespace MvcKutuphane.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         DbKutuphaneEntities2 db = new DbKutuphaneEntities2();
@@ -80,29 +81,39 @@ namespace MvcKutuphane.Controllers
         [HttpPost]
         public ActionResult Login(TBL_UYELER p)
         {
-            if(string.IsNullOrWhiteSpace(p.MAIL) || string.IsNullOrWhiteSpace(p.SIFRE))
+            if (string.IsNullOrWhiteSpace(p.MAIL) || string.IsNullOrWhiteSpace(p.SIFRE))
             {
                 TempData["Error"] = "E-posta ve şifre boş bırakılamaz.";
                 return RedirectToAction("Login");
             }
 
-            var member=db.TBL_UYELER.FirstOrDefault(x=>x.MAIL==p.MAIL && x.SIFRE==p.SIFRE); 
+            var member = db.TBL_UYELER.FirstOrDefault(x => x.MAIL == p.MAIL && x.SIFRE == p.SIFRE);
 
-            if(member==null)
+            if (member == null)
             {
                 TempData["Error"] = "E-posta veya şifre hatalı.";
                 return RedirectToAction("Login");
             }
-            FormsAuthentication.SetAuthCookie(member.MAIL, false); //Authorize 
 
+            var ticket = new FormsAuthenticationTicket(
+                1,
+                member.KULLANICIADI,
+                DateTime.Now,
+                DateTime.Now.AddMinutes(60),
+                false,
+                "Member"
+            );
 
-            Session["Mail"] = member.MAIL; 
+            string encryptedTicket = FormsAuthentication.Encrypt(ticket);
+            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+            Response.Cookies.Add(cookie);
+
+            Session["Mail"] = member.MAIL;
             TempData["Message"] = "Giriş başarılı, hoş geldiniz " + member.AD + "!";
             return RedirectToAction("Index", "MemberProfile");
-
         }
 
-     
+
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();

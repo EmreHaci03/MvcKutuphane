@@ -1,22 +1,26 @@
 ﻿@model List<MvcKutuphane.Models.Entities.TBL_KITAP>
 @{
-    ViewBag.Title = "Kitaplar";
-    ViewBag.Lede = "Koleksiyondaki tüm eserleri keşfedin.";
+    ViewBag.Title = ViewBag.KategoriAdi ?? "Kategori";
+    ViewBag.Lede = (ViewBag.KategoriAdi ?? "Bu kategori") + " kategorisindeki tüm eserler.";
     Layout = "~/Views/Shared/_UILayout.cshtml";
+    var kapakRenkleri = new[] { "#7a2a2e", "#2f4a3e", "#a9793b", "#5b1f22" };
+    int i = 0;
 }
 
 <style>
     .catalog-toolbar {
         display: flex;
+        justify-content: space-between;
+        align-items: center;
         gap: 12px;
         margin-bottom: 28px;
         flex-wrap: wrap;
-        align-items: center;
     }
 
     .catalog-search {
         flex: 1;
         min-width: 240px;
+        max-width: 420px;
         position: relative;
     }
 
@@ -46,36 +50,6 @@
             color: var(--ink-soft);
         }
 
-    .pill-row {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 32px;
-    }
-
-    .pill {
-        padding: 8px 16px;
-        border-radius: 999px;
-        border: 1px solid var(--border-strong);
-        background: var(--surface);
-        font-size: 0.88rem;
-        font-weight: 600;
-        color: var(--ink-soft);
-        cursor: pointer;
-        white-space: nowrap;
-    }
-
-        .pill:hover {
-            border-color: var(--oxblood);
-            color: var(--oxblood);
-        }
-
-        .pill.is-active {
-            background: var(--oxblood);
-            border-color: var(--oxblood);
-            color: var(--surface-warm);
-        }
-
     .catalog-count {
         color: var(--ink-soft);
         font-size: 0.9rem;
@@ -96,6 +70,8 @@
         transition: transform 0.18s ease, box-shadow 0.18s ease;
         display: flex;
         flex-direction: column;
+        text-decoration: none;
+        color: inherit;
     }
 
         .book-card:hover {
@@ -165,18 +141,6 @@
             justify-content: space-between;
         }
 
-    .tag {
-        display: inline-block;
-        font-size: 0.76rem;
-        font-weight: 600;
-        color: var(--forest);
-        background: #eef3ec;
-        border-radius: 999px;
-        padding: 3px 10px;
-        margin-bottom: 9px;
-        width: fit-content;
-    }
-
     .badge-status {
         font-size: 0.76rem;
         font-weight: 600;
@@ -204,7 +168,26 @@
             color: var(--ink);
             margin-bottom: 8px;
         }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+    }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
 </style>
+
+<a href="@Url.Action("Index", "Categories")" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    Tüm kategoriler
+</a>
 
 <div class="catalog-toolbar">
     <div class="catalog-search">
@@ -212,45 +195,25 @@
             <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6" />
             <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
         </svg>
-        <input type="text" id="catalogSearchInput" placeholder="Kitap veya yazar ara..." autocomplete="off" />
+        <input type="text" id="catalogSearchInput" placeholder="Bu kategoride ara..." autocomplete="off" />
     </div>
-</div>
-
-<div class="pill-row" id="categoryPills">
-    <span class="pill is-active" data-category="all">Tümü</span>
-    @if (Model != null)
-    {
-        var kategoriler = Model
-            .Where(x => x.TBL_KATEGORI != null)
-            .Select(x => x.TBL_KATEGORI.CategoryName)
-            .Distinct()
-            .OrderBy(x => x);
-
-        foreach (var kategori in kategoriler)
-        {
-            <span class="pill" data-category="@kategori.ToLower()">@kategori</span>
-        }
-    }
 </div>
 
 @if (Model != null && Model.Any())
 {
-    <p class="catalog-count" id="catalogCount">@Model.Count() kitap listeleniyor</p>
+    <p class="catalog-count" id="catalogCount">
+        <strong>@ViewBag.CategoryName</strong> kategorisinde @Model.Count() kitap listeleniyor
+    </p>
 
     <div class="book-grid" id="bookGrid">
-        @{
-            var renkler = new[] { "#7a2a2e", "#2f4a3e", "#a9793b", "#5b1f22" };
-            int i = 0;
-        }
         @foreach (var kitap in Model)
         {
-            var kategoriAdi = kitap.TBL_KATEGORI != null ? kitap.TBL_KATEGORI.CategoryName : "Diğer";
             var yazarAdi = kitap.TBL_YAZAR != null ? kitap.TBL_YAZAR.AD + " " + kitap.TBL_YAZAR.SOYAD : "Bilinmeyen Yazar";
-            var renk = renkler[i % renkler.Length];
+            var renk = kapakRenkleri[i % kapakRenkleri.Length];
             var hasImage = !string.IsNullOrEmpty(kitap.FOTOGRAF);
             i++;
 
-            <a href="@Url.Action("BookDetail", "Catalog", new { id = kitap.ID })" class="book-card" data-name="@((kitap.AD + " " + yazarAdi).ToLower())" data-category="@kategoriAdi.ToLower()" style="text-decoration:none; color:inherit;">
+            <a href="@Url.Action("BookDetail", "Catalog", new { id = kitap.ID })" class="book-card" data-name="@((kitap.AD + " " + yazarAdi).ToLower())">
                 <div class="book-spine @(hasImage ? "has-image" : "")" style="@(hasImage ? "" : "background:" + renk + ";")">
                     @if (hasImage)
                     {
@@ -259,7 +222,6 @@
                     <span class="spine-label">@kitap.AD</span>
                 </div>
                 <div class="book-info">
-                    <span class="tag">@kategoriAdi</span>
                     <h3 style="font-size: 1.02rem; margin-bottom: 4px;">@kitap.AD</h3>
                     <p class="author">@yazarAdi</p>
                     <div class="meta">
@@ -281,44 +243,30 @@
 else
 {
     <div class="catalog-empty">
-        <h3>Henüz kitap eklenmemiş</h3>
-        <p>Koleksiyon yakında güncellenecek, tekrar uğrayın.</p>
+        <h3>Bu kategoride kitap bulunamadı</h3>
+        <p>Yakında bu kategoriye yeni eserler eklenecek.</p>
+        <a class="btn btn-primary" href="@Url.Action("Index", "Categories")" style="margin-top:16px;">Diğer kategorilere göz at</a>
     </div>
 }
 
-<script>(function () {
+<script>
+    (function () {
         var input = document.getElementById("catalogSearchInput");
         var grid = document.getElementById("bookGrid");
         var countLabel = document.getElementById("catalogCount");
-        var pills = document.querySelectorAll(".pill");
-        if (!grid) return;
+        if (!input || !grid) return;
 
         var cards = Array.prototype.slice.call(grid.querySelectorAll(".book-card"));
-        var currentCategory = "all";
 
-        function applyFilters() {
-            var term = input ? input.value.trim().toLowerCase() : "";
+        input.addEventListener("input", function () {
+            var term = input.value.trim().toLowerCase();
             var visible = 0;
-
             cards.forEach(function (card) {
-                var matchesSearch = card.getAttribute("data-name").indexOf(term) !== -1;
-                var matchesCategory = currentCategory === "all" || card.getAttribute("data-category") === currentCategory;
-                var show = matchesSearch && matchesCategory;
-                card.style.display = show ? "" : "none";
-                if (show) visible++;
+                var match = card.getAttribute("data-name").indexOf(term) !== -1;
+                card.style.display = match ? "" : "none";
+                if (match) visible++;
             });
-
             if (countLabel) countLabel.textContent = visible + " kitap listeleniyor";
-        }
-
-        if (input) input.addEventListener("input", applyFilters);
-
-        pills.forEach(function (pill) {
-            pill.addEventListener("click", function () {
-                pills.forEach(function (p) { p.classList.remove("is-active"); });
-                pill.classList.add("is-active");
-                currentCategory = pill.getAttribute("data-category");
-                applyFilters();
-            });
         });
-    })();</script>
+    })();
+</script>

@@ -26,6 +26,9 @@
         <EntityTypeShape EntityType="DbKutuphaneModel.TBL_BILDIRIM" Width="1.5" PointX="3" PointY="13" />
         <AssociationConnector Association="DbKutuphaneModel.FK_TBL_BILDIRIM_TBL_UYELER" />
         <EntityTypeShape EntityType="DbKutuphaneModel.TBL_DUYURU" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DbKutuphaneModel.TBL_KITAPDETAY" Width="1.5" PointX="6" PointY="11.125" />
+        <AssociationConnector Association="DbKutuphaneModel.FK_TBL_KITAPDETAY_TBL_KITAP" />
+        <EntityTypeShape EntityType="DbKutuphaneModel.TBL_ADMIN" Width="1.5" PointX="8.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

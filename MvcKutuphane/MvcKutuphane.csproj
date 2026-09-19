@@ -130,6 +130,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminLoginController.cs" />
     <Compile Include="Controllers\AnnouncementController.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\BookController.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
@@ -161,6 +163,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AdminLoginViewModel.cs" />
     <Compile Include="Models\ChangePasswordViewModel.cs" />
     <Compile Include="Models\Entities\Model1.Context.cs">
       <AutoGen>True</AutoGen>
@@ -186,6 +189,9 @@
     <Compile Include="Models\Entities\sysdiagrams.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\TBL_ADMIN.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\TBL_BILDIRIM.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -208,6 +214,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\TBL_KITAP.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\TBL_KITAPDETAY.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\TBL_MESAJ.cs">
@@ -348,6 +357,12 @@
     <Content Include="Views\MemberDashboard\Index.cshtml" />
     <Content Include="Views\Author\AuthorBooks.cshtml" />
     <Content Include="Views\Member\MemberReturnedBooks.cshtml" />
+    <Content Include="Views\Catalog\BookDetail.cshtml" />
+    <Content Include="Views\AdminLogin\Index.cshtml" />
+    <Content Include="Views\Catalog\BookListWithCategory.cshtml" />
+    <Content Include="Views\Error\Page404.cshtml" />
+    <Content Include="Views\Error\Page403.cshtml" />
+    <Content Include="Views\Error\Page401.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

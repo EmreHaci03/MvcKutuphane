@@ -40,6 +40,8 @@ namespace MvcKutuphane.Models.Entities
         public virtual DbSet<TBL_BULTEN> TBL_BULTEN { get; set; }
         public virtual DbSet<TBL_BILDIRIM> TBL_BILDIRIM { get; set; }
         public virtual DbSet<TBL_DUYURU> TBL_DUYURU { get; set; }
+        public virtual DbSet<TBL_KITAPDETAY> TBL_KITAPDETAY { get; set; }
+        public virtual DbSet<TBL_ADMIN> TBL_ADMIN { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
