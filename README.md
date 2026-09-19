@@ -27,7 +27,7 @@ ASP.NET MVC (.NET Framework 4.7.2) ile geliştirilmiş, rol tabanlı yetkilendir
 - 💰 Ödenmiş / ödenmemiş cezaların görüntülenmesi
 - 🔔 Duyurular
 - 🙋 Profil ve şifre değiştirme
-- 🤖 Yapay zeka destekli kitap önerisi
+- 🤖 **Yapay Zeka Destekli Kitap Önerisi** — üye, ilgi alanlarını / okumak istediği türü yazınca sistem yapay zeka ile kişiselleştirilmiş kitap önerileri sunuyor. Klasik "en çok okunanlar" listesinin ötesinde, gerçek zamanlı ve üyeye özel bir öneri deneyimi.
 
 ### 🌐 Genel Site
 - 🏡 Ana sayfa ve tanıtım içerikleri
