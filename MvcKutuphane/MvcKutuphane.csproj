@@ -254,6 +254,30 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\404 Hata Sayfası.png" />
+    <Content Include="images\Admin Cezalar Listesi.png" />
+    <Content Include="images\Admin Dashboard.png" />
+    <Content Include="images\Admin Gelen Mesajlar.png" />
+    <Content Include="images\Admin Ödünç İşlemleri.png" />
+    <Content Include="images\Admin Üye Listesi.png" />
+    <Content Include="images\Admin İade Alınan Kitaplar.png" />
+    <Content Include="images\Admin İstatistikler.png" />
+    <Content Include="images\Ana Sayfa 2.png" />
+    <Content Include="images\Ana Sayfa 3.png" />
+    <Content Include="images\Ana Sayfa.png" />
+    <Content Include="images\Hakkımızda 2.png" />
+    <Content Include="images\Hakkımızda.png" />
+    <Content Include="images\Kategoriler.png" />
+    <Content Include="images\Kitaplar Sayfası.png" />
+    <Content Include="images\Üye AI Kitap Önerisi.png" />
+    <Content Include="images\Üye Aktif Ödünç.png" />
+    <Content Include="images\Üye Dashboard.png" />
+    <Content Include="images\Üye Duyurular.png" />
+    <Content Include="images\Üye Profil.png" />
+    <Content Include="images\Üye Ödenmemiş Cezalar.png" />
+    <Content Include="images\Üye Ödenmiş Cezalar.png" />
+    <Content Include="images\Üye Şifre Değiştirme.png" />
+    <Content Include="images\İletişim.png" />
     <Content Include="Models\Entities\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -368,7 +392,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
